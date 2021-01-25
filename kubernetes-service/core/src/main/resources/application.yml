@@ -1,0 +1,27 @@
+spring:
+    application:
+        name: kubernetes
+    jpa:
+        open-in-view: false
+        show-sql: false
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+                query.substitutions: true 1, false 0
+                max_fetch_depth: 2
+                current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+                connection.zeroDateTimeBehavior: convertToNull
+                enable_lazy_load_no_trans: false
+                globally_quoted_identifiers: true
+    kafka:
+        consumer:
+            group-id: platform-kubernetes-service
+        producer:
+            acks: all
+            key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+eureka:
+    instance:
+        hostname: localhost

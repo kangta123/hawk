@@ -1,0 +1,31 @@
+spring:
+    application:
+        name: gateway
+    cloud:
+        gateway:
+            discovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_URL:http://localhost:8080/eureka/}
+        registry-fetch-interval-seconds: 5
+
+management:
+    endpoint:
+        gateway:
+            enabled: true
+
+hawk:
+    auth:
+        whiteList:
+            - /base/auth
+            - /performance/ws
+            - /container/ws
+            - /kubekeepalive/ws
+            - /container/file
+            - /actuator
+            - /gateway

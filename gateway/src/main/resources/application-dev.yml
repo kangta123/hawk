@@ -1,0 +1,14 @@
+server:
+  port:  8001
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+    registry-fetch-interval-seconds: 5
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 200
+        read-timeout: 5000

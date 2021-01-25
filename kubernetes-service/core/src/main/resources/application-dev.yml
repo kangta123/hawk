@@ -1,0 +1,23 @@
+server:
+    port: 8802
+spring:
+    datasource:
+        url: jdbc:mysql://127.0.0.1:3306/hawk?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        username: root
+        password: 123456
+    kafka:
+        bootstrap-servers: ${KAFKA:127.0.0.1}:9092
+
+eureka:
+    instance:
+        hostname: localhost
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8080/eureka/
+
+hawk:
+    kubernetes:
+        apiServer: https://192.168.24.207:6443
+        token: eyJhbGciOiJSUzI1NiIsImtpZCI6ImJCZGYzb0hpZDlXNE53bEluLUdaX3ZBMmc4MGs1WjhWUzhkRS1mRFdKLVEifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi10b2tlbi04dmNyNCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJhZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImViODAyMGFhLWUyN2EtNDI1Ny1iMzA1LTk5MDk5ZDg5N2Q5NSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTphZG1pbiJ9.qnrwxMwCtGefQ2d-rTc_KwvkFSKL1GEcIMXLKfrWK5OBvELYz1avaZAp85ufu8QWjyLhR-koeZEcTK7gG0AjGsqj8qttOgqPwN4KWdYRgIsfdCA8CG_ouW33TauCjCAvfEqomWBeP4LWyKgy3pJ0FxQmTENL5v2cZXIO5Spc60Ug1X4M8bZYVSjfXKD5I7f8mhoP3Uh1oWunRh7QyL_okmouamvZ6y-BqRoohKcB1KqYbnl2Lh6BYFdkBFA_YsSMSK9cvqi3-VoHe1zE8CDn6sPnGU31e3UknwTB-6r8ZDt16iq5Uo95eAFZAKLoqthvlkWz7SVHp7NFS8jXOHhkEA
+        dockerConfigJson: eyJhdXRocyI6eyJyZWdpc3RyeS5jbi1xaW5nZGFvLmFsaXl1bmNzLmNvbSI6eyJ1c2VybmFtZSI6Imthbmc3MjEzQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiaHdxVS44TkAqdyIsImVtYWlsIjoia2FuZzcyMTNAZ21haWwuY29tIiwiYXV0aCI6ImEyRnVaemN5TVROQVoyMWhhV3d1WTI5dE9taDNjVlV1T0U1QUtuYz0ifX19
+

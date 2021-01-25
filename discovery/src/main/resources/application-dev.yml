@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+    enableSelfPreservation: false
+  instance:
+    lease-expiration-duration-in-seconds: 30 # remove if no heartbeat
+    lease-renewal-interval-in-seconds: 10 # heartbeat interval
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/

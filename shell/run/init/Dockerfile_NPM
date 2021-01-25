@@ -1,0 +1,8 @@
+FROM alpine:latest
+
+RUN mkdir -p /data/app /data/files
+ADD app.sh /app.sh
+
+ONBUILD ARG PROJECT
+ONBUILD ADD ${PROJECT} /data/app/
+ONBUILD COPY ./docker/ /data/files/

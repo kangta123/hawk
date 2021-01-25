@@ -1,0 +1,25 @@
+FROM hlwojiv/alpine-jdk8
+
+ENV TZ="Asia/Shanghai"
+ENV LOG_FOLDER="/app/logs"
+ENV APP_ROOT="/app"
+RUN mkdir -p /app/bin ${LOG_FOLDER} /app/jar /app/lib /app/files /app/shared
+
+COPY shell/ /app/bin/
+
+COPY lib/ /app/lib/
+
+RUN apk --update add --no-cache openssh libstdc++ vim bash gawk sed grep bc coreutils wget curl gpgme \
+  && sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
+  && rm -rf /var/cache/apk/* \
+  && sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \
+    && sed -ri 's/#HostKey \/etc\/ssh\/ssh_host_key/HostKey \/etc\/ssh\/ssh_host_key/g' /etc/ssh/sshd_config \
+    && sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_rsa_key/HostKey \/etc\/ssh\/ssh_host_rsa_key/g' /etc/ssh/sshd_config \
+    && sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_dsa_key/HostKey \/etc\/ssh\/ssh_host_dsa_key/g' /etc/ssh/sshd_config \
+    && sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_ecdsa_key/HostKey \/etc\/ssh\/ssh_host_ecdsa_key/g' /etc/ssh/sshd_config \
+    && sed -ir 's/#HostKey \/etc\/ssh\/ssh_host_ed25519_key/HostKey \/etc\/ssh\/ssh_host_ed25519_key/g' /etc/ssh/sshd_config \
+    && /usr/bin/ssh-keygen -A \
+    && ssh-keygen -t rsa -b 4096 -f  /etc/ssh/ssh_host_key \
+    && chmod 755 /app/bin/*
+
+
