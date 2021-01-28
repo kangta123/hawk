@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class DateUtils {
     public static final String HOUR_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    public static final long HOUR_8_MS = 8 * 60 * 60 * 1000;
+    public static final long HOUR_8_MS = 8 * 60 * 60 ;
 
     public static long toLong(LocalDateTime target) {
         return target.atZone(ZoneOffset.systemDefault()).toInstant().toEpochMilli();
@@ -27,6 +27,5 @@ public class DateUtils {
     public static long timestampUtcToCst(long utc) {
         return utc + HOUR_8_MS;
     }
-
 
 }

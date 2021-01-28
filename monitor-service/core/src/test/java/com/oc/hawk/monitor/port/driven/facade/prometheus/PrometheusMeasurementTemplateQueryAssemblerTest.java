@@ -7,9 +7,6 @@ import com.oc.hawk.monitor.domain.measurement.template.MeasurementTemplate;
 import com.oc.hawk.monitor.domain.service.FetchMeasurementsTemplate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author kangta123
@@ -21,9 +18,14 @@ class PrometheusMeasurementTemplateQueryAssemblerTest extends MonitorBaseTest {
     void assemble_podPlaceHolderIsReplaced() {
         final PrometheusMeasurementTemplateQueryAssembler prometheusMeasurementTemplateQueryAssembler = new PrometheusMeasurementTemplateQueryAssembler(config);
 
-        final String pod = anyStr();
-        final MeasurementTemplate t = MeasurementTemplate.builder().template("123$PODabc$POD$").build();
-        final FetchMeasurementsTemplate template = new FetchMeasurementsTemplate(instance(MeasurementGroupName.class), pod, anyDateTime(), anyDateTime(), t);
+        final String pod = str();
+        final FetchMeasurementsTemplate template = FetchMeasurementsTemplate.builder()
+            .start(anyDateTime())
+            .end(anyDateTime())
+            .template(MeasurementTemplate.builder().template("123$PODabc$POD$").build())
+            .pod(pod)
+            .name(instance(MeasurementGroupName.class))
+            .build();
         final String assemble = prometheusMeasurementTemplateQueryAssembler.assemble(template);
 
 

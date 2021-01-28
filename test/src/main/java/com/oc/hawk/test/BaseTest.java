@@ -5,15 +5,15 @@ import com.oc.hawk.api.utils.BeanUtils;
 import java.time.LocalDateTime;
 
 public abstract class BaseTest {
-    protected String anyStr() {
+    protected String str() {
         return TestHelper.anyString();
     }
 
-    protected int anyInt() {
+    protected int integer() {
         return TestHelper.anyInt();
     }
 
-    protected long anyLong() {
+    protected long along() {
         return TestHelper.anyLong();
     }
 

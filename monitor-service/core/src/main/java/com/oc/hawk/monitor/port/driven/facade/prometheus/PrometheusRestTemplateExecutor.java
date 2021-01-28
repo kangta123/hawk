@@ -23,33 +23,34 @@ public class PrometheusRestTemplateExecutor implements IMeasureFetchExecutor {
 
     private final PrometheusConfig config;
     private final MeasurementTemplateQueryAssembler queryAssembler;
-    private final PrometheusResultValueExtractor extractor;
 
     public PrometheusRestTemplateExecutor(RestTemplate restTemplate, PrometheusConfig config) {
         this.restTemplate = restTemplate;
         this.config = config;
         queryAssembler = new PrometheusMeasurementTemplateQueryAssembler(config);
-        extractor = new ValuePrecisionPrometheusResultValueExtractor();
     }
 
     @Override
     public String[][] fetch(FetchMeasurementsTemplate fetchMeasurementsTemplate) {
         Map<String, Object> params = Maps.newHashMap();
+        final long start = fetchMeasurementsTemplate.getStartUnixTimestamp();
+        final long end = fetchMeasurementsTemplate.getEndUnixTimestamp();
+
         final String query = queryAssembler.assemble(fetchMeasurementsTemplate);
         params.put("query", query);
-        params.put("start", fetchMeasurementsTemplate.getStartUnixTimestamp());
-        params.put("end", fetchMeasurementsTemplate.getEndUnixTimestamp());
-        params.put("step", fetchMeasurementsTemplate.getDiffSecondBetweenStartAndEnd() / config.getMaxMeasurementCount());
+        params.put("start", start);
+        params.put("end", end);
+        params.put("step", getStep(fetchMeasurementsTemplate));
 
         String queryStr = config.getHost() + "/api/v1/query_range?query={query}&start={start}&end={end}&step={step}";
-        log.info("fetch measurement from prometheus with query {} ", query);
+        log.info("fetch measurement from prometheus with query {} from {}, to {}", query, start, end);
 
         ResponseEntity<PrometheusQueryResult> response = restTemplate.getForEntity(queryStr, PrometheusQueryResult.class, params);
 
         PrometheusQueryResult result = response.getBody();
         if (Objects.nonNull(result)) {
             if (result.isSuccess()) {
-                return extractor.extract(result);
+                return result.getValues();
             } else {
                 log.error("failed query data from prometheus with {}", queryStr);
                 return null;
@@ -58,5 +59,8 @@ public class PrometheusRestTemplateExecutor implements IMeasureFetchExecutor {
         return null;
     }
 
+    private long getStep(FetchMeasurementsTemplate fetchMeasurementsTemplate) {
+        return fetchMeasurementsTemplate.getDiffSecondBetweenStartAndEnd() / config.getMaxMeasurementCount();
+    }
 
 }
