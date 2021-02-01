@@ -32,20 +32,15 @@ public class PrometheusRestTemplateExecutor implements IMeasureFetchExecutor {
 
     @Override
     public String[][] fetch(FetchMeasurementsTemplate fetchMeasurementsTemplate) {
-        Map<String, Object> params = Maps.newHashMap();
-        final long start = fetchMeasurementsTemplate.getStartUnixTimestamp();
-        final long end = fetchMeasurementsTemplate.getEndUnixTimestamp();
 
-        final String query = queryAssembler.assemble(fetchMeasurementsTemplate);
-        params.put("query", query);
-        params.put("start", start);
-        params.put("end", end);
-        params.put("step", getStep(fetchMeasurementsTemplate));
+
+        final Map<String, Object> assemble = queryAssembler.assemble(fetchMeasurementsTemplate);
+
 
         String queryStr = config.getHost() + "/api/v1/query_range?query={query}&start={start}&end={end}&step={step}";
-        log.info("fetch measurement from prometheus with query {} from {}, to {}", query, start, end);
+        log.info("fetch measurement from prometheus with param {}", assemble);
 
-        ResponseEntity<PrometheusQueryResult> response = restTemplate.getForEntity(queryStr, PrometheusQueryResult.class, params);
+        ResponseEntity<PrometheusQueryResult> response = restTemplate.getForEntity(queryStr, PrometheusQueryResult.class, assemble);
 
         PrometheusQueryResult result = response.getBody();
         if (Objects.nonNull(result)) {
@@ -59,8 +54,5 @@ public class PrometheusRestTemplateExecutor implements IMeasureFetchExecutor {
         return null;
     }
 
-    private long getStep(FetchMeasurementsTemplate fetchMeasurementsTemplate) {
-        return fetchMeasurementsTemplate.getDiffSecondBetweenStartAndEnd() / config.getMaxMeasurementCount();
-    }
 
 }

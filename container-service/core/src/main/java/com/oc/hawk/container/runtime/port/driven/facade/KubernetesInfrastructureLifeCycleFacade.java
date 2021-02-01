@@ -5,6 +5,7 @@ import com.oc.hawk.api.constant.KafkaTopic;
 import com.oc.hawk.container.api.command.CreateInstanceVolumeSpecCommand;
 import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
 import com.oc.hawk.container.api.command.CreateServiceEntryPointCommand;
+import com.oc.hawk.container.api.command.StopRuntimeInfoCommand;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.facade.InfrastructureLifeCycleFacade;
 import com.oc.hawk.container.domain.model.app.ServiceApp;
@@ -19,7 +20,7 @@ import com.oc.hawk.container.domain.model.runtime.config.volume.NormalInstanceVo
 import com.oc.hawk.container.domain.service.InstanceConfigDecoratorFacade;
 import com.oc.hawk.container.domain.service.RuntimeInstanceConfigDecoratorService;
 import com.oc.hawk.container.runtime.port.driven.facade.feign.KubernetesGateway;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.ddd.event.EventPublisher;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;
@@ -100,8 +101,17 @@ public class KubernetesInfrastructureLifeCycleFacade implements InfrastructureLi
         if (runtimeConfig != null) {
             spec.setAppImage(runtimeConfig.getImage().getAppImage());
         }
-        eventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(baseConfig.getId().getId(), RuntimeDomainEventType.RUNTIME_START_EVENT, spec));
+        eventPublisher.publishDomainEvent(DomainEvent.byData(baseConfig.getId().getId(), ContainerDomainEventType.INSTANCE_STARTED, spec));
+    }
 
+    @Override
+    public void stop(InstanceConfig config) {
+        BaseInstanceConfig baseConfig = (BaseInstanceConfig) config.getBaseConfig();
+
+        final long id = baseConfig.getId().getId();
+        StopRuntimeInfoCommand command = new StopRuntimeInfoCommand(id, baseConfig.getNamespace(), baseConfig.getName().getName(), baseConfig.getProjectId());
+
+        eventPublisher.publishDomainEvent(DomainEvent.byData(id, ContainerDomainEventType.INSTANCE_STOPPED, command));
     }
 
     @Override

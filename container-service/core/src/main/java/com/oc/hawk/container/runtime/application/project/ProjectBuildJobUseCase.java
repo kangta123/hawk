@@ -1,6 +1,5 @@
 package com.oc.hawk.container.runtime.application.project;
 
-import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
 import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfig;
 import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfigRepository;
@@ -30,13 +29,8 @@ public class ProjectBuildJobUseCase {
         projectBuildInfrastructureFacade.createBuildRuntime(domainId, data, projectRuntimeConfig);
     }
 
-    public void watchLog(long domainId, CreateRuntimeInfoSpecCommand spec) {
-        log.info("watch log of project build job {}", domainId);
-        projectBuildInfrastructureFacade.watchLog(domainId, spec);
-    }
-
     public void endBuildJob(Long projectBuildJobId) {
-        log.info("build job over with id {}", projectBuildJobId);
+        log.info("Build job end with {}", projectBuildJobId);
         final ProjectBuild projectBuild = projectFacade.getProjectBuild(projectBuildJobId);
         if (projectBuild == null) {
             return;

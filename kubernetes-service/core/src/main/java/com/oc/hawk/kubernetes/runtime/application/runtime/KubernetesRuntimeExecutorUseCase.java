@@ -6,7 +6,7 @@ import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
 import com.oc.hawk.container.api.command.DeleteRuntimeInfoCommand;
 import com.oc.hawk.container.api.command.StopRuntimeInfoCommand;
 import com.oc.hawk.container.api.event.EntryPointUpdatedEvent;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.infrastructure.application.KubernetesApi;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;
@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static com.oc.hawk.container.api.event.RuntimeDomainEventType.RUNTIME_STARTED;
-import static com.oc.hawk.container.api.event.RuntimeDomainEventType.RUNTIME_START_FAILED;
+import static com.oc.hawk.container.api.event.ContainerDomainEventType.RUNTIME_STARTED;
+import static com.oc.hawk.container.api.event.ContainerDomainEventType.RUNTIME_START_FAILED;
 
 @Component
 @RequiredArgsConstructor
@@ -43,13 +43,13 @@ public class KubernetesRuntimeExecutorUseCase {
         if (networkConfigSpec != null) {
             EntryPointUpdatedEvent serviceEntryPoint = serviceEntryPointCreator.createServiceEntryPoint(configuration.getNamespace(), configuration.getProjectId(), networkConfigSpec);
             if (serviceEntryPoint != null) {
-                kafkaDomainEventPublish.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(domainId, RuntimeDomainEventType.RUNTIME_ENTRYPOINT_UPDATED, serviceEntryPoint));
+                kafkaDomainEventPublish.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(domainId, ContainerDomainEventType.RUNTIME_ENTRYPOINT_UPDATED, serviceEntryPoint));
             }
         }
 
         ServiceRuntimeStarter starter = KubernetesServiceStarterFactory.starter(configuration);
         if (starter == null) {
-            log.warn("No suitable starter to start runtime, {}", spec.getName());
+            log.warn("No suitable starter , {}", spec.getName());
             notifyRuntimeStartFailed(spec);
             return;
         }

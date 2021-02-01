@@ -20,7 +20,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class ProjectBuildRuntimeRepresentation {
-    public static final String PERFORMANCE_UNLIMITED = "UNLIMITED";
     public static final String RUNTIME_CATALOG_BUILD = "build";
     public static final String LABEL_BUILD_JOB_ID = "build_job";
     private static final String LABEL_RUNTIME_CATALOG = "runtime_catalog";

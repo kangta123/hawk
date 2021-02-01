@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class ProjectBuildJobStageDTO {
-    private Long id;
     private Boolean success;
     private LocalDateTime startTime;
     private String title;

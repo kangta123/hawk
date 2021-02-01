@@ -13,6 +13,7 @@ public interface InfrastructureLifeCycleFacade {
 
 
     void start(InstanceConfig config, ProjectRuntimeConfig runtimeConfig);
+    void stop(InstanceConfig config);
 
     void scale(ServiceAppVersion version);
 

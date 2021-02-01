@@ -9,13 +9,13 @@ public interface UserRepository {
 
     User getCurrent();
 
-    void save(User user);
+    User save(User user);
 
     boolean isEmailExisted(String email);
 
     boolean isAuthNameExisted(String authName);
 
-    void deleteUser(UserId id);
+    void deleteUser(User user);
 
     List<User> queryUser(String key, List<Long> ids, Boolean departmentIgnore);
 

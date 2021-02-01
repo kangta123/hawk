@@ -5,6 +5,8 @@ import com.oc.hawk.monitor.domain.measurement.Measurement;
 import java.util.List;
 
 /**
+ * 获取指标数据
+ *
  * @author kangta123
  */
 public interface IObtainMeasurement {

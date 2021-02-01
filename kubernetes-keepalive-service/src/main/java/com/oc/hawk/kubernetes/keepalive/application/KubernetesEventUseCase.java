@@ -2,7 +2,7 @@ package com.oc.hawk.kubernetes.keepalive.application;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oc.hawk.api.constant.KafkaTopic;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.ddd.event.EventPublisher;
 import com.oc.hawk.infrastructure.application.KubernetesEventApi;
@@ -42,9 +42,7 @@ public class KubernetesEventUseCase {
 
     public void startWatching() {
         String resourceVersion = kubernetesEventRepository.loadEventResourceVersion();
-        executorService.execute(() -> {
-            watch(resourceVersion);
-        });
+        executorService.execute(() -> watch(resourceVersion));
     }
 
     private void watch(String resourceVersion) {
@@ -57,7 +55,7 @@ public class KubernetesEventUseCase {
                 }
 
                 RuntimeInfoDTO runtimeInfoDTO = kubernetesPodRepresentation.toRuntimeInfoDTO(kubernetesRuntime);
-                eventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(RuntimeDomainEventType.RUNTIME_STATE_UPDATED_EVENT, runtimeInfoDTO));
+                eventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(ContainerDomainEventType.RUNTIME_STATE_UPDATED, runtimeInfoDTO));
                 log.info("Kubernetes event received {}-{}, ith version {}", kubernetesRuntime.getRuntimeId(), kubernetesRuntime.getRuntimeStatus(), kubernetesRuntime.getResourceVersion());
 
                 kubernetesEventRepository.updateEventResourceVersion(kubernetesRuntime.getResourceVersion());

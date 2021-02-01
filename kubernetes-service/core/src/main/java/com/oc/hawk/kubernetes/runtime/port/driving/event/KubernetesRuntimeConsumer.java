@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import static com.oc.hawk.container.api.event.RuntimeDomainEventType.*;
+import static com.oc.hawk.container.api.event.ContainerDomainEventType.*;
 
 @Component
 @RequiredArgsConstructor
@@ -24,28 +24,28 @@ public class KubernetesRuntimeConsumer {
     private final KubernetesRuntimeExecutorUseCase kubernetesRuntimeExecutorUseCase;
     private final KubernetesProjectBuildExecutorUseCase kubernetesProjectBuildExecutorUseCase;
 
-    @KafkaListener(topics = KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC)
+    @KafkaListener(topics = {KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, KafkaTopic.DOMAIN_EVENT_TOPIC})
     public void createDeployment(DomainEvent event) {
         log.info("Received event {}", event);
-        if (event.is(RUNTIME_START_EVENT)) {
+        if (event.is(INSTANCE_STARTED)) {
             CreateRuntimeInfoSpecCommand data = (CreateRuntimeInfoSpecCommand) event.getData();
             kubernetesRuntimeExecutorUseCase.start(event.getDomainId(), data);
         }
-        if (event.is(RUNTIME_DELETE_EVENT)) {
+        if (event.is(INSTANCE_DELETED)) {
             DeleteRuntimeInfoCommand command = (DeleteRuntimeInfoCommand) event.getData();
             kubernetesRuntimeExecutorUseCase.delete(command);
         }
-        if (event.is(RUNTIME_STOP_EVENT)) {
+        if (event.is(INSTANCE_STOPPED)) {
             StopRuntimeInfoCommand command = (StopRuntimeInfoCommand) event.getData();
             kubernetesRuntimeExecutorUseCase.stop(command);
         }
 
-        if (event.is(RUNTIME_BUILD_STOP_EVENT)) {
+        if (event.is(BUILD_RUNTIME_STOPPED)) {
             ProjectBuildRuntimeStopEvent eventData = (ProjectBuildRuntimeStopEvent) event.getData();
             kubernetesProjectBuildExecutorUseCase.stop(eventData);
         }
 
-        if (event.is(RUNTIME_STATE_UPDATED_EVENT)) {
+        if (event.is(RUNTIME_STATE_UPDATED)) {
             RuntimeInfoDTO eventData = (RuntimeInfoDTO) event.getData();
             kubernetesRuntimeExecutorUseCase.checkRuntimeStatus(eventData);
         }

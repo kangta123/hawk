@@ -7,6 +7,8 @@ import com.oc.hawk.monitor.domain.service.IMeasurementProvisioner;
 import org.springframework.stereotype.Component;
 
 /**
+ * 从prometheus抓取指标
+ *
  * @author kangta123
  */
 @Component

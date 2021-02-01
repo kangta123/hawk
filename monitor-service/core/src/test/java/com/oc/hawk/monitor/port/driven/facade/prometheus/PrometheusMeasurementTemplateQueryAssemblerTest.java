@@ -26,7 +26,7 @@ class PrometheusMeasurementTemplateQueryAssemblerTest extends MonitorBaseTest {
             .pod(pod)
             .name(instance(MeasurementGroupName.class))
             .build();
-        final String assemble = prometheusMeasurementTemplateQueryAssembler.assemble(template);
+        final String assemble = prometheusMeasurementTemplateQueryAssembler.assemble(template).get("query").toString();
 
 
         Assertions.assertThat(assemble).contains("123" + pod + "abc" + pod + "$");

@@ -6,9 +6,8 @@ import java.util.Objects;
 
 public class InstanceDomain {
 
-    public static final String DEFAULT_NAMESPACE = "default";
-    private String serviceName;
-    private String namespace;
+    private final String serviceName;
+    private final String namespace;
 
     public InstanceDomain(String serviceName, String namespace) {
         this.serviceName = serviceName;
@@ -17,7 +16,7 @@ public class InstanceDomain {
 
     public String getDomain(ContainerConfiguration containerConfiguration) {
         String domain = containerConfiguration.getDomainHost();
-        if (Objects.equals(namespace, DEFAULT_NAMESPACE)) {
+        if (Objects.equals(namespace, containerConfiguration.getDefaultInstanceNamespace())) {
             return serviceName + "." + domain;
         } else {
             return serviceName + "." + namespace + "." + domain;

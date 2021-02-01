@@ -109,7 +109,10 @@ public class ProjectBuildJobUseCase {
         projectBuildJob.endJob();
 
         projectBuildJobRepository.save(projectBuildJob);
-        domainEventPublisher.publishDomainEvent(DomainEvent.byType(projectBuildJob.getId().getId(), ProjectDomainEventType.PROJECT_BUILD_JOB_END));
+
+        ProjectBuildJobDTO projectBuildJobDTO = projectBuildJobRepresentation.toProjectBuildJobDTO(projectBuildJob, new ProjectBuildJobDetailDTO());
+
+        domainEventPublisher.publishDomainEvent(DomainEvent.byData(projectBuildJob.getId().getId(), ProjectDomainEventType.PROJECT_BUILD_JOB_END, projectBuildJobDTO));
     }
 
     public List<String> getAllBuildTags() {

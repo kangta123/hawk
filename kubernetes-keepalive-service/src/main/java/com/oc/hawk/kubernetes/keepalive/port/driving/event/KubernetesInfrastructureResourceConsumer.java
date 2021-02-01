@@ -1,7 +1,7 @@
 package com.oc.hawk.kubernetes.keepalive.port.driving.event;
 
 import com.oc.hawk.api.constant.KafkaTopic;
-import com.oc.hawk.container.api.command.CreateProjectBuildWatchLogCommand;
+import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
 import com.oc.hawk.container.api.event.EntryPointUpdatedEvent;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import static com.oc.hawk.container.api.event.RuntimeDomainEventType.*;
+import static com.oc.hawk.container.api.event.ContainerDomainEventType.*;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class KubernetesInfrastructureResourceConsumer {
             final RuntimeStartFailedDto data = (RuntimeStartFailedDto) domainEvent.getData();
             kubernetesRuntimeUseCase.runtimeStartFailed(data);
         }
-        if (domainEvent.is(RUNTIME_STATE_UPDATED_EVENT)) {
+        if (domainEvent.is(RUNTIME_STATE_UPDATED)) {
             RuntimeInfoDTO runtimeInfo = (RuntimeInfoDTO) domainEvent.getData();
             kubernetesRuntimeUseCase.updateState(runtimeInfo);
         }
@@ -37,9 +37,11 @@ public class KubernetesInfrastructureResourceConsumer {
             EntryPointUpdatedEvent serviceEntryPoint = (EntryPointUpdatedEvent) domainEvent.getData();
             kubernetesRuntimeUseCase.updateEntryPoint(serviceEntryPoint);
         }
-        if (domainEvent.is(RUNTIME_WATCH_LOG_EVENT)) {
-            CreateProjectBuildWatchLogCommand executionSpecDTO = (CreateProjectBuildWatchLogCommand) domainEvent.getData();
-            kubernetesProjectBuildLogUseCase.asyncWatchLog(executionSpecDTO.getNamespace(), executionSpecDTO.getName(), executionSpecDTO.getDomainId());
+        if (domainEvent.is(RUNTIME_STARTED)) {
+            CreateRuntimeInfoSpecCommand command = (CreateRuntimeInfoSpecCommand) domainEvent.getData();
+            if (Boolean.TRUE.equals(command.getWatchLog())) {
+                kubernetesProjectBuildLogUseCase.asyncWatchLog(command.getNamespace(), command.getName(), domainEvent.getDomainId());
+            }
         }
     }
 }

@@ -15,4 +15,3 @@ spring:
         connection.zeroDateTimeBehavior: convertToNull
         enable_lazy_load_no_trans: false
         globally_quoted_identifiers: true
-

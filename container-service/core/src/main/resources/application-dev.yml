@@ -12,8 +12,6 @@ spring:
         show-sql: true
     redis:
         host: localhost
-    kafka:
-        bootstrap-servers: ${KAFKA:127.0.0.1}:9092
 
 eureka:
     instance:

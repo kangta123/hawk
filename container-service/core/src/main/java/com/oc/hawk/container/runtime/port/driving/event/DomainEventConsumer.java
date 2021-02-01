@@ -2,8 +2,7 @@ package com.oc.hawk.container.runtime.port.driving.event;
 
 import com.oc.hawk.api.constant.KafkaTopic;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
-import com.oc.hawk.container.runtime.application.instance.InstanceConfigUseCase;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.runtime.application.instance.InstanceExecutorUseCase;
 import com.oc.hawk.container.runtime.application.project.ProjectBuildJobUseCase;
 import com.oc.hawk.ddd.event.DomainEvent;
@@ -34,7 +33,7 @@ public class DomainEventConsumer {
             projectBuildJobUseCase.startBuildJob(event.getDomainId(), data);
         }
 
-        if (event.is(RuntimeDomainEventType.INSTANCE_CONFIG_DELETED)) {
+        if (event.is(ContainerDomainEventType.INSTANCE_DELETED)) {
             InstanceConfigDTO configDTO = (InstanceConfigDTO) event.getData();
             instanceExecutorUseCase.deleteService(configDTO.getName(), configDTO.getServiceName(), configDTO.getNamespace());
         }

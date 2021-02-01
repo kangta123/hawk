@@ -65,13 +65,14 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         UserPo po = UserPo.createNew(user);
 
         final DepartmentPo departmentPo = departmentRepository.findById(user.getDepartmentId().getId()).orElse(null);
         po.setDepartment(departmentPo);
 
         userPoRepository.save(po);
+        return po.toUser();
     }
 
     @Override
@@ -85,8 +86,8 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public void deleteUser(UserId id) {
-        userPoRepository.deleteById(id.getId());
+    public void deleteUser(User user) {
+        userPoRepository.deleteById(user.getId().getId());
     }
 
     @Override

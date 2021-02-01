@@ -1,10 +1,8 @@
 package com.oc.hawk.container.runtime.port.driven.facade;
 
-import com.oc.hawk.api.constant.KafkaTopic;
 import com.oc.hawk.container.api.command.CreateInstanceVolumeSpecCommand;
 import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
-import com.oc.hawk.container.api.command.CreateProjectBuildWatchLogCommand;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.api.event.ProjectBuildRuntimeStopEvent;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfig;
@@ -38,24 +36,15 @@ public class KubernetesProjectBuildInfrastructureFacade implements ProjectBuildI
         List<CreateInstanceVolumeSpecCommand> volumes = spec.getVolume();
         volumes.add(new CreateInstanceVolumeSpecCommand("/usr/bin/docker:/usr/bin/docker", "docker-volume", true));
         volumes.add(new CreateInstanceVolumeSpecCommand("/var/run/docker.sock:/var/run/docker.sock", "docker-sock-volume", true));
-        domainEventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(buildJobId, RuntimeDomainEventType.RUNTIME_START_EVENT, spec));
-    }
 
-    @Override
-    public void watchLog(long domainId, CreateRuntimeInfoSpecCommand spec) {
-        CreateProjectBuildWatchLogCommand createProjectBuildWatchLogCommand = new CreateProjectBuildWatchLogCommand();
-        createProjectBuildWatchLogCommand.setDomainId(domainId);
-        createProjectBuildWatchLogCommand.setName(spec.getName());
-        createProjectBuildWatchLogCommand.setNamespace(spec.getNamespace());
-
-        domainEventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(null, RuntimeDomainEventType.RUNTIME_WATCH_LOG_EVENT, createProjectBuildWatchLogCommand));
-
+        spec.setWatchLog(true);
+        domainEventPublisher.publishDomainEvent(DomainEvent.byData(buildJobId, ContainerDomainEventType.INSTANCE_STARTED, spec));
     }
 
     @Override
     public void stopBuildRuntime(Long domainId) {
         log.info("Stop build runtime pod, {}", domainId);
         ProjectBuildRuntimeStopEvent data = ProjectBuildRuntimeStopEvent.ofLabel(containerConfiguration.getBuildNamespace(), LABEL_BUILD_JOB_ID, String.valueOf(domainId));
-        domainEventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(domainId, RuntimeDomainEventType.RUNTIME_BUILD_STOP_EVENT, data));
+        domainEventPublisher.publishDomainEvent(DomainEvent.byData(domainId, ContainerDomainEventType.BUILD_RUNTIME_STOPPED, data));
     }
 }

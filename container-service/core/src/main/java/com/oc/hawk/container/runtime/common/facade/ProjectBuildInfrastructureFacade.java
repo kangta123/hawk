@@ -7,7 +7,7 @@ import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
 public interface ProjectBuildInfrastructureFacade {
     void createBuildRuntime(Long domainId, ProjectBuildStartDTO data, ProjectRuntimeConfig projectRuntimeConfig);
 
-    void watchLog(long domainId, CreateRuntimeInfoSpecCommand spec);
+//    void watchLog(long domainId, CreateRuntimeInfoSpecCommand spec);
 
     void stopBuildRuntime(Long domainId);
 

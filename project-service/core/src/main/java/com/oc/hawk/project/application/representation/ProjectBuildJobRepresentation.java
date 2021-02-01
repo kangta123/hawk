@@ -74,7 +74,6 @@ public class ProjectBuildJobRepresentation {
             if (executionPlan != null) {
                 List<ProjectBuildJobStageDTO> stages = executionPlan.getStages().stream().map(projectBuildStage -> {
                     ProjectBuildJobStageDTO stage = new ProjectBuildJobStageDTO();
-                    stage.setId(projectBuildStage.getId().getId());
                     stage.setSuccess(projectBuildStage.isSuccess());
                     stage.setJobStage(projectBuildStage.getStage().toString());
                     stage.setStartTime(projectBuildStage.getCreatedAt());

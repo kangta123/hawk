@@ -4,7 +4,7 @@ import com.oc.hawk.container.api.command.ChangeInstanceConfigCommand;
 import com.oc.hawk.container.api.command.CreateInstanceConfigCommand;
 import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
-import com.oc.hawk.container.api.event.RuntimeDomainEventType;
+import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.facade.InfrastructureLifeCycleFacade;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
@@ -46,7 +46,7 @@ public class InstanceConfigUseCase {
     private final ProjectRuntimeConfigRepository projectRuntimeConfigRepository;
 
     public List<InstanceConfigDTO> queryDefaultNsInstanceConfig(Long projectId) {
-        List<InstanceConfig> configurations = instanceConfigRepository.byProject(projectId, InstanceDomain.DEFAULT_NAMESPACE);
+        List<InstanceConfig> configurations = instanceConfigRepository.byProject(projectId, containerConfiguration.getDefaultInstanceNamespace());
 
         return instanceConfigRepresentation.instanceConfigDtoWithRuntimeInfo(configurations);
     }
@@ -73,7 +73,7 @@ public class InstanceConfigUseCase {
 
         InstanceConfigDTO instanceConfigDTO = instanceConfigRepresentation.instanceConfigDTO(configuration);
 
-        eventPublisher.publishDomainEvent(DomainEvent.byData(id, RuntimeDomainEventType.INSTANCE_CONFIG_DELETED, instanceConfigDTO));
+        eventPublisher.publishDomainEvent(DomainEvent.byData(id, ContainerDomainEventType.INSTANCE_DELETED, instanceConfigDTO));
     }
 
     public InstanceConfigDTO getConfiguration(String namespace, String name) {
@@ -91,7 +91,7 @@ public class InstanceConfigUseCase {
 
         InstanceConfigDTO instanceConfigDTO = instanceConfigRepresentation.instanceConfigDTO(config);
 
-        eventPublisher.publishDomainEvent(DomainEvent.byData(id, RuntimeDomainEventType.INSTANCE_CONFIG_UPDATED, instanceConfigDTO));
+        eventPublisher.publishDomainEvent(DomainEvent.byData(id, ContainerDomainEventType.INSTANCE_CONFIG_UPDATED, instanceConfigDTO));
         return instanceConfigDTO;
     }
 
@@ -109,7 +109,7 @@ public class InstanceConfigUseCase {
         new InstanceStartExecutor(infrastructureLifeCycleFacade, instanceConfigRepository, projectRuntimeConfigRepository).start(instance);
 
         final InstanceDeploymentDTO deployInstance = instanceConfigRepresentation.autoDeployInstance(instance, projectBuildId);
-        eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), RuntimeDomainEventType.INSTANCE_BUILD_AUTH_DEPLOY, deployInstance));
+        eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), ContainerDomainEventType.INSTANCE_BUILD_AUTH_DEPLOY, deployInstance));
     }
 
     private InstanceConfigDTO createInstanceConfig(CreateInstanceConfigCommand command, String namespace) {
@@ -119,7 +119,7 @@ public class InstanceConfigUseCase {
 
         InstanceConfigDTO instanceConfigDTO = instanceConfigRepresentation.instanceConfigDTO(instanceConfig);
         instanceConfigDTO.setId(instanceId.getId());
-        eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), RuntimeDomainEventType.INSTANCE_CONFIG_CREATED, instanceConfigDTO));
+        eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), ContainerDomainEventType.INSTANCE_CREATED, instanceConfigDTO));
         return instanceConfigDTO;
     }
 }

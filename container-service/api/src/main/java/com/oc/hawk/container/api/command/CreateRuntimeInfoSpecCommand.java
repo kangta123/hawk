@@ -26,4 +26,5 @@ public class CreateRuntimeInfoSpecCommand {
     private String runtimeCatalog;
     private String appImage;
     private Long instanceId;
+    private Boolean watchLog;
 }

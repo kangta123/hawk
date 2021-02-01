@@ -15,13 +15,6 @@ spring:
                 connection.zeroDateTimeBehavior: convertToNull
                 enable_lazy_load_no_trans: false
                 globally_quoted_identifiers: true
-    kafka:
-        consumer:
-            group-id: platform-kubernetes-service
-        producer:
-            acks: all
-            key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
-            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 eureka:
     instance:
         hostname: localhost
