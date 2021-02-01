@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
@@ -21,6 +22,8 @@ import java.time.temporal.ChronoUnit;
 public class FetchMeasurementsTemplate {
     private MeasurementGroupName name;
     private String pod;
+    private String app;
+    private String version;
     private LocalDateTime start;
     private LocalDateTime end;
     private MeasurementTemplate template;
@@ -29,7 +32,6 @@ public class FetchMeasurementsTemplate {
         this.template = template;
         return this;
     }
-
 
     public long getEndUnixTimestamp() {
         return toUnixTimestamp(end);
@@ -40,7 +42,7 @@ public class FetchMeasurementsTemplate {
     }
 
     private long toUnixTimestamp(LocalDateTime from) {
-        return from.toInstant(ZoneOffset.of("+8")).toEpochMilli() / 1000;
+        return from.toInstant(ZoneOffset.UTC).toEpochMilli() / 1000;
     }
 
     public long getDiffSecondBetweenStartAndEnd() {

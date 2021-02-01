@@ -14,7 +14,7 @@ public class MeasurementTemplate {
     private final MeasurementTemplateID id;
     private final String template;
     private final String name;
-    private final String unit;
+    private final MeasurementScale scale;
     private final boolean enabled;
     private final String title;
 }

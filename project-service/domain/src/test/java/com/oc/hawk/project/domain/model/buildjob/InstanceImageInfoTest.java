@@ -14,10 +14,10 @@ class InstanceImageInfoTest extends ProjectBaseTest {
     void testSortImageInfoByTime() {
         LocalDateTime now = LocalDateTime.now();
         List<InstanceImageInfo> list = Lists.newArrayList(
-            new InstanceImageInfo("tag1", anyStr(), anyStr(), anyLong(), now.minusHours(3)),
-            new InstanceImageInfo("tag2", anyStr(), anyStr(), anyLong(), now.minusHours(2)),
-            new InstanceImageInfo("tag3", anyStr(), anyStr(), anyLong(), now.minusHours(1)),
-            new InstanceImageInfo("tag4", anyStr(), anyStr(), anyLong(), now)
+            new InstanceImageInfo("tag1", str(), str(), along(), now.minusHours(3)),
+            new InstanceImageInfo("tag2", str(), str(), along(), now.minusHours(2)),
+            new InstanceImageInfo("tag3", str(), str(), along(), now.minusHours(1)),
+            new InstanceImageInfo("tag4", str(), str(), along(), now)
         );
 
         Collections.sort(list);

@@ -13,11 +13,11 @@ class InstanceNetworkTest extends ContainerBaseTest {
 
     @Test
     void exposePort() {
-        int assignPort = anyInt();
+        int assignPort = integer();
         Map<Integer, Integer> ports = Maps.newHashMap();
         SystemServicePort sshPort = SystemServicePort.SSH_PORT;
         ports.put(sshPort.getPort(), assignPort);
-        InstanceNetwork instanceNetwork = new InstanceNetwork(anyStr(), anyInt(), true, ports);
+        InstanceNetwork instanceNetwork = new InstanceNetwork(str(), integer(), true, ports);
         instanceNetwork.exposePort(sshPort);
 
         Assertions.assertThat(instanceNetwork.getAllExposePorts().get(sshPort.getPort())).isEqualTo(assignPort);

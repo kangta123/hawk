@@ -1,4 +1,4 @@
-package com.oc.hawk.monitor.domain.util;
+package com.oc.hawk.monitor.domain.measurement.unit;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

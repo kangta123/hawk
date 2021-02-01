@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 public class DomainEventConsumer {
     private final ProjectBuildJobUseCase projectBuildJobUseCase;
     private final InstanceExecutorUseCase instanceExecutorUseCase;
-    private final InstanceConfigUseCase instanceConfigUseCase;
 
     @KafkaListener(topics = {KafkaTopic.DOMAIN_EVENT_TOPIC})
     public void serviceUpdated(DomainEvent event) {
