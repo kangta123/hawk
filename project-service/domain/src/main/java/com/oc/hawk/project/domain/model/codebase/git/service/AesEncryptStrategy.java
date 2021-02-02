@@ -20,7 +20,7 @@ import java.security.spec.KeySpec;
 import java.util.Properties;
 
 @Slf4j
-public class AESEncryptStrategy implements GitPasswordEncryptStrategy {
+public class AesEncryptStrategy implements GitPasswordEncryptStrategy {
     private final String SALT = "hawk";
     private final String TRANSFORM = "AES/CBC/PKCS5Padding";
 
@@ -28,6 +28,13 @@ public class AESEncryptStrategy implements GitPasswordEncryptStrategy {
 //    public AESEncryptStrategy() {
 //        properties.setProperty(CryptoCipherFactory.CLASSES_KEY, CryptoCipherFactory.CipherProvider.OPENSSL.getClassName());
 //    }
+
+    private static String asString(ByteBuffer buffer) {
+        final ByteBuffer copy = buffer.duplicate();
+        final byte[] bytes = new byte[copy.remaining()];
+        copy.get(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
 
     /**
      * Converts String to UTF8 bytes
@@ -37,13 +44,6 @@ public class AESEncryptStrategy implements GitPasswordEncryptStrategy {
      */
     private byte[] getUtf8Bytes(final String input) {
         return input.getBytes(StandardCharsets.UTF_8);
-    }
-
-    private static String asString(ByteBuffer buffer) {
-        final ByteBuffer copy = buffer.duplicate();
-        final byte[] bytes = new byte[copy.remaining()];
-        copy.get(bytes);
-        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private SecretKeySpec getSecretKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {

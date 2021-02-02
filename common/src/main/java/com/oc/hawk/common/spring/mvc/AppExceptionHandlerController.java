@@ -73,7 +73,6 @@ public class AppExceptionHandlerController extends ResponseEntityExceptionHandle
     }
 
 
-
     @ExceptionHandler(value = AppBusinessException.class)
     public ResponseEntity<Object> handleAppBusinessException(HttpServletRequest request, AppBusinessException e) {
 
@@ -104,12 +103,12 @@ public class AppExceptionHandlerController extends ResponseEntityExceptionHandle
 
 
     private String extractErrorMessageFromObjectErrors(List<ObjectError> allErrors, String defaultMessage) {
-        if(allErrors == null || allErrors.isEmpty()) {
+        if (allErrors == null || allErrors.isEmpty()) {
             return defaultMessage;
         } else {
             List<String> errorMessages = allErrors.stream()
-                    .map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList());
+                .map(ObjectError::getDefaultMessage)
+                .collect(Collectors.toList());
             return Joiner.on(",").skipNulls().join(errorMessages);
         }
     }

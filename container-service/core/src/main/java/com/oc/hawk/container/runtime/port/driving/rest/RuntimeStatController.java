@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RuntimeStatController {
     private final ProjectRuntimeStatUseCase projectRuntimeStatUseCase;
+
     @GetMapping("/project/summary")
     public ProjectSummaryDTO getProjectSummary() {
         return projectRuntimeStatUseCase.getProjectRuntimeStat();

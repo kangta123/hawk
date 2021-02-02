@@ -4,16 +4,13 @@ import com.oc.hawk.base.api.dto.AddUserDTO;
 import com.oc.hawk.base.api.dto.DepartmentDTO;
 import com.oc.hawk.base.api.dto.QueryUserDTO;
 import com.oc.hawk.base.api.dto.UserDTO;
-import com.oc.hawk.base.port.driven.persistence.po.UserPo;
 import com.oc.hawk.base.application.UserUseCase;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
 import com.oc.hawk.ddd.web.DomainPage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -22,7 +19,7 @@ public class UserController {
     private final UserUseCase userUseCase;
 
     @PostMapping
-    public List <UserDTO> queryUsers(@RequestBody(required = false) QueryUserDTO queryUserDTO) {
+    public List<UserDTO> queryUsers(@RequestBody(required = false) QueryUserDTO queryUserDTO) {
         return userUseCase.queryUsers(queryUserDTO);
     }
 
@@ -39,9 +36,9 @@ public class UserController {
 
     @GetMapping("/page")
     public DomainPage<UserDTO> queryUserPage(
-            @RequestParam(name = "size") int size,
-            @RequestParam(name = "page") int page,
-            @RequestParam(name = "key", required = false) String key) {
+        @RequestParam(name = "size") int size,
+        @RequestParam(name = "page") int page,
+        @RequestParam(name = "key", required = false) String key) {
         return userUseCase.queryUserPage(page, size, key);
 
     }

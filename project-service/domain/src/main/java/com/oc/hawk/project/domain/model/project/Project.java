@@ -2,8 +2,8 @@ package com.oc.hawk.project.domain.model.project;
 
 
 import com.oc.hawk.ddd.AggregateRoot;
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
 import com.oc.hawk.project.domain.model.codebase.CodeBaseID;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -26,12 +26,10 @@ public class Project {
     private final ProjectBuild build;
 
     private final ProjectRuntime runtime;
-    private CodeBaseID codeBaseId;
     private final Long departmentId;
-
     private final LocalDateTime createdTime;
     private final ProjectBuildMode mode;
-
+    private CodeBaseID codeBaseId;
     private Set<ProjectApp> apps;
 
     public String buildType() {

@@ -1,12 +1,9 @@
 package com.oc.hawk.container.runtime.port.driving.event;
 
 import com.oc.hawk.api.constant.KafkaTopic;
-import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
-import com.oc.hawk.container.api.event.EntryPointUpdatedEvent;
 import com.oc.hawk.container.api.event.ContainerDomainEventType;
-import com.oc.hawk.container.domain.model.runtime.info.RuntimeCatalog;
+import com.oc.hawk.container.api.event.EntryPointUpdatedEvent;
 import com.oc.hawk.container.runtime.application.instance.InstanceConfigUseCase;
-import com.oc.hawk.container.runtime.application.project.ProjectBuildJobUseCase;
 import com.oc.hawk.ddd.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

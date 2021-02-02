@@ -1,6 +1,5 @@
 package com.oc.hawk.kubernetes.runtime.application.runtime;
 
-import com.google.common.collect.ImmutableMap;
 import com.oc.hawk.infrastructure.application.KubernetesApi;
 import com.oc.hawk.infrastructure.config.KubernetesAccessConfiguration;
 import com.oc.hawk.kubernetes.domain.model.IServiceLabelConstants;
@@ -14,7 +13,6 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

@@ -5,5 +5,6 @@ import com.oc.hawk.project.domain.model.user.UserInfo;
 
 public interface UserFacade {
     UserInfo currentUser();
+
     UserDepartment currentUserDepartment();
 }

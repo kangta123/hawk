@@ -1,16 +1,16 @@
 package com.oc.hawk.project.domain.service;
 
 import com.google.common.collect.Maps;
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
 import com.oc.hawk.project.domain.model.buildjob.ProjectBuildExecutionEnv;
+import com.oc.hawk.project.domain.model.buildjob.ProjectBuildJob;
 import com.oc.hawk.project.domain.model.codebase.CodeBase;
 import com.oc.hawk.project.domain.model.codebase.git.GitCommitLog;
 import com.oc.hawk.project.domain.model.gitrecord.GitCommitLogRepository;
 import com.oc.hawk.project.domain.model.project.Project;
 import com.oc.hawk.project.domain.model.project.ProjectAppRepository;
 import com.oc.hawk.project.domain.model.project.ProjectBuild;
-import com.oc.hawk.project.domain.model.buildjob.ProjectBuildJob;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;

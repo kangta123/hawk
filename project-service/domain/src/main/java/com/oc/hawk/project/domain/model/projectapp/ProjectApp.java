@@ -1,4 +1,4 @@
-package com.oc.hawk.project.domain.model.projectApp;
+package com.oc.hawk.project.domain.model.projectapp;
 
 import com.google.common.base.Objects;
 import com.oc.hawk.ddd.DomainValueObject;

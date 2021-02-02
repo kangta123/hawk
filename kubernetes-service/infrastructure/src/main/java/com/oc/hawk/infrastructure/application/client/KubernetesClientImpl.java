@@ -16,11 +16,11 @@ public class KubernetesClientImpl implements IKubernetesClient {
     @Override
     public KubernetesClient getClient() {
         Config config = new ConfigBuilder()
-                .withTrustCerts(true)
-                .withOauthToken(kubernetesAccessConfiguration.getToken())
-                .withDisableHostnameVerification(true)
-                .withMasterUrl(kubernetesAccessConfiguration.getApiServer()).withDisableHostnameVerification(true)
-                .build();
+            .withTrustCerts(true)
+            .withOauthToken(kubernetesAccessConfiguration.getToken())
+            .withDisableHostnameVerification(true)
+            .withMasterUrl(kubernetesAccessConfiguration.getApiServer()).withDisableHostnameVerification(true)
+            .build();
 
         return new AutoAdaptableKubernetesClient(config);
     }

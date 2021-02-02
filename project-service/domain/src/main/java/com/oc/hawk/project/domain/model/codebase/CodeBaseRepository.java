@@ -9,6 +9,7 @@ public interface CodeBaseRepository {
     CodeBaseID save(CodeBase codeBase);
 
     CodeBase byProjectId(ProjectID projectId);
+
     CodeBase byId(CodeBaseID codeBaseId);
 
     List<CodeBaseID> getCodeBaseIdsByUrl(String key);

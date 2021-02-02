@@ -47,7 +47,7 @@ public class UserPo extends BaseEntity {
     }
 
     public User toUser() {
-        if(department == null){
+        if (department == null) {
             return null;
         }
         final Department department = Department.builder()

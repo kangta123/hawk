@@ -1,8 +1,8 @@
 package com.oc.hawk.message.application.representation;
 
 import com.oc.hawk.message.api.dto.EventMessageDTO;
-import com.oc.hawk.message.domain.model.EventMessage;
 import com.oc.hawk.message.domain.facade.UserInfoFacade;
+import com.oc.hawk.message.domain.model.EventMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventMessageRepresentation {
     private final UserInfoFacade userInfoFacade;
+
     public List<EventMessageDTO> toEventMessageDTO(List<EventMessage> eventMessageList) {
         List<Long> userIds = eventMessageList.stream().map(EventMessage::getUserId).filter(Objects::nonNull).distinct().collect(Collectors.toList());
         Map<Long, String> userName = userInfoFacade.getUserName(userIds);

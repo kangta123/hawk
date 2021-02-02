@@ -3,7 +3,7 @@ package com.oc.hawk.container.domain.model.runtime.config;
 import com.google.common.collect.Sets;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.model.runtime.SystemServicePort;
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.config.volume.NormalInstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.info.PerformanceLevel;
@@ -46,7 +46,7 @@ public class BaseInstanceConfig implements InstanceConfig {
 
     @Override
     public String getRuntimeType() {
-        return ProjectTypeInfo.JAVA;
+        return ProjectType.JAVA;
     }
 
 
@@ -95,7 +95,7 @@ public class BaseInstanceConfig implements InstanceConfig {
 
         InstanceVolume volume = new NormalInstanceVolume(volumeName, mountPath);
         this.volumes.remove(volume);
-        if(StringUtils.isNotEmpty(mountPath)){
+        if (StringUtils.isNotEmpty(mountPath)) {
             this.volumes.add(volume);
         }
     }
@@ -148,7 +148,6 @@ public class BaseInstanceConfig implements InstanceConfig {
         final InstanceImage newImage = version.getInstanceImage(getImage().getApp());
         this.updateImage(newImage);
     }
-
 
 
 }

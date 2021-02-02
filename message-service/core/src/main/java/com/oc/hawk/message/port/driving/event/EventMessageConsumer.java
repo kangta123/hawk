@@ -22,33 +22,33 @@ public class EventMessageConsumer {
     @KafkaListener(topics = {KafkaTopic.DOMAIN_EVENT_TOPIC})
     public void userMessageListener(DomainEvent domainEvent) {
         //Project build
-        if(domainEvent.is(ProjectDomainEventType.PROJECT_BUILD_JOB_CREATED)){
-            eventMessageUseCase.createEventMessage(EventType.PROJECT_BUILD,  domainEvent);
+        if (domainEvent.is(ProjectDomainEventType.PROJECT_BUILD_JOB_CREATED)) {
+            eventMessageUseCase.createEventMessage(EventType.PROJECT_BUILD, domainEvent);
         }
-        if(domainEvent.is(ProjectDomainEventType.PROJECT_CREATED)){
+        if (domainEvent.is(ProjectDomainEventType.PROJECT_CREATED)) {
             eventMessageUseCase.createEventMessage(EventType.PROJECT_ADD, domainEvent);
         }
-        if(domainEvent.is(ProjectDomainEventType.PROJECT_BUILD_JOB_FAILED)){
-            eventMessageUseCase.createEventMessage(EventType.PROJECT_BUILD_FAILED,domainEvent);
+        if (domainEvent.is(ProjectDomainEventType.PROJECT_BUILD_JOB_FAILED)) {
+            eventMessageUseCase.createEventMessage(EventType.PROJECT_BUILD_FAILED, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_STARTED)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_STARTED)) {
             eventMessageUseCase.createEventMessage(EventType.RUNTIME_START, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_STOPPED)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_STOPPED)) {
             eventMessageUseCase.createEventMessage(EventType.RUNTIME_STOP, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_CREATED)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_CREATED)) {
             eventMessageUseCase.createEventMessage(EventType.RUNTIME_ADD_CONFIG, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_CONFIG_UPDATED)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_CONFIG_UPDATED)) {
             eventMessageUseCase.createEventMessage(EventType.RUNTIME_UPDATE_CONFIG, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_DELETED)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_DELETED)) {
             eventMessageUseCase.createEventMessage(EventType.RUNTIME_DELETE_CONFIG, domainEvent);
         }
-        if(domainEvent.is(ContainerDomainEventType.INSTANCE_BUILD_AUTH_DEPLOY)){
+        if (domainEvent.is(ContainerDomainEventType.INSTANCE_BUILD_AUTH_DEPLOY)) {
             final InstanceDeploymentDTO data = (InstanceDeploymentDTO) domainEvent.getData();
-            if(data.getProjectBuildJobId() != null){
+            if (data.getProjectBuildJobId() != null) {
                 eventMessageUseCase.createEventMessage(EventType.RUNTIME_AUTH_DEPLOYMENT_BY_PROJECT_BUILD, domainEvent);
             }
         }

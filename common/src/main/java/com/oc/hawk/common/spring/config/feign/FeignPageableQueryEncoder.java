@@ -23,7 +23,7 @@ public class FeignPageableQueryEncoder implements Encoder {
     public FeignPageableQueryEncoder() {
         HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(JsonUtils.OBJECT_MAPPER);
         ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
-        delegate =  new SpringEncoder(objectFactory);
+        delegate = new SpringEncoder(objectFactory);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class FeignPageableQueryEncoder implements Encoder {
             template.query("page", pageable.getPageNumber() + "");
             template.query("size", pageable.getPageSize() + "");
 
-            Collection <String> existingSorts = template.queries().get("sort");
-            List <String> sortQueries = existingSorts != null ? new ArrayList <>(existingSorts) : new ArrayList <>();
+            Collection<String> existingSorts = template.queries().get("sort");
+            List<String> sortQueries = existingSorts != null ? new ArrayList<>(existingSorts) : new ArrayList<>();
             for (Sort.Order order : pageable.getSort()) {
                 sortQueries.add(order.getProperty() + "," + order.getDirection());
             }

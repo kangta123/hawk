@@ -47,7 +47,7 @@ public class MeasurementGroup {
         }
 
         final MeasurementUnit unit = scale.getUnit(max);
-        if(unit == null){
+        if (unit == null) {
             throw new RuntimeException("Measurement unit cannot be null");
         }
         return unit;

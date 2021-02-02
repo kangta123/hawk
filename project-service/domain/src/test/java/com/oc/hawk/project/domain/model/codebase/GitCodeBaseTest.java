@@ -11,8 +11,9 @@ class GitCodeBaseTest extends ProjectBaseTest {
     void getUrlWithProtocol_urlWithOutProtocol() {
         String url = "github.com/architecture/demo.git";
         GitCodeBase gitCodeBase = new GitCodeBase(url, null);
-        Assertions.assertThat(gitCodeBase.url(true)).isEqualTo("http://"+url);
+        Assertions.assertThat(gitCodeBase.url(true)).isEqualTo("http://" + url);
     }
+
     @Test
     void getUrlWithProtocol_urlWithProtocol() {
         String url = "http://github.com/architecture/demo.git";

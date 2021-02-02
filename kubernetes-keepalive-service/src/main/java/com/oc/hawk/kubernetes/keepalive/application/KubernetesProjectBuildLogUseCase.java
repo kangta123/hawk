@@ -7,7 +7,6 @@ import com.oc.hawk.container.domain.model.build.protocal.RuntimeProjectBuildMess
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.ddd.event.EventPublisher;
 import com.oc.hawk.infrastructure.application.KubernetesApi;
-import com.oc.hawk.infrastructure.application.exception.KubeExecutionException;
 import com.oc.hawk.infrastructure.application.exception.PodNotReadyException;
 import com.oc.hawk.infrastructure.application.exception.PodStartFailedException;
 import com.oc.hawk.kubernetes.keepalive.port.driven.socket.WebSocketMessage;

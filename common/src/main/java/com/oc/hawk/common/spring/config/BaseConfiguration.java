@@ -17,11 +17,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
 @ComponentScan(basePackages = {"com.oc.hawk"}, excludeFilters = {@ComponentScan.Filter(IgnoreScan.class)})
-@EnableFeignClients(basePackages={"com.oc.hawk.**.service.gateway", "com.oc.hawk.**.facade.feign"})
+@EnableFeignClients(basePackages = {"com.oc.hawk.**.service.gateway", "com.oc.hawk.**.facade.feign"})
 @EnableDiscoveryClient
 @Import(value = {KafkaConfiguration.class, Jsr310JpaConverters.class})
 @Slf4j
@@ -44,9 +43,10 @@ public class BaseConfiguration {
 
 
     @Bean
-    public ApplicationConstants applicationConstants(){
+    public ApplicationConstants applicationConstants() {
         return new ApplicationConstants();
     }
+
     @Bean
     Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;

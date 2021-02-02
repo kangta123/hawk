@@ -1,7 +1,6 @@
 package com.oc.hawk.container.domain.config;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 public class HealthCheckProperties {

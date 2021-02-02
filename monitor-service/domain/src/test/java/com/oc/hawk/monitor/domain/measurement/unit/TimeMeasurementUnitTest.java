@@ -4,8 +4,6 @@ import com.oc.hawk.monitor.domain.MonitorDomainBaseTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author kangta123
  */
@@ -17,6 +15,7 @@ class TimeMeasurementUnitTest extends MonitorDomainBaseTest {
         final double unitValue = timeMeasurementUnit.getUnitValue(0.00001);
         Assertions.assertThat(unitValue).isEqualTo(10);
     }
+
     @Test
     void getUnitValue_maxValueBiggerThenSecond() {
         final TimeMeasurementUnit timeMeasurementUnit = new TimeMeasurementUnit(7808);

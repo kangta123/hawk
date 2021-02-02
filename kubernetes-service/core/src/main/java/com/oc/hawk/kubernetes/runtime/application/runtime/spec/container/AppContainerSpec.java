@@ -52,7 +52,7 @@ public class AppContainerSpec implements ContainerSpec {
         final EnvVarSource envVarSource = new EnvVarSourceBuilder()
             .withFieldRef(
                 new ObjectFieldSelectorBuilder().withFieldPath(NAMESPACE_FIELD_PATH).build())
-                    .build();
+            .build();
         return new EnvVar(POD_NAMESPACE, null, envVarSource);
     }
 

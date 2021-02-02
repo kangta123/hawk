@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class UpdateInstanceVersionCommand {
+    private final Long instanceId;
+    private final String version;
+
     public UpdateInstanceVersionCommand(Long instanceId, String version) {
         this.instanceId = instanceId;
         this.version = version;
     }
-
-    private Long instanceId;
-    private String version;
 }

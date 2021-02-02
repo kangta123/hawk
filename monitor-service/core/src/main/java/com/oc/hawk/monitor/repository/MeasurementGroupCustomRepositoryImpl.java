@@ -1,19 +1,15 @@
 package com.oc.hawk.monitor.repository;
 
 import com.google.common.collect.Lists;
-import com.oc.hawk.common.spring.ApplicationContextHolder;
-import com.oc.hawk.monitor.domain.measurement.MeasurementGroupRepository;
-import com.oc.hawk.monitor.port.driven.persistence.po.MeasurementTemplatePO;
-import com.oc.hawk.monitor.port.driven.persistence.po.MeasurementGroupPO;
 import com.oc.hawk.monitor.application.QueryMetricGroupParam;
+import com.oc.hawk.monitor.port.driven.persistence.po.MeasurementGroupPO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class MeasurementGroupCustomRepositoryImpl  {
+public class MeasurementGroupCustomRepositoryImpl {
     public List<MeasurementGroupPO> find(QueryMetricGroupParam param) {
 //        Specification<MeasurementGroupPO> specification = createSpecification(param);
 //        MeasurementGroupRepository repository = ApplicationContextHolder.getBean(MeasurementGroupRepository.class);

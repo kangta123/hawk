@@ -1,11 +1,8 @@
 package com.oc.hawk.monitor.port.driven.facade.prometheus;
 
 import com.oc.hawk.monitor.config.MonitorBaseTest;
-import com.oc.hawk.monitor.domain.measurement.template.MeasurementTemplate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 /**
  * @author kangta123

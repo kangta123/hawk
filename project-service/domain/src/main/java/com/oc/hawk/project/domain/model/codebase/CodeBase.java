@@ -1,7 +1,7 @@
 package com.oc.hawk.project.domain.model.codebase;
 
-import com.oc.hawk.project.domain.model.codebase.git.CodeBaseUrl;
 import com.oc.hawk.project.domain.model.codebase.git.CodeBaseAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseUrl;
 
 
 public abstract class CodeBase {

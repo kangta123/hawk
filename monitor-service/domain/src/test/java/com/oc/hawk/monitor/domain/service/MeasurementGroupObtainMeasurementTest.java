@@ -44,7 +44,7 @@ public class MeasurementGroupObtainMeasurementTest extends MonitorDomainBaseTest
     @Test
     public void testObtainMeasurements_returnEmptyIfTemplatesIsEmpty() {
         final FetchMeasurementsTemplate template = template();
-        final MeasurementGroup measurementGroup = new MeasurementGroup(new MeasurementGroupID(along()),template.getName(), Lists.newArrayList(),   true, str());
+        final MeasurementGroup measurementGroup = new MeasurementGroup(new MeasurementGroupID(along()), template.getName(), Lists.newArrayList(), true, str());
         when(measurementGroupRepository.byName(template.getName())).thenReturn(measurementGroup);
 
         final List<Measurement> measurements = new MeasurementGroupObtainMeasurement(measurementGroupRepository, measurementFetcher).obtainMeasurements(template);
@@ -55,7 +55,7 @@ public class MeasurementGroupObtainMeasurementTest extends MonitorDomainBaseTest
     @Test
     public void testObtainMeasurements_returnEmptyIfGroupDisabled() {
         final FetchMeasurementsTemplate template = template();
-        final MeasurementGroup measurementGroup = new MeasurementGroup(new MeasurementGroupID(along()),template.getName(), Lists.newArrayList(instance(MeasurementTemplate.class)),  false, str());
+        final MeasurementGroup measurementGroup = new MeasurementGroup(new MeasurementGroupID(along()), template.getName(), Lists.newArrayList(instance(MeasurementTemplate.class)), false, str());
 
         when(measurementGroupRepository.byName(template.getName())).thenReturn(measurementGroup);
 

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(name = "project")
 public interface ProjectGateway {
-    @RequestMapping(method = RequestMethod.GET,  path="/build/job/{id}")
+    @RequestMapping(method = RequestMethod.GET, path = "/build/job/{id}")
     ProjectBuildJobDetailDTO getProjectBuildJob(@PathVariable long id);
 }

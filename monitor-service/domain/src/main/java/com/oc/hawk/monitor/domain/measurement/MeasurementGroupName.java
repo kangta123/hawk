@@ -3,8 +3,6 @@ package com.oc.hawk.monitor.domain.measurement;
 import com.oc.hawk.ddd.DomainValueObject;
 import lombok.Getter;
 
-import java.util.StringJoiner;
-
 /**
  * @author kangta123
  */

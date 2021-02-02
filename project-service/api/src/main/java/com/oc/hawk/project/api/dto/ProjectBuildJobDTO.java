@@ -2,8 +2,6 @@ package com.oc.hawk.project.api.dto;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,10 +20,11 @@ public class ProjectBuildJobDTO {
     private LocalDateTime endTime;
     private Long deployToId;
     private String deployToInstance;
-    public void addApp(String i){
-       if(apps == null){
-           apps = Lists.newArrayList();
-       }
+
+    public void addApp(String i) {
+        if (apps == null) {
+            apps = Lists.newArrayList();
+        }
         apps.add(i);
     }
 }

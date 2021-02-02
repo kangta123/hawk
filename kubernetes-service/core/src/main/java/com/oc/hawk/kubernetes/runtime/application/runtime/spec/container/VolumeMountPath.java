@@ -2,8 +2,6 @@ package com.oc.hawk.kubernetes.runtime.application.runtime.spec.container;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.function.Function;
-
 public class VolumeMountPath {
     private static final String MULTI_PATH_SPLIT_FLAG = ":";
     String path;
@@ -18,7 +16,7 @@ public class VolumeMountPath {
 
 
     public String getVolumePath() {
-        if(!path.contains(MULTI_PATH_SPLIT_FLAG)){
+        if (!path.contains(MULTI_PATH_SPLIT_FLAG)) {
             return null;
         }
         return StringUtils.substringBefore(path, MULTI_PATH_SPLIT_FLAG);

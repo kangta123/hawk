@@ -22,8 +22,8 @@ public class RemoteContainerFacade implements ContainerFacade {
     public Map<ProjectID, ProjectRuntimeCounter> loadRuntimeCountByProjects(List<ProjectID> projectIds) {
         Map<ProjectID, ProjectRuntimeCounter> result = Maps.newHashMap();
         List<Long> ids = projectIds.stream().map(ProjectID::getId).collect(Collectors.toList());
-        if(CollectionUtils.isEmpty(ids)){
-            return  result;
+        if (CollectionUtils.isEmpty(ids)) {
+            return result;
         }
         ProjectRuntimeStatDTO projectRuntimeStatDTO = containerGateway.loadRuntimeCountByProjects(ids);
         if (projectRuntimeStatDTO == null) {

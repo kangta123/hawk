@@ -10,5 +10,5 @@ import java.util.List;
 public class QueryUserDTO {
     private String key;
     private List<Long> ids;
-    private Boolean departmentIgnore ;
+    private Boolean departmentIgnore;
 }

@@ -1,10 +1,10 @@
 package com.oc.hawk.base.application;
 
 import com.oc.hawk.base.api.dto.AddUserDTO;
-import com.oc.hawk.base.domain.service.UserPasswordEncoder;
-import com.oc.hawk.base.domain.service.UserRegisterChecker;
 import com.oc.hawk.base.domain.model.user.User;
 import com.oc.hawk.base.domain.model.user.UserRepository;
+import com.oc.hawk.base.domain.service.UserPasswordEncoder;
+import com.oc.hawk.base.domain.service.UserRegisterChecker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class UserFactory {
             .phone(addUserDTO.getPhone()).build();
 
 
-        user.applyNewPassword(User.DefaultPassword, userPasswordEncoder);
+        user.applyNewPassword(User.DEFAULT_PASSWORD, userPasswordEncoder);
         return user;
     }
 }

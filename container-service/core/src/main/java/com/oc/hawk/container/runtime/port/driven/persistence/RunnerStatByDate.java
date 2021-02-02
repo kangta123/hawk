@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public interface RunnerStatByDate {
     LocalDate getDate();
+
     Long getRunnerCount();
+
     Long getConfigurationCount();
 }

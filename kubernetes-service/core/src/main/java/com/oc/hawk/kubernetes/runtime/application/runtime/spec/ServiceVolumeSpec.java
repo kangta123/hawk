@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class ServiceVolumeSpec {
-    private String mountPath;
-    private String volumeName;
+    private final String mountPath;
+    private final String volumeName;
 
-    private VolumeType type;
+    private final VolumeType type;
+    private String subPath;
 
     public ServiceVolumeSpec(String mountPath, String volumeName, VolumeType type, String subPath) {
         this.mountPath = mountPath;
@@ -17,7 +18,6 @@ public class ServiceVolumeSpec {
         this.subPath = subPath;
     }
 
-    private String subPath;
     public ServiceVolumeSpec(String mountPath, String volumeName, VolumeType type) {
         this.mountPath = mountPath;
         this.volumeName = volumeName;

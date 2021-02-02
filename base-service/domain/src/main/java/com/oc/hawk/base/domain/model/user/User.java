@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class User {
-    public final static String DefaultPassword = "password123";
+    public final static String DEFAULT_PASSWORD = "password123";
     private final String name;
     private final String authName;
     private final String phone;

@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class LogInstanceVolume extends InstanceVolume {
+    private final String subPath;
+
     public LogInstanceVolume(String volumeName, String mountPath, String subPath) {
         super(volumeName, mountPath);
         this.subPath = subPath;
     }
-
-    private String subPath;
 }

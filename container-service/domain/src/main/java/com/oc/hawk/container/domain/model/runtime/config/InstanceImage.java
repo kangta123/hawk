@@ -11,7 +11,7 @@ public class InstanceImage {
     private final String SPLIT_SIGN = ":";
     private final String app;
     private final String tag;
-    private String branch;
+    private final String branch;
 
     public InstanceImage(String app, String tag, String branch) {
         this.app = app;
@@ -20,7 +20,7 @@ public class InstanceImage {
     }
 
     public String getApp() {
-        if(app.contains("/")){
+        if (app.contains("/")) {
             return StringUtils.substringAfterLast(app, "/");
         }
         return app;

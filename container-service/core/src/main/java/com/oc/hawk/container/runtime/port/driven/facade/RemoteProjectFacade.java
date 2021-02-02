@@ -1,10 +1,11 @@
 package com.oc.hawk.container.runtime.port.driven.facade;
 
+import com.google.common.collect.Lists;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectBuild;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildPost;
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceId;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceImage;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceImageVersion;
@@ -38,9 +39,9 @@ public class RemoteProjectFacade implements ProjectFacade {
     }
 
     @Override
-    public ProjectTypeInfo getProjectType(Long id) {
+    public ProjectType getProjectType(Long id) {
         ProjectDetailDTO projectDTO = projectGateway.getProject(id);
-        return new ProjectTypeInfo(projectDTO.getProjectType());
+        return new ProjectType(projectDTO.getProjectType(), projectDTO.getBuildType());
     }
 
 
@@ -57,7 +58,13 @@ public class RemoteProjectFacade implements ProjectFacade {
     @Override
     public ProjectBuild getProjectBuild(long buildJobId) {
         final ProjectBuildJobDTO buildJob = projectGateway.getProjectBuildJob(buildJobId);
-        final List<InstanceImage> instanceImages = buildJob.getApps().stream().map(m -> new InstanceImage(m, buildJob.getTag(), buildJob.getBranch())).collect(Collectors.toList());
+        final List<String> apps = buildJob.getApps();
+        final List<InstanceImage> instanceImages;
+        if (apps != null) {
+            instanceImages = apps.stream().map(m -> new InstanceImage(m, buildJob.getTag(), buildJob.getBranch())).collect(Collectors.toList());
+        } else {
+            instanceImages = Lists.newArrayList();
+        }
         return new ProjectBuild(getProjectBuildPost(buildJob), new InstanceImageVersion(instanceImages));
     }
 

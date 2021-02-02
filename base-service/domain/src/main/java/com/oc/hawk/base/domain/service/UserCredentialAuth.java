@@ -1,9 +1,9 @@
 package com.oc.hawk.base.domain.service;
 
+import com.oc.hawk.api.utils.NumberUtils;
 import com.oc.hawk.base.domain.model.auth.exception.InvalidUsernameOrPasswordException;
 import com.oc.hawk.base.domain.model.user.User;
 import com.oc.hawk.base.domain.model.user.UserRepository;
-import com.oc.hawk.api.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 

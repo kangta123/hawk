@@ -55,7 +55,7 @@ public class ProjectUseCase {
 
     @Transactional(rollbackFor = Exception.class)
     public void registerProject(RegisterProjectCommand command) {
-        log.info("register new project with name {}", command.getName());
+        log.info("Register project with name {}", command.getName());
         CodeBase codeBase = codeBaseFactory.create(command);
         Project project = projectFactory.create(command);
 
@@ -68,10 +68,14 @@ public class ProjectUseCase {
     }
 
     @Async
-    public void loadProjectCode(Long projectId) {
+    public void asyncUpdateGitRepo(Long projectId) {
+        log.info("Asynchronously update git repo {}", projectId);
+
         final CodeBase codeBase = codeBaseRepository.byProjectId(new ProjectID(projectId));
         if (codeBase instanceof GitCodeBase) {
             gitRepository.updateCodeRepo(new GitRepoKey(projectId), codeBase);
+        } else {
+            log.warn("Not support this kind of codebase, {}", projectId);
         }
     }
 
@@ -121,9 +125,8 @@ public class ProjectUseCase {
     }
 
     public void deleteProject(long id) {
-        log.info("delete project with id {}", id);
+        log.info("Delete project with id {}", id);
         projectRepository.deleteProject(id);
         eventPublisher.publishDomainEvent(DomainEvent.byType(id, ProjectDomainEventType.PROJECT_DELETED));
-
     }
 }

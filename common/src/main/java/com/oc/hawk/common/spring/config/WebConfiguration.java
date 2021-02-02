@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.oc.hawk.api.constant.AccountHolder;
 import com.oc.hawk.api.constant.Headers;
-import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.api.utils.JsonUtils;
+import com.oc.hawk.common.utils.AccountHolderUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +57,7 @@ public class WebConfiguration implements WebMvcConfigurer {
             @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
                 String idHeader = request.getHeader(Headers.AUTH_ID);
-                if (StringUtils.isNotEmpty(idHeader) ) {
+                if (StringUtils.isNotEmpty(idHeader)) {
                     long id = Long.parseLong(idHeader);
                     AccountHolder accountHolder = new AccountHolder(id);
                     AccountHolderUtils.setCurrent(accountHolder);

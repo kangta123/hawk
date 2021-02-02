@@ -2,7 +2,7 @@ package com.oc.hawk.project;
 
 import com.oc.hawk.common.spring.config.BaseConfiguration;
 import com.oc.hawk.common.spring.config.WebConfiguration;
-import com.oc.hawk.project.domain.config.GitCodeBaseConfiguration;
+import com.oc.hawk.project.domain.config.GitCodeBaseConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,9 +22,8 @@ public class ProjectApplication {
 
     @Bean
     @ConfigurationProperties("hawk.project.codebase.git")
-    public GitCodeBaseConfiguration gitCodeBaseConfiguration() {
-        return new GitCodeBaseConfiguration();
+    public GitCodeBaseConfig gitCodeBaseConfiguration() {
+        return new GitCodeBaseConfig();
     }
-
 }
 

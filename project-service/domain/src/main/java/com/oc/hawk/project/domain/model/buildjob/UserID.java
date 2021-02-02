@@ -6,9 +6,9 @@ import lombok.Getter;
 @DomainValueObject
 @Getter
 public class UserID {
+    private final long id;
+
     public UserID(long id) {
         this.id = id;
     }
-
-    private long id;
 }

@@ -9,14 +9,13 @@ import com.oc.hawk.container.api.dto.InstanceVolumeDTO;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
 import com.oc.hawk.container.domain.facade.UserFacade;
 import com.oc.hawk.container.domain.model.runtime.UserInfo;
-import com.oc.hawk.container.domain.model.runtime.config.InstanceImageVersion;
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
+import com.oc.hawk.container.domain.model.runtime.config.*;
 import com.oc.hawk.container.domain.model.runtime.config.exception.InstanceConfigCreateIllegalArgumentException;
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.config.volume.NormalInstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.info.PerformanceLevel;
 import com.oc.hawk.container.domain.service.InstanceCreateChecker;
-import com.oc.hawk.container.domain.model.runtime.config.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -122,7 +121,7 @@ public class InstanceConfigFactory {
 
 
     private InstanceConfig createConcretedProjectConfig(CreateInstanceConfigCommand command, BaseInstanceConfig config) {
-        ProjectTypeInfo project = projectFacade.getProjectType(config.getProjectId());
+        ProjectType project = projectFacade.getProjectType(config.getProjectId());
         Map<String, String> env = MapUtils.toMap(command.getPropertyKey(), command.getPropertyValue());
         if (project.isSpringBoot()) {
             return new SpringBootInstanceConfig(config, env, command.getDebug(), command.getJprofiler(), command.getProfile());

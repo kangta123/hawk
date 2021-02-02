@@ -5,13 +5,13 @@ public enum BuildType {
     GRADLE(null),
     NPM(null);
 
-    public String getCommand() {
-        return command;
-    }
-
-    private String command;
+    private final String command;
 
     BuildType(String command) {
         this.command = command;
+    }
+
+    public String getCommand() {
+        return command;
     }
 }

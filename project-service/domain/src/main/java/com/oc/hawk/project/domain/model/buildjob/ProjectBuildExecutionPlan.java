@@ -7,7 +7,6 @@ import com.oc.hawk.ddd.DomainEntity;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -27,16 +26,6 @@ public class ProjectBuildExecutionPlan {
         this.projectImages = projectImages;
         this.env = env;
         this.endTime = endTime;
-    }
-
-    public ProjectBuildExecutionPlan(ProjectBuildState state, List<ProjectBuildStage> stages, Set<ProjectImage> projectImages, ProjectBuildExecutionEnv env) {
-        this.state = state;
-        this.projectImages = projectImages;
-        this.env = env;
-        if (stages != null) {
-            Collections.sort(stages);
-        }
-        this.stages = stages;
     }
 
     public ProjectBuildExecutionPlan(ProjectBuildExecutionEnv env) {
@@ -79,8 +68,8 @@ public class ProjectBuildExecutionPlan {
             projectImages.add(image);
         }
 
-        if(this.state == ProjectBuildState.START && projectBuildStage.getStage() == JobStage.Start){
-           this.state = ProjectBuildState.RUNNING;
+        if (this.state == ProjectBuildState.START && projectBuildStage.getStage() == JobStage.Start) {
+            this.state = ProjectBuildState.RUNNING;
         }
         this.stages.add(projectBuildStage);
     }

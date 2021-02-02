@@ -1,8 +1,8 @@
 package com.oc.hawk.common.spring.config;
 
 import com.oc.hawk.api.constant.KafkaTopic;
-import com.oc.hawk.common.spring.ApplicationConstants;
 import com.oc.hawk.api.utils.JsonUtils;
+import com.oc.hawk.common.spring.ApplicationConstants;
 import com.oc.hawk.ddd.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ import java.util.Map;
 public class KafkaConfiguration {
     private final KafkaProperties properties;
     private final ApplicationConstants applicationConstants;
-    private List<String> kafkaTopics = KafkaTopic.getTopics();
+    private final List<String> kafkaTopics = KafkaTopic.getTopics();
 
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Object>> kafkaListenerContainerFactory() {

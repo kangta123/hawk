@@ -4,7 +4,6 @@ import com.oc.hawk.project.domain.model.buildjob.ProjectBuildJobRepository;
 import com.oc.hawk.project.domain.model.buildjob.ProjectImageTag;
 import com.oc.hawk.project.domain.model.buildjob.exception.ProjectImageTagValidateException;
 import com.oc.hawk.project.domain.model.project.ProjectID;
-import com.oc.hawk.project.domain.service.ProjectImageTagGenerator;
 
 import java.util.regex.Pattern;
 

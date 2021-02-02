@@ -22,8 +22,8 @@ public class KubernetesTest {
 
     public static void test2() throws InterruptedException {
         Config config = new ConfigBuilder().withMasterUrl(MASTER_URL).build();
-        try (final KubernetesClient client = new DefaultKubernetesClient(config)){
-             final PodList list = client.pods().list();
+        try (final KubernetesClient client = new DefaultKubernetesClient(config)) {
+            final PodList list = client.pods().list();
 
         }
     }

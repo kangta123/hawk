@@ -2,9 +2,9 @@ package com.oc.hawk.project.domain.service;
 
 import com.oc.hawk.ddd.web.DomainPage;
 import com.oc.hawk.project.domain.facade.UserFacade;
-import com.oc.hawk.project.domain.model.user.UserInfo;
 import com.oc.hawk.project.domain.model.project.Project;
 import com.oc.hawk.project.domain.model.project.ProjectRepository;
+import com.oc.hawk.project.domain.model.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

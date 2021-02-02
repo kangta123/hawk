@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class KubernetesLogController {
     private final KubernetesContainerLogUseCase kubernetesContainerLogUseCase;
+
     @GetMapping("/{name}")
     public KubernetesLogDTO getLogService(
         @PathVariable("name") String name,

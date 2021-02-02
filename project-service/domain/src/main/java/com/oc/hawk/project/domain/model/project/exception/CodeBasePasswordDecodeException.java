@@ -6,6 +6,7 @@ public class CodeBasePasswordDecodeException extends BaseException {
     public CodeBasePasswordDecodeException(String message) {
         super(message);
     }
+
     public CodeBasePasswordDecodeException(String message, Throwable cause) {
         super(message, cause);
     }

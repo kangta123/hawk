@@ -5,6 +5,7 @@ package com.oc.hawk.monitor.domain.measurement.unit;
  */
 public interface IUnits {
     String format(long size, String pattern);
+
     long getUnitSize();
 }
 

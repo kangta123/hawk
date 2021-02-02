@@ -1,10 +1,10 @@
 package com.oc.hawk.kubernetes.runtime.application.runtime.spec.container;
 
 import com.google.common.collect.Lists;
-import com.oc.hawk.kubernetes.runtime.application.runtime.ServiceVolumeComponent;
-import com.oc.hawk.kubernetes.runtime.application.runtime.spec.RuntimeConfigSpec;
 import com.oc.hawk.infrastructure.application.KubernetesConstants;
 import com.oc.hawk.kubernetes.domain.model.IServiceLabelConstants;
+import com.oc.hawk.kubernetes.runtime.application.runtime.ServiceVolumeComponent;
+import com.oc.hawk.kubernetes.runtime.application.runtime.spec.RuntimeConfigSpec;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.deployment.RuntimeComponent;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.EnvVar;
@@ -22,7 +22,7 @@ public class InitContainerSpec implements ContainerSpec {
         SecurityContext securityContext = new SecurityContext();
         securityContext.setPrivileged(true);
         initContainer.setSecurityContext(securityContext);
-        initContainer.setImage(configuration.getImageName() );
+        initContainer.setImage(configuration.getImageName());
 
         EnvVar envVar = new EnvVarBuilder().withName(IServiceLabelConstants.LABEL_SERVICE_NAME).withValue(configuration.getName()).build();
         initContainer.getEnv().add(envVar);

@@ -29,7 +29,7 @@ public class KubernetesFacadeTest extends MonitorBaseTest {
         setObjectValue(inst1, "startTime", 2000L);
         final RuntimeInfoDTO inst2 = instance(RuntimeInfoDTO.class);
         setObjectValue(inst2, "startTime", 3000L);
-        when(kubernetesGateway.getAvailableRuntimeInfo(any(), any(), any(), any(),  any())).thenReturn(Lists.newArrayList(inst1, inst2, inst));
+        when(kubernetesGateway.getAvailableRuntimeInfo(any(), any(), any(), any(), any())).thenReturn(Lists.newArrayList(inst1, inst2, inst));
 
         final String availablePodName = kubernetesFacade.getAvailablePodName(str(), str(), str(), str());
 
@@ -39,7 +39,7 @@ public class KubernetesFacadeTest extends MonitorBaseTest {
     @Test
     public void testGetAvailablePodName_withoutAvailablePod() {
         final KubernetesFacade kubernetesFacade = new RemoteKubernetesFacade(kubernetesGateway);
-        when(kubernetesGateway.getAvailableRuntimeInfo(any(), any(), any(), any(),  any())).thenReturn(Lists.newArrayList());
+        when(kubernetesGateway.getAvailableRuntimeInfo(any(), any(), any(), any(), any())).thenReturn(Lists.newArrayList());
 
         final String availablePodName = kubernetesFacade.getAvailablePodName(str(), str(), str(), str());
 

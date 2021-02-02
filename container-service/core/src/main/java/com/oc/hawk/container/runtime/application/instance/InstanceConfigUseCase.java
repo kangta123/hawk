@@ -2,19 +2,18 @@ package com.oc.hawk.container.runtime.application.instance;
 
 import com.oc.hawk.container.api.command.ChangeInstanceConfigCommand;
 import com.oc.hawk.container.api.command.CreateInstanceConfigCommand;
-import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
+import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.facade.InfrastructureLifeCycleFacade;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
-import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfigRepository;
+import com.oc.hawk.container.domain.model.runtime.config.*;
 import com.oc.hawk.container.domain.service.InstanceStartExecutor;
 import com.oc.hawk.container.domain.service.InstanceVersionUpdater;
 import com.oc.hawk.container.runtime.application.InstanceConfigFactory;
-import com.oc.hawk.container.runtime.application.instance.representation.InstanceConfigRepresentation;
+import com.oc.hawk.container.runtime.application.representation.InstanceConfigRepresentation;
 import com.oc.hawk.container.runtime.port.driven.facade.feign.BaseGateway;
-import com.oc.hawk.container.domain.model.runtime.config.*;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.ddd.event.EventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,6 @@ public class InstanceConfigUseCase {
     private final ProjectFacade projectFacade;
     private final InfrastructureLifeCycleFacade infrastructureLifeCycleFacade;
 
-    private final ProjectRuntimeConfigRepository projectRuntimeConfigRepository;
 
     public List<InstanceConfigDTO> queryDefaultNsInstanceConfig(Long projectId) {
         List<InstanceConfig> configurations = instanceConfigRepository.byProject(projectId, containerConfiguration.getDefaultInstanceNamespace());
@@ -106,7 +104,7 @@ public class InstanceConfigUseCase {
 
     public void updateInstanceVersionAndRestart(InstanceId instanceId, Long projectBuildId) {
         final InstanceConfig instance = new InstanceVersionUpdater(projectFacade, instanceConfigRepository).update(instanceId, projectBuildId);
-        new InstanceStartExecutor(infrastructureLifeCycleFacade, instanceConfigRepository, projectRuntimeConfigRepository).start(instance);
+        new InstanceStartExecutor(infrastructureLifeCycleFacade, instanceConfigRepository).start(instance);
 
         final InstanceDeploymentDTO deployInstance = instanceConfigRepresentation.autoDeployInstance(instance, projectBuildId);
         eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), ContainerDomainEventType.INSTANCE_BUILD_AUTH_DEPLOY, deployInstance));

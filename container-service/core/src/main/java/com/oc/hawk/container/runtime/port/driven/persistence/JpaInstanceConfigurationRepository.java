@@ -2,11 +2,10 @@ package com.oc.hawk.container.runtime.port.driven.persistence;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.container.domain.facade.ProjectFacade;
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.config.*;
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.container.runtime.port.driven.persistence.po.InstanceConfigPO;
 import com.oc.hawk.container.runtime.port.driven.persistence.po.InstanceVolumePO;
-import com.oc.hawk.container.domain.model.runtime.config.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -95,9 +94,6 @@ public class JpaInstanceConfigurationRepository implements InstanceConfigReposit
 
         instanceConfigPo.setCreateTime(baseConfig.getCreatedTime());
         Long projectId = baseConfig.getProjectId();
-
-        ProjectTypeInfo projectType = projectFacade.getProjectType(projectId);
-        instanceConfigPo.setProjectType(projectType.getProjectType());
 
         InstanceNetwork network = baseConfig.getNetwork();
         InstanceImage image = baseConfig.getImage();

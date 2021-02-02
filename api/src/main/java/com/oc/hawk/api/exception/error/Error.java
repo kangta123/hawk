@@ -10,13 +10,14 @@ import java.time.format.DateTimeFormatter;
 @Getter
 public class Error {
 
-    private String code;
+    private final String code;
 
-    private String message;
+    private final String message;
 
-    private String requestUri;
+    private final String requestUri;
 
-    private String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    private final String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
     @JsonCreator
     public Error(@JsonProperty("code") String code,
                  @JsonProperty("requestUri") String requestUri,
@@ -41,9 +42,9 @@ public class Error {
     @Override
     public String toString() {
         return "Error{" +
-                "code='" + code + '\'' +
-                ", message='" + message + '\'' +
-                ", requestUri='" + requestUri + '\'' +
-                '}';
+            "code='" + code + '\'' +
+            ", message='" + message + '\'' +
+            ", requestUri='" + requestUri + '\'' +
+            '}';
     }
 }

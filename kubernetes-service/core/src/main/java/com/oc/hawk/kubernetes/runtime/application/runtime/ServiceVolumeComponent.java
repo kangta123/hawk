@@ -92,7 +92,7 @@ public class ServiceVolumeComponent {
         path = getPath(path, index);
         volumeMount.setMountPath(path);
         volumeMount.setReadOnly(false);
-        if(StringUtils.isNotEmpty(spec.getSubPath())){
+        if (StringUtils.isNotEmpty(spec.getSubPath())) {
             volumeMount.setSubPath(spec.getSubPath());
         }
         volumeMount.setName(spec.getVolumeName());

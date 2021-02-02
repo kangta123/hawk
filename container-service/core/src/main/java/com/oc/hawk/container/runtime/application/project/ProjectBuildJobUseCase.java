@@ -1,8 +1,6 @@
 package com.oc.hawk.container.runtime.application.project;
 
 import com.oc.hawk.container.domain.facade.ProjectFacade;
-import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfig;
-import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfigRepository;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectBuild;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildPost;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceId;
@@ -17,16 +15,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectBuildJobUseCase {
-    private final ProjectRuntimeConfigRepository projectRuntimeConfigRepository;
     private final ProjectBuildInfrastructureFacade projectBuildInfrastructureFacade;
     private final InstanceConfigUseCase instanceConfigUseCase;
     private final ProjectFacade projectFacade;
 
     public void startBuildJob(Long domainId, ProjectBuildStartDTO data) {
         log.info("start build job with id {}", domainId);
-        ProjectRuntimeConfig projectRuntimeConfig = projectRuntimeConfigRepository.findBy(data.getBuildType(), data.getRuntimeType());
-
-        projectBuildInfrastructureFacade.createBuildRuntime(domainId, data, projectRuntimeConfig);
+        projectBuildInfrastructureFacade.createBuildRuntime(domainId, data);
     }
 
     public void endBuildJob(Long projectBuildJobId) {

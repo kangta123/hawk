@@ -5,14 +5,14 @@ import com.oc.hawk.ddd.DomainValueObject;
 @DomainValueObject
 
 public class DomainIp {
-    private String ip;
-
-    public String getIp() {
-        return ip;
-    }
+    private final String ip;
 
     public DomainIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getIp() {
+        return ip;
     }
 
     @Override

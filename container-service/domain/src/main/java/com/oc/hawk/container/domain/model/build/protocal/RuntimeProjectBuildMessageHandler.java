@@ -56,7 +56,7 @@ public class RuntimeProjectBuildMessageHandler implements ProjectBuildMessageHan
 
     @Override
     public void append(String message) {
-        if(StringUtils.isNotEmpty(buf)){
+        if (StringUtils.isNotEmpty(buf)) {
             System.err.println("buf is " + buf);
         }
         this.parse(buf + message);

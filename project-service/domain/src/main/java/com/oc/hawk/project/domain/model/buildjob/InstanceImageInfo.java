@@ -5,6 +5,7 @@ import com.oc.hawk.ddd.DomainValueObject;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+
 @DomainValueObject
 @Getter
 public class InstanceImageInfo implements Comparable<InstanceImageInfo> {
@@ -21,7 +22,8 @@ public class InstanceImageInfo implements Comparable<InstanceImageInfo> {
         this.jobId = jobId;
         this.time = now;
     }
-    public String getApp(){
+
+    public String getApp() {
         return new ProjectImageApp(this.image).getApp();
     }
 

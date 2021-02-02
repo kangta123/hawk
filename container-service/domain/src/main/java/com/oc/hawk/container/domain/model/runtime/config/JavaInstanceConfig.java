@@ -28,6 +28,11 @@ public abstract class JavaInstanceConfig implements InstanceConfig {
     }
 
     @Override
+    public InstanceId getId() {
+        return baseInstanceConfig.getId();
+    }
+
+    @Override
     public InstanceConfig getBaseConfig() {
         return baseInstanceConfig;
     }

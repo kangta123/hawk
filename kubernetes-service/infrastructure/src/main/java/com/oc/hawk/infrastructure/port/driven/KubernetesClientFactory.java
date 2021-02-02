@@ -9,11 +9,11 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 public class KubernetesClientFactory {
     public static KubernetesClient getClient(KubernetesAccessConfiguration kubernetesAccessConfiguration) {
         Config config = new ConfigBuilder()
-                .withTrustCerts(true)
-                .withOauthToken(kubernetesAccessConfiguration.getToken())
-                .withDisableHostnameVerification(true)
-                .withMasterUrl(kubernetesAccessConfiguration.getApiServer()).withDisableHostnameVerification(true)
-                .build();
+            .withTrustCerts(true)
+            .withOauthToken(kubernetesAccessConfiguration.getToken())
+            .withDisableHostnameVerification(true)
+            .withMasterUrl(kubernetesAccessConfiguration.getApiServer()).withDisableHostnameVerification(true)
+            .build();
 
         return new AutoAdaptableKubernetesClient(config);
     }

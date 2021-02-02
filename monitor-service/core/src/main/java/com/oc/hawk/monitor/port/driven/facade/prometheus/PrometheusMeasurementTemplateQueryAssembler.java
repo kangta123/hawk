@@ -1,16 +1,10 @@
 package com.oc.hawk.monitor.port.driven.facade.prometheus;
 
-import com.google.common.collect.Maps;
 import com.oc.hawk.monitor.config.PrometheusConfig;
-import com.oc.hawk.monitor.domain.measurement.template.MeasurementTemplate;
 import com.oc.hawk.monitor.domain.service.FetchMeasurementsTemplate;
 import com.oc.hawk.monitor.domain.service.MeasurementTemplateQueryAssembler;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**

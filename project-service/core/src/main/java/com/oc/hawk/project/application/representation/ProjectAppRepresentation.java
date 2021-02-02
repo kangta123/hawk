@@ -1,7 +1,7 @@
 package com.oc.hawk.project.application.representation;
 
 import com.oc.hawk.project.api.dto.ProjectAppDTO;
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
 import org.springframework.stereotype.Component;
 
 @Component

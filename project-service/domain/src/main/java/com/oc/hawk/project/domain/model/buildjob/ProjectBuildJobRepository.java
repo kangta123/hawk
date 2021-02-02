@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface ProjectBuildJobRepository {
-    ProjectBuildJob  save(ProjectBuildJob projectBuildJob);
+    ProjectBuildJob save(ProjectBuildJob projectBuildJob);
 
     Integer findProjectBuildTimesByDay(ProjectID projectId);
 

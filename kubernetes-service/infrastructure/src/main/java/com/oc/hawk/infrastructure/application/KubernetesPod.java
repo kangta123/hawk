@@ -21,16 +21,16 @@ import java.util.StringJoiner;
 public class KubernetesPod implements Comparable<KubernetesPod> {
 
     public static final String PENDING_STATUS = "Pending";
-    private Pod pod;
+    private final Pod pod;
 
     private KubernetesPod(Pod pod) {
         this.pod = pod;
     }
 
     public static KubernetesPod createNew(Pod pod) {
-        if(pod == null){
+        if (pod == null) {
             return null;
-        }else{
+        } else {
             return new KubernetesPod(pod);
         }
     }
@@ -39,9 +39,11 @@ public class KubernetesPod implements Comparable<KubernetesPod> {
         Map<String, String> labels = pod.getMetadata().getLabels();
         return labels.getOrDefault(key, "");
     }
+
     public String getProjectId() {
         return getLabelValue(IServiceLabelConstants.LABEL_PROJECT);
     }
+
     public boolean isBusinessRuntime() {
         return getLabelValue(IServiceLabelConstants.BUSINESS_SERVICE_CATALOG) != null;
     }
@@ -145,7 +147,7 @@ public class KubernetesPod implements Comparable<KubernetesPod> {
             return !isFistPending;
         }
         return false;
-     }
+    }
 
     public String getNodeIp() {
         return pod.getStatus().getHostIP();

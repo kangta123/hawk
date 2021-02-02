@@ -54,6 +54,7 @@ class ProjectBuildExecutionPlanTest extends ProjectBaseTest {
 
         Assertions.assertThat(projectBuildExecutionPlan.getState()).isEqualByComparingTo(RUNNING);
     }
+
     @Test
     void addNewStage_addStageWithProjectImage() {
         ProjectBuildExecutionPlan projectBuildExecutionPlan = newExecutionPlan();

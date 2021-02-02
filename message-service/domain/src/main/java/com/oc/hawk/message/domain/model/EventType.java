@@ -2,7 +2,6 @@ package com.oc.hawk.message.domain.model;
 
 import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 @Getter
 public enum EventType {
@@ -53,6 +52,6 @@ public enum EventType {
 
     public String getTitle(String user, String... params) {
         String[] strings = ArrayUtils.addFirst(params, user);
-        return String.format(title, (Object[])strings);
+        return String.format(title, (Object[]) strings);
     }
 }

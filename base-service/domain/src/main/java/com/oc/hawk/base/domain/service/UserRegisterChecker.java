@@ -1,10 +1,10 @@
 package com.oc.hawk.base.domain.service;
 
+import com.oc.hawk.api.utils.NumberUtils;
 import com.oc.hawk.base.domain.model.department.DepartmentId;
 import com.oc.hawk.base.domain.model.user.User;
 import com.oc.hawk.base.domain.model.user.UserRepository;
 import com.oc.hawk.base.domain.model.user.exception.UserRegisterInvalidParamException;
-import com.oc.hawk.api.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;

@@ -7,6 +7,7 @@ import com.oc.hawk.container.domain.model.runtime.config.InstanceConfig;
 
 public class InstanceLogDecorator extends AbstractInstanceConfigDecorator {
     ContainerConfiguration containerConfiguration;
+
     public InstanceLogDecorator(InstanceConfigRuntimeDecorator configRuntimeDecorator, ContainerConfiguration configuration) {
         super(configRuntimeDecorator);
         this.containerConfiguration = configuration;
@@ -16,7 +17,7 @@ public class InstanceLogDecorator extends AbstractInstanceConfigDecorator {
     public void config(InstanceConfig instanceConfig) {
         super.config(instanceConfig);
 
-        if(Objects.equal(containerConfiguration.getPvcLog(), Boolean.TRUE)){
+        if (Objects.equal(containerConfiguration.getPvcLog(), Boolean.TRUE)) {
             BaseInstanceConfig baseConfig = (BaseInstanceConfig) instanceConfig.getBaseConfig();
             baseConfig.addVolume(baseConfig.getLog().getLogVolume(baseConfig.getNetwork().getServiceName()));
         }

@@ -4,9 +4,9 @@ import com.oc.hawk.project.api.command.CreateProjectBuildJobCommand;
 import com.oc.hawk.project.domain.facade.UserFacade;
 import com.oc.hawk.project.domain.model.buildjob.*;
 import com.oc.hawk.project.domain.model.codebase.git.GitCommitLogID;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
-import com.oc.hawk.project.domain.model.user.UserInfo;
 import com.oc.hawk.project.domain.model.project.ProjectID;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
+import com.oc.hawk.project.domain.model.user.UserInfo;
 import com.oc.hawk.project.domain.service.AutoIncrementTagGenerator;
 import com.oc.hawk.project.domain.service.CustomTagGenerator;
 import com.oc.hawk.project.domain.service.ProjectImageTagGenerator;
@@ -27,6 +27,7 @@ public class ProjectBuildJobFactory {
     public ProjectBuildPost createProjectBuildPost(CreateProjectBuildJobCommand addProjectBuildJobCommand, ProjectBuildJobID projectBuildJobId) {
         return new ProjectBuildPost(addProjectBuildJobCommand.getConfig(), projectBuildJobId, addProjectBuildJobCommand.getConfigName());
     }
+
     public ProjectBuildJob createProjectBuildJob(CreateProjectBuildJobCommand addProjectBuildJobCommand, GitCommitLogID commitLogId) {
 
         ProjectID projectId = new ProjectID(addProjectBuildJobCommand.getProjectId());

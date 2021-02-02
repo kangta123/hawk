@@ -14,10 +14,11 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Table(name = "base_user_department")
-public class DepartmentPo extends BaseEntity implements DTOConvert <DepartmentDTO> {
+public class DepartmentPo extends BaseEntity implements DTOConvert<DepartmentDTO> {
     private String name;
     private String projectName;
     private boolean master;
+
     @Override
     public DepartmentDTO convert() {
         return BeanUtils.transform(DepartmentDTO.class, this);

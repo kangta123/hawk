@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public  class ChangeInstanceConfigCommand {
+public class ChangeInstanceConfigCommand {
     private List<String> envKey;
     private List<String> envValue;
     private List<String> propertyKey;

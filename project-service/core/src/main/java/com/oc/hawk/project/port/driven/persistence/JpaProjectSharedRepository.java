@@ -32,6 +32,7 @@ interface ProjectSharedPoRepository extends CrudRepository<ProjectSharedPO, Long
 public class JpaProjectSharedRepository implements ProjectSharedRepository {
     private final ProjectSharedPoRepository projectSharedPORepository;
     private final ProjectRepository projectRepository;
+
     @Override
     public List<Project> getProjectSharedToMe() {
         AccountHolder accountHolder = AccountHolderUtils.getAccountHolder();
@@ -49,7 +50,7 @@ public class JpaProjectSharedRepository implements ProjectSharedRepository {
     @Override
     public List<Long> projectSharedUsers(ProjectID projectId) {
         final List<ProjectSharedPO> poList = projectSharedPORepository.findByProject(projectId.getId());
-        if(poList != null){
+        if (poList != null) {
             return poList.stream().map(ProjectSharedPO::getUser).collect(Collectors.toList());
         }
         return null;

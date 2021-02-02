@@ -50,8 +50,8 @@ public class RuntimeComponent {
             return env
                 .entrySet()
                 .stream()
-                .filter(e->StringUtils.isNotEmpty(e.getKey()))
-                .filter(e->StringUtils.isNotEmpty(e.getValue()))
+                .filter(e -> StringUtils.isNotEmpty(e.getKey()))
+                .filter(e -> StringUtils.isNotEmpty(e.getValue()))
                 .map(entry -> new EnvVar(entry.getKey(), entry.getValue(), null)).collect(Collectors.toList());
         }
         return Lists.newArrayList();

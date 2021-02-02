@@ -1,6 +1,6 @@
 package com.oc.hawk.container.domain.model.runtime.config;
 
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 
 import java.util.Map;
 
@@ -9,8 +9,9 @@ public class TomcatInstanceConfig extends JavaInstanceConfig {
         super(baseInstanceConfig, property, debug, jprofiler);
     }
 
+
     @Override
     public String getRuntimeType() {
-        return ProjectTypeInfo.JAVA_TOMCAT;
+        return ProjectType.JAVA_TOMCAT;
     }
 }

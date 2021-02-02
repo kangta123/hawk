@@ -1,7 +1,7 @@
 package com.oc.hawk.project.port.driven.persistence;
 
 import com.oc.hawk.common.utils.DateUtils;
-import com.oc.hawk.project.domain.config.GitCodeBaseConfiguration;
+import com.oc.hawk.project.domain.config.GitCodeBaseConfig;
 import com.oc.hawk.project.domain.model.codebase.CodeBase;
 import com.oc.hawk.project.domain.model.codebase.git.*;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class RemoteGitRepository implements GitRepository {
-    private final GitCodeBaseConfiguration gitCodeBaseConfiguration;
+    private final GitCodeBaseConfig gitCodeBaseConfig;
 
     @Override
     public List<String> loadProjectBranches(GitRepoKey key, CodeBase codeBase) {
@@ -43,7 +43,7 @@ public class RemoteGitRepository implements GitRepository {
     }
 
     private String getGitRepoLocalPath(GitRepoKey key) {
-        return gitCodeBaseConfiguration.getRepoPath() + "/" + key;
+        return gitCodeBaseConfig.getRepoPath() + "/" + key;
     }
 
     private GitCommitLog commitLog(RevCommit commit, String branch) {

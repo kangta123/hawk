@@ -17,6 +17,7 @@ public class CodeBaseController {
     public List<String> loadBranches(@PathVariable Long projectId) {
         return codebaseUseCase.loadBranches(projectId);
     }
+
     @GetMapping("/{projectId}/codebase/branches/log/latest")
     public GitCommitRecordDTO getLatestBranchCommitLog(@PathVariable Long projectId, @RequestParam String branch) {
         return codebaseUseCase.getLatestBranchCommitLog(projectId, branch);

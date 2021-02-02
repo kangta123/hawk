@@ -1,11 +1,10 @@
 package com.oc.hawk.kubernetes;
 
 import com.oc.hawk.common.spring.config.BaseConfiguration;
-import com.oc.hawk.common.spring.config.KafkaConfiguration;
 import com.oc.hawk.common.spring.config.WebConfiguration;
-import com.oc.hawk.infrastructure.port.driven.KubernetesClientFactory;
 import com.oc.hawk.container.domain.config.HealthCheckProperties;
 import com.oc.hawk.infrastructure.config.KubernetesAccessConfiguration;
+import com.oc.hawk.infrastructure.port.driven.KubernetesClientFactory;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +33,7 @@ public class KubernetesApplication {
     public KubernetesAccessConfiguration kubernetesConfiguration() {
         return new KubernetesAccessConfiguration();
     }
+
     @Bean
     public HealthCheckProperties healthCheckProperties() {
         return new HealthCheckProperties();

@@ -1,15 +1,12 @@
 package com.oc.hawk.container.runtime.application.instance;
 
-import com.oc.hawk.api.constant.KafkaTopic;
 import com.oc.hawk.common.spring.cloud.stream.event.KafkaEventPublish;
 import com.oc.hawk.container.api.command.DeleteRuntimeInfoCommand;
-import com.oc.hawk.container.api.command.StopRuntimeInfoCommand;
 import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.facade.InfrastructureLifeCycleFacade;
-import com.oc.hawk.container.domain.model.project.ProjectRuntimeConfigRepository;
-import com.oc.hawk.container.domain.service.InstanceStartExecutor;
 import com.oc.hawk.container.domain.model.runtime.config.*;
+import com.oc.hawk.container.domain.service.InstanceStartExecutor;
 import com.oc.hawk.ddd.event.DomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +26,11 @@ public class InstanceExecutorUseCase {
 
     private final KafkaEventPublish eventPublish;
 
-    private final ProjectRuntimeConfigRepository projectRuntimeConfigRepository;
     private final ContainerConfiguration configuration;
 
     public void startOrUpdate(InstanceId instanceId) {
         log.info("start or restart instance  with id {}", instanceId);
-        new InstanceStartExecutor(infrastructureLifeCycleFacade, instanceConfigRepository, projectRuntimeConfigRepository).start(instanceId);
+        new InstanceStartExecutor(infrastructureLifeCycleFacade, instanceConfigRepository).start(instanceId);
     }
 
 

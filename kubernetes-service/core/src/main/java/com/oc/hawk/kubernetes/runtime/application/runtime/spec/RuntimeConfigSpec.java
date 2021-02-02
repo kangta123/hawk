@@ -25,7 +25,7 @@ public class RuntimeConfigSpec {
     private final List<ServiceVolumeSpec> volumes;
     private final Map<String, String> labels;
     private final String serviceName;
-//    private final RemoteAccessConfigurationSpec remoteAccessConfigurationSpec;
+    //    private final RemoteAccessConfigurationSpec remoteAccessConfigurationSpec;
     private final String healthCheckPath;
     private final String runtimeType;
     private final RuntimeCatalog catalog;

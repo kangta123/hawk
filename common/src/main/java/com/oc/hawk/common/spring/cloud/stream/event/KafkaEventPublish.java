@@ -40,7 +40,7 @@ public class KafkaEventPublish implements EventPublisher {
 
         AccountHolder accountHolder = AccountHolderUtils.getAccountHolder();
         if (accountHolder != null) {
-           domainEvent.withUser(accountHolder.getId());
+            domainEvent.withUser(accountHolder.getId());
         }
 
         kafkaTemplate.send(topic, domainEvent);

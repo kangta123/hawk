@@ -1,12 +1,12 @@
-package com.oc.hawk.container.runtime.application.instance.representation;
+package com.oc.hawk.container.runtime.application.representation;
 
-import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
+import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.dto.InstanceManagerDTO;
 import com.oc.hawk.container.api.dto.InstanceVolumeDTO;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
-import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.config.*;
+import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -56,7 +56,7 @@ public class InstanceConfigRepresentation {
     }
 
     public InstanceConfigDTO instanceConfigDTO(InstanceConfig instanceConfig) {
-        if(instanceConfig == null){
+        if (instanceConfig == null) {
             return null;
         }
         BaseInstanceConfig baseConfig = (BaseInstanceConfig) instanceConfig.getBaseConfig();

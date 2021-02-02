@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Data
 public class ServiceAppRuleRouteDTO {
-    private List<ServiceAppRuleConditionDTO> conditions;
     Map<String, String> weight;
+    private List<ServiceAppRuleConditionDTO> conditions;
     private String name;
 }

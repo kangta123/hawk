@@ -16,6 +16,6 @@ public class InstanceImageVersion {
     }
 
     public InstanceImage getInstanceImage(String app) {
-        return images.stream().filter(i -> StringUtils.equals(i.getApp(), app)).findFirst().orElseThrow(()-> new DomainNotFoundException(app));
+        return images.stream().filter(i -> StringUtils.equals(i.getApp(), app)).findFirst().orElseThrow(() -> new DomainNotFoundException(app));
     }
 }

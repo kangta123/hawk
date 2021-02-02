@@ -6,9 +6,9 @@ import lombok.Getter;
 @DomainValueObject
 @Getter
 public class ProjectBuildStageID {
+    private final Long id;
+
     public ProjectBuildStageID(Long id) {
         this.id = id;
     }
-
-    private Long id;
 }

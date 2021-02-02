@@ -50,7 +50,6 @@ public class InstanceConfigPO extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "volume_id")
     private InstanceVolumePO volume;
-    private String projectType;
 
     @PreUpdate
     protected void onUpdate() {

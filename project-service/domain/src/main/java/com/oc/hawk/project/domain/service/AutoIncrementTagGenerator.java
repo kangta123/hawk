@@ -9,8 +9,8 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public  class AutoIncrementTagGenerator implements ProjectImageTagGenerator {
-    private ProjectBuildJobRepository projectBuildJobRepository;
+public class AutoIncrementTagGenerator implements ProjectImageTagGenerator {
+    private final ProjectBuildJobRepository projectBuildJobRepository;
 
     public AutoIncrementTagGenerator(ProjectBuildJobRepository projectBuildJobRepository) {
         this.projectBuildJobRepository = projectBuildJobRepository;
@@ -18,7 +18,7 @@ public  class AutoIncrementTagGenerator implements ProjectImageTagGenerator {
 
     @Override
     public ProjectImageTag createImageTag(ProjectID projectId, String customTag) {
-        if(StringUtils.isEmpty(customTag)){
+        if (StringUtils.isEmpty(customTag)) {
             Integer times = projectBuildJobRepository.findProjectBuildTimesByDay(projectId);
             customTag = LocalDate.now().format(DateTimeFormatter.ofPattern("MMdd")) + new DecimalFormat("000").format(times);
         }

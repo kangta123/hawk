@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AddAppRuleDTO {
-    private final Integer TOTAL_WEIGHT_VALUE=100;
+    private final Integer TOTAL_WEIGHT_VALUE = 100;
     private AddAppRuleWeightDTO weight;
 
     public void validate() {

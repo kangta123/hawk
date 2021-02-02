@@ -72,20 +72,11 @@ public class BeanUtils {
 
     public static <T> T newInstance(Class<T> clazz) {
         try {
-            return clazz.newInstance();
+           return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static <T> T newInstanceWithObject(T object, String... properties) {
-        T t = (T) newInstance(object.getClass());
-        for (String property : properties) {
-            setProperty(t, property, getProperty(object, property));
-        }
-        return t;
-
     }
 
     private static <T> T newInstance(Class<T> clazz, Object src) {
@@ -135,7 +126,7 @@ public class BeanUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> mapByKey(String key, Collection list) {
-        Map<K, V> map = new HashMap<>();
+        Map<K, V> map = new HashMap<>(list.size());
         if (CollectionUtils.isEmpty(list)) {
             return map;
         }
@@ -165,7 +156,7 @@ public class BeanUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, List<V>> aggByKeyToList(String key, Collection list) {
-        Map<K, List<V>> map = new HashMap<>();
+        Map<K, List<V>> map = new HashMap<>(list.size());
         if (CollectionUtils.isEmpty(list)) {
             return map;
         }

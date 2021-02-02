@@ -10,7 +10,7 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TestHelper {
-    private static EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
-            .stringLengthRange(5, 20)
-            .randomizationDepth(3)
-            .randomize(Long.TYPE, (Randomizer<Long>) () -> TestHelper.anyLong())
-            .randomize(BigDecimal.class, (Randomizer<BigDecimal>) () -> TestHelper.anyBigDecimal())
-            .randomize(Integer.TYPE, (Randomizer<Integer>) () -> TestHelper.anyInt())
-            .charset(Charset.forName("UTF-8")).scanClasspathForConcreteTypes(true)
-            .build();
-    private static Random random = new Random();
+    private static final EnhancedRandom enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
+        .stringLengthRange(5, 20)
+        .randomizationDepth(3)
+        .randomize(Long.TYPE, (Randomizer<Long>) TestHelper::anyLong)
+        .randomize(BigDecimal.class, (Randomizer<BigDecimal>) TestHelper::anyBigDecimal)
+        .randomize(Integer.TYPE, (Randomizer<Integer>) TestHelper::anyInt)
+        .charset(StandardCharsets.UTF_8).scanClasspathForConcreteTypes(true)
+        .build();
+    private static final Random random = new Random();
 
     public static LocalDate day(int day) {
         return LocalDate.of(2016, 1, day + 1);
@@ -112,7 +112,7 @@ public class TestHelper {
 
     public static Stream<String> generateFuzzyString(String partOfName) {
         return Lists.newArrayList(TestHelper.anyString() + partOfName, partOfName + TestHelper.anyString(),
-                TestHelper.anyString() + partOfName + TestHelper.anyString()).stream();
+            TestHelper.anyString() + partOfName + TestHelper.anyString()).stream();
     }
 
     public static <T> Set<T> randomChooseSubCollection(Set<T> source, int size) {

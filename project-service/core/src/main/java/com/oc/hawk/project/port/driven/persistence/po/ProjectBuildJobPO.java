@@ -3,10 +3,10 @@ package com.oc.hawk.project.port.driven.persistence.po;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.oc.hawk.common.hibernate.BaseEntity;
+import com.oc.hawk.project.domain.model.buildjob.*;
 import com.oc.hawk.project.domain.model.codebase.git.GitCommitLogID;
 import com.oc.hawk.project.domain.model.project.ProjectID;
-import com.oc.hawk.project.domain.model.buildjob.*;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -44,7 +44,7 @@ class ProjectBuildJobPO extends BaseEntity {
         ProjectBuildJobPO projectBuildJobPo = new ProjectBuildJobPO();
         projectBuildJobPo.setProjectId(projectBuildJob.getProjectId().getId());
         projectBuildJobPo.setTag(projectBuildJob.getImageTag().getTag());
-        if(projectBuildJob.getGitCommitLogId() != null){
+        if (projectBuildJob.getGitCommitLogId() != null) {
             projectBuildJobPo.setCommitLogId(projectBuildJob.getGitCommitLogId().getId());
         }
 

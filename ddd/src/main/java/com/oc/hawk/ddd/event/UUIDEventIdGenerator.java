@@ -2,7 +2,7 @@ package com.oc.hawk.ddd.event;
 
 import java.util.UUID;
 
-public class UUIDEventIdGenerator implements EventIdGenerator{
+public class UUIDEventIdGenerator implements EventIdGenerator {
     @Override
     public String id() {
         return newUuid();

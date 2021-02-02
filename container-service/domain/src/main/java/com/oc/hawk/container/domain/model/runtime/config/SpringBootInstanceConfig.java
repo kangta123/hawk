@@ -1,6 +1,6 @@
 package com.oc.hawk.container.domain.model.runtime.config;
 
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 
 import java.util.Map;
 
@@ -27,6 +27,6 @@ public class SpringBootInstanceConfig extends JavaInstanceConfig {
 
     @Override
     public String getRuntimeType() {
-        return ProjectTypeInfo.JAVA_SPRINGBOOT;
+        return ProjectType.JAVA_SPRINGBOOT;
     }
 }

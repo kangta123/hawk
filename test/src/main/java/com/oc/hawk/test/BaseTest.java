@@ -27,7 +27,7 @@ public abstract class BaseTest {
         return instance;
     }
 
-    protected LocalDateTime anyDateTime(){
+    protected LocalDateTime anyDateTime() {
         return instance(LocalDateTime.class);
     }
 

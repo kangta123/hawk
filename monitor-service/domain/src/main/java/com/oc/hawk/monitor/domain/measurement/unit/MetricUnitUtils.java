@@ -4,6 +4,28 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class MetricUnitUtils {
+    private static final String PERCENT_UNIT = "%";
+    private static final String BYTE_UNIT = "byte";
+    private static final BigDecimal BYTE = new BigDecimal(1);
+    private static final String KB_UNIT = "kb";
+    private static final BigDecimal KB = new BigDecimal(1024).multiply(BYTE);
+    private static final String MB_UNIT = "mb";
+    private static final BigDecimal MB = KB.multiply(KB);
+    private static final String GB_UNIT = "gb";
+    private static final BigDecimal GB = MB.multiply(KB);
+    private static final String TB_UNIT = "tb";
+    private static final BigDecimal TB = GB.multiply(KB);
+    private static final String MILLISECOND_UNIT = "ms";
+    private static final BigDecimal MILLISECOND = new BigDecimal(1).divide(new BigDecimal(1000)).setScale(3);
+    private static final String SECOND_UNIT = "s";
+    private static final BigDecimal SECOND = new BigDecimal(1);
+    private static final String MINUTE_UNIT = "m";
+    private static final BigDecimal MINUTE = SECOND.multiply(new BigDecimal(60));
+    private static final String HOUR_UNIT = "h";
+    private static final BigDecimal HOUR = MINUTE.multiply(new BigDecimal(60));
+    private static final String DAY_UNIT = "d";
+    private static final BigDecimal DAY = HOUR.multiply(new BigDecimal(24));
+
     public static int toInt(String value) {
         return Math.round(Float.parseFloat(value));
     }
@@ -47,48 +69,6 @@ public class MetricUnitUtils {
                 return value;
         }
     }
-
-    private static final String PERCENT_UNIT = "%";
-
-    private static final String BYTE_UNIT = "byte";
-
-    private static final BigDecimal BYTE = new BigDecimal(1);
-
-    private static final String KB_UNIT = "kb";
-
-    private static final BigDecimal KB = new BigDecimal(1024).multiply(BYTE);
-
-    private static final String MB_UNIT = "mb";
-
-    private static final BigDecimal MB = KB.multiply(KB);
-
-    private static final String GB_UNIT = "gb";
-
-    private static final BigDecimal GB = MB.multiply(KB);
-
-    private static final String TB_UNIT = "tb";
-
-    private static final BigDecimal TB = GB.multiply(KB);
-
-    private static final String MILLISECOND_UNIT = "ms";
-
-    private static final BigDecimal MILLISECOND = new BigDecimal(1).divide(new BigDecimal(1000)).setScale(3);
-
-    private static final String SECOND_UNIT = "s";
-
-    private static final BigDecimal SECOND = new BigDecimal(1);
-
-    private static final String MINUTE_UNIT = "m";
-
-    private static final BigDecimal MINUTE = SECOND.multiply(new BigDecimal(60));
-
-    private static final String HOUR_UNIT = "h";
-
-    private static final BigDecimal HOUR = MINUTE.multiply(new BigDecimal(60));
-
-    private static final String DAY_UNIT = "d";
-
-    private static final BigDecimal DAY = HOUR.multiply(new BigDecimal(24));
 
 
 }

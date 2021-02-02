@@ -20,19 +20,21 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 通过指标组获取指标数据
+ *
  * @author kangta123
  */
 @DomainService
 @Slf4j
 public class MeasurementGroupObtainMeasurement implements IObtainMeasurement {
-    private static final ThreadPoolExecutor METRIC_EXTRACT_THREAD_POOL;
-    private final MeasurementGroupRepository measurementGroupRepository;
-    private final IMeasurementProvisioner measurementProvisioner;
+    private static final ThreadPoolExecutor metricExtractThreadPool;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("HAWK-MeasurementGroup-Extractor-%d").build();
-        METRIC_EXTRACT_THREAD_POOL = new ThreadPoolExecutor(10, 100, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), factory);
+        metricExtractThreadPool = new ThreadPoolExecutor(10, 100, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), factory);
     }
+
+    private final MeasurementGroupRepository measurementGroupRepository;
+    private final IMeasurementProvisioner measurementProvisioner;
 
     public MeasurementGroupObtainMeasurement(MeasurementGroupRepository measurementGroupRepository, IMeasurementProvisioner measurementProvisioner) {
         this.measurementGroupRepository = measurementGroupRepository;
@@ -67,7 +69,7 @@ public class MeasurementGroupObtainMeasurement implements IObtainMeasurement {
         List<Measurement> result = Lists.newArrayListWithCapacity(templates.size());
 
         templates.stream().map(template ->
-            METRIC_EXTRACT_THREAD_POOL.submit(() ->
+            metricExtractThreadPool.submit(() ->
                 measurementProvisioner.fetchMeasurement(fetchMeasurementsTemplate.withMeasurementTemplate(template))))
             .forEach(f -> {
                 try {

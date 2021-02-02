@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class RuntimeInfo {
     private final int restartCount;
-    private String name;
     private final int MAX_FAILURE_TIMES = 3;
+    private final String name;
 
     public RuntimeInfo(int restartCount, String name) {
         this.restartCount = restartCount;

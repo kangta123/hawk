@@ -4,8 +4,6 @@ import com.oc.hawk.monitor.domain.MonitorDomainBaseTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author kangta123
  */

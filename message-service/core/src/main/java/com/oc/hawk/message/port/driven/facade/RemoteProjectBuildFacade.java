@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RemoteProjectBuildFacade implements ProjectBuildFacade {
     private final ProjectBuildGateway gateway;
+
     @Override
     public ProjectBuildCreator getBuildJobCreator(Long jobId) {
         final ProjectBuildJobDTO buildJob = gateway.getProjectBuildJob(jobId);

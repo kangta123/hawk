@@ -3,7 +3,7 @@ package com.oc.hawk.project.domain.model.buildjob;
 import com.oc.hawk.ddd.AggregateRoot;
 import com.oc.hawk.project.domain.model.codebase.git.GitCommitLogID;
 import com.oc.hawk.project.domain.model.project.ProjectID;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
 import lombok.Builder;
 import lombok.Getter;
 

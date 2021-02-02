@@ -14,7 +14,10 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.api.model.apps.DoneableDeployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
-import io.fabric8.kubernetes.client.dsl.*;
+import io.fabric8.kubernetes.client.dsl.NonNamespaceOperation;
+import io.fabric8.kubernetes.client.dsl.PodResource;
+import io.fabric8.kubernetes.client.dsl.RollableScalableResource;
+import io.fabric8.kubernetes.client.dsl.ServiceResource;
 import io.fabric8.kubernetes.client.internal.SerializationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +58,7 @@ public class KubernetesApi {
         yaml(service);
         try {
             return client.services().inNamespace(StringUtils.defaultString(ns, KubernetesConstants.DEFAULT_NAMESPACE)).createOrReplace(service);
-        }catch (KubernetesClientException e){
+        } catch (KubernetesClientException e) {
             log.error("create service of {} error {}", service.getMetadata().getName(), e.getMessage());
         }
         return null;

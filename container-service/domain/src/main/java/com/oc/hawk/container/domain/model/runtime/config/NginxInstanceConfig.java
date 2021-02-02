@@ -1,18 +1,23 @@
 package com.oc.hawk.container.domain.model.runtime.config;
 
-import com.oc.hawk.container.domain.model.runtime.build.ProjectTypeInfo;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 import com.oc.hawk.ddd.DomainEntity;
 import lombok.Getter;
 
 @Getter
 @DomainEntity
 public class NginxInstanceConfig implements InstanceConfig {
-    private BaseInstanceConfig instanceConfig;
+    private final BaseInstanceConfig instanceConfig;
     private String nginxLocation;
 
     public NginxInstanceConfig(BaseInstanceConfig instanceConfig, String nginxLocation) {
         this.instanceConfig = instanceConfig;
         this.nginxLocation = nginxLocation;
+    }
+
+    @Override
+    public InstanceId getId() {
+        return instanceConfig.getId();
     }
 
     @Override
@@ -22,7 +27,7 @@ public class NginxInstanceConfig implements InstanceConfig {
 
     @Override
     public String getRuntimeType() {
-        return ProjectTypeInfo.NGINX;
+        return ProjectType.NGINX;
     }
 
 

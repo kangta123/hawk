@@ -2,8 +2,8 @@ package com.oc.hawk.project.application;
 
 import com.oc.hawk.project.api.command.RegisterProjectCommand;
 import com.oc.hawk.project.domain.facade.UserFacade;
-import com.oc.hawk.project.domain.model.user.UserInfo;
 import com.oc.hawk.project.domain.model.project.*;
+import com.oc.hawk.project.domain.model.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

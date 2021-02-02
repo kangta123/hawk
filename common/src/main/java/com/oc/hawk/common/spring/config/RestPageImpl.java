@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestPageImpl<T> extends PageImpl <T> {
+public class RestPageImpl<T> extends PageImpl<T> {
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public RestPageImpl(@JsonProperty("content") List <T> content,
+    public RestPageImpl(@JsonProperty("content") List<T> content,
                         @JsonProperty("number") int number,
                         @JsonProperty("size") int size,
                         @JsonProperty("totalElements") Long totalElements,
@@ -27,15 +27,15 @@ public class RestPageImpl<T> extends PageImpl <T> {
         super(content, PageRequest.of(number, size), totalElements);
     }
 
-    public RestPageImpl(List <T> content, Pageable pageable, long total) {
+    public RestPageImpl(List<T> content, Pageable pageable, long total) {
         super(content, pageable, total);
     }
 
-    public RestPageImpl(List <T> content) {
+    public RestPageImpl(List<T> content) {
         super(content);
     }
 
     public RestPageImpl() {
-        super(new ArrayList <>());
+        super(new ArrayList<>());
     }
 }

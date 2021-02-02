@@ -3,13 +3,10 @@ package com.oc.hawk.container.traffic.domain;
 import com.oc.hawk.common.utils.BeanUtils;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
 import com.oc.hawk.container.api.dto.QueryServiceTrafficDTO;
-import com.oc.hawk.container.api.constants.Direction;
 import com.oc.hawk.kubernetes.api.dto.QueryTrafficDTO;
 
-import static com.oc.hawk.container.api.constants.Direction.*;
-
 public class QueryTraffic {
-    private InstanceConfigDTO configuration;
+    private final InstanceConfigDTO configuration;
 
     public QueryTraffic(InstanceConfigDTO serviceConfiguration) {
         this.configuration = serviceConfiguration;
@@ -25,8 +22,6 @@ public class QueryTraffic {
 
         return queryTrafficDTO;
     }
-
-
 
 
     private void handleDirection(QueryServiceTrafficDTO traffic, QueryTrafficDTO queryTrafficDTO) {

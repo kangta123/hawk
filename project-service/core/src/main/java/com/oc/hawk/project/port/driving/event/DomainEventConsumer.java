@@ -28,7 +28,7 @@ public class DomainEventConsumer {
         log.info("Domain event {} consumed", event);
 
         if (event.is(ProjectDomainEventType.PROJECT_CREATED)) {
-            projectUseCase.loadProjectCode(event.getDomainId());
+            projectUseCase.asyncUpdateGitRepo(event.getDomainId());
         }
         if (event.is(ProjectDomainEventType.PROJECT_BUILD_JOB_CREATED)) {
             Long domainId = event.getDomainId();

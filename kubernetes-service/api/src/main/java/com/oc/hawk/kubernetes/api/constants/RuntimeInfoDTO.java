@@ -1,13 +1,6 @@
 package com.oc.hawk.kubernetes.api.constants;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.MoreObjects;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Objects;
 
 @Data
 public class RuntimeInfoDTO {

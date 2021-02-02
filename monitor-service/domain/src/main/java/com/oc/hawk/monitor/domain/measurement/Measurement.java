@@ -35,7 +35,7 @@ public class Measurement {
     }
 
     public Map<Long, Double> unitedData(MeasurementUnit unit) {
-        for (Long d: data.keySet()) {
+        for (Long d : data.keySet()) {
             final Double value = data.get(d);
             data.put(d, unit.getUnitValue(value));
         }

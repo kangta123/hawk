@@ -2,8 +2,6 @@ package com.oc.hawk.container.api.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class ProjectSummaryDTO {
     private Integer totalRunner;

@@ -1,8 +1,9 @@
 package com.oc.hawk.container.domain.model.app;
 
-import javax.persistence.*;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
-public class ServiceAppRule implements Comparable<ServiceAppRule>{
+public class ServiceAppRule implements Comparable<ServiceAppRule> {
     private static final String DEFAULT_WEIGHT = "100";
 
     @ManyToOne(fetch = FetchType.LAZY)

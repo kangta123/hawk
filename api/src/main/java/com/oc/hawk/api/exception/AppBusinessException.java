@@ -6,9 +6,9 @@ import com.oc.hawk.api.exception.error.ErrorCode;
 
 public class AppBusinessException extends BaseException {
 
-	private static final long serialVersionUID = 8299312292335394970L;
+    private static final long serialVersionUID = 8299312292335394970L;
 
-	private static final ErrorCode DEFAULT_CODE = CommonErrorCode.INTERNAL_ERROR;
+    private static final ErrorCode DEFAULT_CODE = CommonErrorCode.INTERNAL_ERROR;
 
     private String code = DEFAULT_CODE.getCode();
 

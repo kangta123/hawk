@@ -13,7 +13,7 @@ public class RuntimeInstanceConfigDecoratorService implements InstanceConfigDeco
     private final ContainerConfiguration containerConfiguration;
 
     @Override
-    public void assemble(InstanceConfig config) {
+    public void decorate(InstanceConfig config) {
         InstanceConfigRuntimeDecorator runtimeDecorator = new BaseInstanceConfigRuntimeDecorator(containerConfiguration);
         runtimeDecorator = new AppVolumeDecorator(runtimeDecorator);
         runtimeDecorator = new HostRemoteAccessDecorator(runtimeDecorator);

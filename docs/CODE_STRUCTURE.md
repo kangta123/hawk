@@ -83,7 +83,7 @@ hawk项目主要由以下几种服务组成：
 
 - base: 负责处理用户，部门，授权等业务。
 - project：负责对项目管理，如注册，构建等业务。
-- container：将业务数据转成通用容器管理标准（spec），如将创建服务的instance信息传换成ServiceConfigurationSpecDTO, 后续由k8s服务处理。
+- container：将业务数据转成通用容器管理标准（spec），如将创建服务的instance信息传换成InstanceConfigDTO, 后续由k8s服务处理。
 - kubernetes， 将各种Spec文件信息转换成yaml配置信息，交由kubernetes执行。
 - kubernetes-keepalive，主要处理kubernetes主动发送的数据，如kubernetes广播的的事件，或长时间watch 某一个服务的日志等信息。将信息通过kafka或websocket等方式通知出来。
 - monitor, 处理监控相关信息，对接influxdb（之后会替换为prometheus）， 将监控指标加工处理，提供api供web或其他服务使用。

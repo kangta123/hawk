@@ -1,6 +1,5 @@
 package com.oc.hawk.monitor.port.driven.facade.prometheus;
 
-import com.google.common.collect.Maps;
 import com.oc.hawk.monitor.config.PrometheusConfig;
 import com.oc.hawk.monitor.domain.service.FetchMeasurementsTemplate;
 import com.oc.hawk.monitor.domain.service.IMeasureFetchExecutor;

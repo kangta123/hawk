@@ -1,8 +1,8 @@
 package com.oc.hawk.project.port.driven.persistence.po;
 
 import com.oc.hawk.common.hibernate.BaseEntity;
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +32,8 @@ public class ProjectAppPO extends BaseEntity {
         projectAppPo.setBranch(app.getBranch());
         return projectAppPo;
     }
-    public ProjectApp toProjectApp(){
+
+    public ProjectApp toProjectApp() {
         return new ProjectApp(new ProjectAppID(getId()), branch, appName, appPath);
     }
 }

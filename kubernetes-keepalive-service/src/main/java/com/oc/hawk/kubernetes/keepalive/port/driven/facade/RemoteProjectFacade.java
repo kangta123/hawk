@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RemoteProjectFacade implements ProjectFacade {
     private final ProjectGateway projectGateway;
+
     @Override
     public ProjectBuildJobDetailDTO getProjectBuildJob(Long jobId) {
         return projectGateway.getProjectBuildJob(jobId);

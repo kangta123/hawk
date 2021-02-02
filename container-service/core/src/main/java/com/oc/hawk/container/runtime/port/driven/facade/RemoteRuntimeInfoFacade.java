@@ -1,7 +1,7 @@
 package com.oc.hawk.container.runtime.port.driven.facade;
 
 import com.oc.hawk.container.domain.model.runtime.config.InstanceName;
-import com.oc.hawk.container.runtime.application.instance.representation.RuntimeInfoFacade;
+import com.oc.hawk.container.runtime.application.representation.RuntimeInfoFacade;
 import com.oc.hawk.container.runtime.port.driven.facade.feign.KubernetesGateway;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;
 import lombok.RequiredArgsConstructor;

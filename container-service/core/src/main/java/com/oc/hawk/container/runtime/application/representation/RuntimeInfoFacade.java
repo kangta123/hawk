@@ -1,4 +1,4 @@
-package com.oc.hawk.container.runtime.application.instance.representation;
+package com.oc.hawk.container.runtime.application.representation;
 
 import com.oc.hawk.container.domain.model.runtime.config.InstanceName;
 import com.oc.hawk.kubernetes.api.constants.RuntimeInfoDTO;

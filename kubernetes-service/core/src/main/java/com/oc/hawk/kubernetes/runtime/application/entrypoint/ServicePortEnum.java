@@ -8,7 +8,8 @@ public enum ServicePortEnum {
     JPROFILER_INNER_PORT("8849"),
     SSH_INNER_PORT("22"),
     ANY_PORT("0");
-    private String port;
+    private final String port;
+
     ServicePortEnum(String port) {
         this.port = port;
     }

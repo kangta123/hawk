@@ -5,5 +5,6 @@ package com.oc.hawk.monitor.domain.measurement.unit;
  */
 public interface MeasurementUnit {
     String getDisplayName();
+
     double getUnitValue(double value);
 }

@@ -1,12 +1,12 @@
 package com.oc.hawk.project.port.driven.facade;
 
 import com.oc.hawk.api.constant.AccountHolder;
+import com.oc.hawk.api.exception.BaseException;
 import com.oc.hawk.base.api.dto.DepartmentDTO;
 import com.oc.hawk.base.api.dto.UserDTO;
-import com.oc.hawk.api.exception.BaseException;
 import com.oc.hawk.common.utils.AccountHolderUtils;
-import com.oc.hawk.project.domain.model.user.UserDepartment;
 import com.oc.hawk.project.domain.facade.UserFacade;
+import com.oc.hawk.project.domain.model.user.UserDepartment;
 import com.oc.hawk.project.domain.model.user.UserInfo;
 import com.oc.hawk.project.port.driven.facade.feign.UserGateway;
 import lombok.RequiredArgsConstructor;

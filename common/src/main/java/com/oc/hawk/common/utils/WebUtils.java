@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Slf4j
 public class WebUtils {
-    public static Optional <HttpServletRequest> getCurrentHttpRequest() {
+    public static Optional<HttpServletRequest> getCurrentHttpRequest() {
         return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
-                .filter(requestAttributes -> ServletRequestAttributes.class.isAssignableFrom(requestAttributes.getClass()))
-                .map(requestAttributes -> ((ServletRequestAttributes) requestAttributes))
-                .map(ServletRequestAttributes::getRequest);
+            .filter(requestAttributes -> ServletRequestAttributes.class.isAssignableFrom(requestAttributes.getClass()))
+            .map(requestAttributes -> ((ServletRequestAttributes) requestAttributes))
+            .map(ServletRequestAttributes::getRequest);
     }
 
     public static String getClientIp() {

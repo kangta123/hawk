@@ -47,11 +47,13 @@ public class ProjectController {
     public ProjectDetailDTO getProject(@PathVariable long id) {
         return projectUsecase.getProject(id);
     }
+
     @DeleteMapping("/{id:[0-9]+}")
     public BooleanWrapper deleteProject(@PathVariable long id) {
         projectUsecase.deleteProject(id);
         return BooleanWrapper.TRUE;
     }
+
     @PostMapping("/")
     public BooleanWrapper registerProject(@RequestBody RegisterProjectCommand command) {
         projectUsecase.registerProject(command);

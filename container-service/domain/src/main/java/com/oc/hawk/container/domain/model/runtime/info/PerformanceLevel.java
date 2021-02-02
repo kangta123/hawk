@@ -10,10 +10,10 @@ public enum PerformanceLevel {
     LARGE(0, 4, 8, 8),
     UNLIMITED(-1, -1, -1, -1);
 
-    private String resCpu;
-    private String limitCpu;
-    private String resMem;
-    private String limitMem;
+    private final String resCpu;
+    private final String limitCpu;
+    private final String resMem;
+    private final String limitMem;
 
     PerformanceLevel(double resCpu, double limitCpu, double resMem, double limitMem) {
         this.resCpu = String.valueOf(resCpu);
@@ -21,14 +21,11 @@ public enum PerformanceLevel {
         this.resMem = resMem + "Gi";
         this.limitMem = limitMem + "Gi";
     }
-    public static PerformanceLevel getDefault(){
-        return PerformanceLevel.MEDIUM;
-    }
 
     public static PerformanceLevel getWithDefaultPerformanceLevel(String performance) {
-        if(StringUtils.isEmpty(performance)){
-            return MEDIUM;
-        }else{
+        if (StringUtils.isEmpty(performance)) {
+            return NORMAL;
+        } else {
             return PerformanceLevel.valueOf(performance);
         }
     }

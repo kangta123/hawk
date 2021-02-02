@@ -1,7 +1,5 @@
 package com.oc.hawk.monitor.domain.measurement.unit;
 
-import com.oc.hawk.monitor.domain.measurement.unit.MeasurementUnit;
-
 /**
  * @author kangta123
  */

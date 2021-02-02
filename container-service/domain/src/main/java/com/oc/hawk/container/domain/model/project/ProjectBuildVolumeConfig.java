@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ProjectRuntimeVolumeConfig {
+public class ProjectBuildVolumeConfig {
     private String volume;
     private String mountPath;
 
-    public ProjectRuntimeVolumeConfig(String volume, String mountPath) {
+    public ProjectBuildVolumeConfig(String volume, String mountPath) {
         this.volume = volume;
         this.mountPath = mountPath;
     }

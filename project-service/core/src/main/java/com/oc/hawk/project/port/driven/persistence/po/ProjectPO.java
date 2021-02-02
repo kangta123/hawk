@@ -2,9 +2,9 @@ package com.oc.hawk.project.port.driven.persistence.po;
 
 
 import com.oc.hawk.common.hibernate.BaseEntity;
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
 import com.oc.hawk.project.domain.model.codebase.CodeBaseID;
 import com.oc.hawk.project.domain.model.project.*;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
 import lombok.Getter;
 import lombok.Setter;
 

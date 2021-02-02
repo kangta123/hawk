@@ -14,7 +14,7 @@ public class NetworkTrafficController {
     private final NetworkTrafficUseCase networkTrafficUseCase;
 
     @PostMapping("/{id}/traffic")
-    public MetricResultDTO queryTraffic(@PathVariable long id,  @RequestBody QueryServiceTrafficDTO traffic) {
+    public MetricResultDTO queryTraffic(@PathVariable long id, @RequestBody QueryServiceTrafficDTO traffic) {
         return networkTrafficUseCase.queryTraffic(id, traffic);
     }
 }

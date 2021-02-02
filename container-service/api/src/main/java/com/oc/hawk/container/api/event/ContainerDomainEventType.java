@@ -13,6 +13,6 @@ public interface ContainerDomainEventType {
     String INSTANCE_CREATED = "InstanceCreated";
     String INSTANCE_STARTED = "InstanceStarted";
     String INSTANCE_CONFIG_UPDATED = "InstanceConfigUpdated";
-    String INSTANCE_BUILD_AUTH_DEPLOY= "InstanceBuildAuthDeploy";
+    String INSTANCE_BUILD_AUTH_DEPLOY = "InstanceBuildAuthDeploy";
 
 }

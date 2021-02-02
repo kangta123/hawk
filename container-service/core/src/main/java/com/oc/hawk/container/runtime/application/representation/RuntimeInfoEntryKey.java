@@ -1,4 +1,4 @@
-package com.oc.hawk.container.runtime.application.instance.representation;
+package com.oc.hawk.container.runtime.application.representation;
 
 import com.google.common.base.Objects;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;

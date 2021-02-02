@@ -3,9 +3,9 @@ package com.oc.hawk.project.application.representation;
 import com.oc.hawk.project.api.dto.ProjectBuildJobDTO;
 import com.oc.hawk.project.api.dto.ProjectBuildJobDetailDTO;
 import com.oc.hawk.project.api.dto.ProjectBuildJobStageDTO;
+import com.oc.hawk.project.domain.model.buildjob.*;
 import com.oc.hawk.project.domain.model.codebase.git.GitCommitLog;
 import com.oc.hawk.project.domain.model.gitrecord.GitCommitLogRepository;
-import com.oc.hawk.project.domain.model.buildjob.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

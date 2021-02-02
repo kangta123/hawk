@@ -1,8 +1,8 @@
 package com.oc.hawk.project.port.driven.persistence;
 
-import com.oc.hawk.project.domain.model.projectApp.ProjectApp;
-import com.oc.hawk.project.domain.model.projectApp.ProjectAppID;
 import com.oc.hawk.project.domain.model.project.ProjectAppRepository;
+import com.oc.hawk.project.domain.model.projectapp.ProjectApp;
+import com.oc.hawk.project.domain.model.projectapp.ProjectAppID;
 import com.oc.hawk.project.port.driven.persistence.po.ProjectAppPO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
@@ -36,7 +36,7 @@ public class JpaProjectAppRepository implements ProjectAppRepository {
     @Override
     public List<ProjectApp> byIds(List<ProjectAppID> appIds) {
         List<ProjectAppPO> apps = projectAppPORepository.findByIdIn(appIds.stream().map(ProjectAppID::getId).collect(Collectors.toList()));
-        if(apps != null){
+        if (apps != null) {
             return apps.stream().map(ProjectAppPO::toProjectApp).collect(Collectors.toList());
         }
         return null;
