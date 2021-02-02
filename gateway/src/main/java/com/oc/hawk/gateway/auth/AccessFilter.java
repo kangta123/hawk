@@ -21,17 +21,23 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 权限认证过滤器
+ *
+ * @author kangta123
+ */
 @Slf4j
 public class AccessFilter implements WebFilter, Ordered {
     public static final String WEBSOCKET_PROTOCOL = "websocket";
     public static final int MIN_TOKEN_LENGTH = 10;
-    private static String TagKey = "Bearer";
-    private static SecretKey secretKey = Keys.hmacShaKeyFor(AuthKey.KEY.getBytes());
+    private static final String TAG_KEY = "Bearer";
+    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(AuthKey.KEY.getBytes());
     @Autowired
     private AuthProperties authProperties;
 
@@ -39,15 +45,15 @@ public class AccessFilter implements WebFilter, Ordered {
         if (token != null) {
             try {
                 Claims claims = Jwts.parser()
-                        .setSigningKey(secretKey)
-                        .parseClaimsJws(token.replace(TagKey, ""))
-                        .getBody();
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token.replace(TAG_KEY, ""))
+                    .getBody();
 
                 String subject = claims.getSubject();
                 Map<String, List<String>> headers = Maps.newHashMap();
                 Object id = claims.get("id");
 
-                if (Objects.isNull(id) ||  Objects.isNull(subject)) {
+                if (Objects.isNull(id) || Objects.isNull(subject)) {
                     return null;
                 }
 
@@ -61,16 +67,22 @@ public class AccessFilter implements WebFilter, Ordered {
         return null;
     }
 
+    @PostConstruct
+    public void setup() {
+        log.info("Authorization white list {}", authProperties.getWhiteList());
+    }
+
     private Mono<Void> forward(ServerWebExchange exchange, WebFilterChain chain, Map<String, List<String>> authentication) {
         ServerHttpRequest forwardRequest = Objects.nonNull(authentication) ? exchange.getRequest()
-                .mutate()
-                .headers(httpHeaders -> httpHeaders.putAll(authentication))
-                .build() : exchange.getRequest();
+            .mutate()
+            .headers(httpHeaders -> httpHeaders.putAll(authentication))
+            .build() : exchange.getRequest();
 
         return chain.filter(exchange.mutate().request(forwardRequest).build());
     }
 
     private Mono<Void> unauthorized(ServerWebExchange exchange) {
+        log.info("Request denied {}, ", exchange.getRequest().getPath().value());
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
 
@@ -105,8 +117,8 @@ public class AccessFilter implements WebFilter, Ordered {
             }
         } else {
             boolean ignoreAuth = authProperties.getWhiteList()
-                    .stream()
-                    .anyMatch(requestPath::startsWith);
+                .stream()
+                .anyMatch(requestPath::startsWith);
             if (ignoreAuth) {
                 return forward(exchange, chain, null);
             }

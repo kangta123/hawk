@@ -1,4 +1,4 @@
-FROM registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_jdk8:v4.0.0
+FROM registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_jdk8:v4.0
 
 ENV TOMCAT_MAJOR 8
 ENV TOMCAT_VERSION 8.5.46

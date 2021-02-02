@@ -9,7 +9,7 @@ COPY shell/ /app/bin/
 
 COPY lib/ /app/lib/
 
-RUN apk --update add --no-cache openssh libstdc++ vim bash gawk sed grep bc coreutils wget curl gpgme \
+RUN apk --update add --no-cache openssh libstdc++ bash gawk sed grep bc coreutils wget curl gpgme \
   && sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
   && rm -rf /var/cache/apk/* \
   && sed -ie 's/#Port 22/Port 22/g' /etc/ssh/sshd_config \

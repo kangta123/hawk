@@ -31,3 +31,4 @@ targets.json
 rebel.xml
 *.class
 target/
+.swp

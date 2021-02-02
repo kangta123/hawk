@@ -34,7 +34,6 @@ build_docker() {
   rm -fr ${tmp}
 }
 
-
 package
 
 for f in $(find . -regex ".*/target/[^/]*\.jar" | grep -v "sources\.jar"); do

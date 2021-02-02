@@ -1,0 +1,21 @@
+FROM registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_jdk11:v4.0
+
+ENV TOMCAT_MAJOR 8
+ENV TOMCAT_VERSION 8.5.46
+
+ENV PATH $CATALINA_HOME/bin:$PATH
+
+ADD tomcat/tomcat.tar.gz /usr/local/
+
+ENV CATALINA_HOME /usr/local/apache-tomcat-8.5.46
+RUN set -x \
+	&& cd /usr/local \
+	&& rm -rf $CATALINA_HOME/webapps/* \
+	&& rm -rf $CATALINA_HOME/bin/*.bat \
+	&& chmod +x $CATALINA_HOME/bin/catalina.sh
+
+WORKDIR $CATALINA_HOME
+
+RUN rm -fr $CATALINA_HOME/webapps/*
+
+ENTRYPOINT /app/bin/startup_tomcat.sh

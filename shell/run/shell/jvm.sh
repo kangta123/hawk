@@ -1,8 +1,7 @@
 #!/bin/bash
 
-JVM_FILE="/app/bin/jvm-options-${PERFORMANCE_LEVEL:-NORMAL}.sh"
-
-source ${JVM_FILE}
+source ./jvm-options-${PERFORMANCE_LEVEL:-NORMAL}.sh
+source ./jvm-options.sh
 
 export LD_LIBRARY_PATH=/app/shared/jprofiler11.0.1/bin/linux-x64
 
@@ -21,4 +20,4 @@ if [[ -n "${JAVA_PROPS}" ]]; then
   JAVA_OPTS="${JAVA_PROPS} ${JAVA_OPTS}"
 fi
 
-JAVA_OPTS="-DserviceName=${SERVICE_NAME} ${JAVA_OPTS} "
+echo "Java options $JAVA_OPTS"

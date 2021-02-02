@@ -1,4 +1,4 @@
-FROM registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_jdk8:v4.0.0
+FROM registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_jdk11:v4.0
 
 ENTRYPOINT /app/bin/startup_springboot.sh
 

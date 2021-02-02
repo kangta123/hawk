@@ -4,9 +4,9 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.oc.hawk.ddd.DomainService;
-import com.oc.hawk.monitor.domain.measurement.MeasurementGroupName;
 import com.oc.hawk.monitor.domain.measurement.Measurement;
 import com.oc.hawk.monitor.domain.measurement.MeasurementGroup;
+import com.oc.hawk.monitor.domain.measurement.MeasurementGroupName;
 import com.oc.hawk.monitor.domain.measurement.MeasurementGroupRepository;
 import com.oc.hawk.monitor.domain.measurement.template.MeasurementTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +25,13 @@ import java.util.concurrent.TimeUnit;
 @DomainService
 @Slf4j
 public class MeasurementGroupObtainMeasurement implements IObtainMeasurement {
-    private static ThreadPoolExecutor metricExtractThreadPool;
+    private static final ThreadPoolExecutor METRIC_EXTRACT_THREAD_POOL;
     private final MeasurementGroupRepository measurementGroupRepository;
     private final IMeasurementProvisioner measurementProvisioner;
 
     static {
-        ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("HawkMeasurementGroup-Extractor-%d").build();
-        metricExtractThreadPool = new ThreadPoolExecutor(10, 100, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), factory);
+        ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("HAWK-MeasurementGroup-Extractor-%d").build();
+        METRIC_EXTRACT_THREAD_POOL = new ThreadPoolExecutor(10, 100, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), factory);
     }
 
     public MeasurementGroupObtainMeasurement(MeasurementGroupRepository measurementGroupRepository, IMeasurementProvisioner measurementProvisioner) {
@@ -67,7 +67,7 @@ public class MeasurementGroupObtainMeasurement implements IObtainMeasurement {
         List<Measurement> result = Lists.newArrayListWithCapacity(templates.size());
 
         templates.stream().map(template ->
-            metricExtractThreadPool.submit(() ->
+            METRIC_EXTRACT_THREAD_POOL.submit(() ->
                 measurementProvisioner.fetchMeasurement(fetchMeasurementsTemplate.withMeasurementTemplate(template))))
             .forEach(f -> {
                 try {
