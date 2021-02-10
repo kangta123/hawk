@@ -1,0 +1,40 @@
+{{- if .Values.persistent.enabled }}
+
+{{- range $key, $val := .Values.persistent.volume }}
+{{- if $val.enabled }}
+{{- if and ($val.nfs) ($val.path) }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name:  {{ $val.name }}
+spec:
+  capacity:
+    storage: {{ $val.size }}
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: {{ $val.nfs }}
+    path: {{ $val.path }}
+{{- end }}
+
+---    
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $val.name }}
+  namespace: {{ $val.namespace }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ $val.size }}
+  {{- if $val.storageClass }}
+  storageClassName: {{ $val.storageClass }}
+  {{- end }}
+
+{{- end }}
+{{- end }}
+
+{{- end }}
+

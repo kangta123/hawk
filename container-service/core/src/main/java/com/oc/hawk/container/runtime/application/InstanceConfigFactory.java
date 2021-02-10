@@ -37,7 +37,8 @@ public class InstanceConfigFactory {
         InstanceConfig config = instanceConfigRepository.byId(instanceId);
         BaseInstanceConfig baseConfig = (BaseInstanceConfig) config.getBaseConfig();
 
-        baseConfig.update(command.getDescn(), command.getPerformanceLevel(), command.getHealthCheckPath());
+        baseConfig.update(command.getDescn(), command.getPerformanceLevel());
+        baseConfig.updateHealthCheck(command.getHealthCheck(), command.getHealthCheckPath());
         baseConfig.updateNetwork(command.getMesh(), command.getExposePorts());
         baseConfig.updateInstanceLog(command.getLogPath());
         baseConfig.updateInstanceManagers(getInstanceManager(command));
@@ -86,11 +87,11 @@ public class InstanceConfigFactory {
             .namespace(namespace)
             .descn(command.getDescn())
             .network(entryPoint)
-            .healthCheckPath(command.getHealthCheckPath())
+            .healthCheck(new InstanceHealthCheck(command.getHealthCheck(), command.getHealthCheckPath()))
             .log(log)
             .managers(getInstanceManager(command))
             .name(name)
-            .performanceLevel(PerformanceLevel.valueOf(command.getPerformanceLevel()))
+            .performanceLevel(PerformanceLevel.getWithDefaultPerformanceLevel(command.getPerformanceLevel()))
             .projectId(command.getProjectId())
             .createdTime(LocalDateTime.now())
             .updatedTime(LocalDateTime.now())

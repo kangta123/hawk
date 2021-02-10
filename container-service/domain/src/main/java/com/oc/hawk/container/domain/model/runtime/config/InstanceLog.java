@@ -1,7 +1,7 @@
 package com.oc.hawk.container.domain.model.runtime.config;
 
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
-import com.oc.hawk.container.domain.model.runtime.config.volume.LogInstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.config.volume.SharedInstanceVolume;
 import com.oc.hawk.ddd.DomainValueObject;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,7 @@ public class InstanceLog {
 
     public InstanceVolume getLogVolume(String serviceName) {
         if (StringUtils.isNotEmpty(logPath)) {
-            return new LogInstanceVolume(LOG_PVC_NAME, logPath, serviceName);
+            return new SharedInstanceVolume(LOG_PVC_NAME, logPath, serviceName);
         } else {
             return null;
         }

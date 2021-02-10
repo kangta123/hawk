@@ -32,7 +32,7 @@ public class PrometheusMeasurementTemplateQueryAssembler implements MeasurementT
     }
 
     enum Interval {
-        M1(60), M5(60 * 5), M15(60 * 15), H1(60 * 60), H2(60 * 60 * 2);
+        M2(60 * 5), M10(60 * 10), M30(60 * 30), H1(60 * 60), H2(60 * 60 * 2);
         private final int value;
 
         Interval(int value) {

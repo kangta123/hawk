@@ -8,16 +8,11 @@ import com.oc.hawk.kubernetes.runtime.application.runtime.spec.deployment.decora
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.deployment.decorator.ServiceVolumeDecorator;
 
 public class BusinessRuntimeComponent implements ConfigurableRuntimeComponent {
-    private final HealthCheckProperties healthCheckProperties;
 
-    public BusinessRuntimeComponent(HealthCheckProperties healthCheckProperties) {
-        this.healthCheckProperties = healthCheckProperties;
-    }
 
     @Override
     public void config(RuntimeComponent componentHolder) {
         RuntimeConfigSpec configuration = componentHolder.getConfiguration();
-        configuration.withDefaultHealthCheckProperties(healthCheckProperties);
 
         ConfigurableRuntimeComponent configurableRuntimeComponent = new DefaultRuntimeComponent(configuration);
         configurableRuntimeComponent = new ServiceMeshDecorator(configurableRuntimeComponent);

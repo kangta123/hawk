@@ -19,6 +19,7 @@ public class CreateRuntimeInfoSpecCommand {
     private Map<String, String> labels;
     private Long projectId;
     private String healthCheckPath;
+    private Boolean healthCheckEnabled;
 
     private List<CreateInstanceVolumeSpecCommand> volume = Lists.newArrayList();
     private CreateInstanceVolumeSpecCommand appVolume;

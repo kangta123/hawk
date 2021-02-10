@@ -17,18 +17,18 @@ public abstract class BaseTest {
         return TestHelper.anyLong();
     }
 
-    protected <T> T instance(Class<T> cls) {
+    protected <T> T newInstance(Class<T> cls) {
         return TestHelper.newInstance(cls);
     }
 
-    protected <T> T instanceWith(Class<T> cls, String property, Object value) {
-        final T instance = instance(cls);
+    protected <T> T newInstance(Class<T> cls, String property, Object value) {
+        final T instance = newInstance(cls);
         this.setObjectValue(instance, property, value);
         return instance;
     }
 
     protected LocalDateTime anyDateTime() {
-        return instance(LocalDateTime.class);
+        return newInstance(LocalDateTime.class);
     }
 
     protected void setObjectValue(Object obj, String property, Object value) {

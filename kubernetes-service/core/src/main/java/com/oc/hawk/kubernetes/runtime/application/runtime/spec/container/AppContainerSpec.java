@@ -37,7 +37,7 @@ public class AppContainerSpec implements ContainerSpec {
             appContainer.setResources(resourceRequirement);
         }
         if (configuration.isBusiness()) {
-            new AppContainerProbe(appContainer).configContainerProbe(configuration);
+            new AppContainerProbe(appContainer).configContainerProbe(configuration.getHealthCheck());
         }
 
         final List<EnvVar> envVars = runtimeComponent.getEnvVars();

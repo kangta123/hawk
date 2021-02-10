@@ -25,43 +25,46 @@ hawk:
         default-instance-namespace: default
         domain-host: hawk.cn
         build-namespace: build
-        app-image-prefix: "registry.cn-beijing.aliyuncs.com/9fbank/"
+        app-image-prefix: "registry.cn-qingdao.aliyuncs.com/kangta123"
         gateway-url: "localhost:8001"
         pvc-log: true
     runtime:
+        buildVolume: lib-repo
         config:
             nginx:
                 runtime:
-                    appImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_nginx:v3.0
-                    dataImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_init_npm:v3.0
+                    appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_nginx:v4.5.2
+                    dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_npm:v4.5.2
                     podInteractionVolume: /tmp/app:/usr/local/openresty/nginx/html
                 build:
                     npm:
-                        image: registry.cn-beijing.aliyuncs.com/9fbank/onecard_npm_build:v3.0.5
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_npm_build:v4.5.2
+                        sub: npm
             tomcat:
                 runtime:
-                    appImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_tomcat8:v3.0.7
-                    dataImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_init_tomcat:v3.0
+                    appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_tomcat8:v4.5.2
+                    dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_tomcat:v4.5.2
                     podInteractionVolume: /tmp/app:/usr/local/apache-tomcat-8.5.46/webapps/ROOT
                 build:
                     npm:
-                        image: registry.cn-beijing.aliyuncs.com/9fbank/onecard_tomcat_build:v3.0.9
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_tomcat_build:v4.5.2
                         volume:
-                            volume: maven-repository-nfs
+                            sub: maven
                             mountPath: /root/.m2/
             springboot:
                 runtime:
-                    appImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_springboot8:v3.0.7
-                    dataImage: registry.cn-beijing.aliyuncs.com/9fbank/onecard_init_springboot:v3.0
+                    appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot8:v4.5.2
+                    dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_springboot:v4.5.2
                     podInteractionVolume: /tmp/app:/app/jar
                 build:
                     maven:
-                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot_build:v4.0.1
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_springboot_build:v4.5.2
                         volume:
-                            volume: maven-repository-nfs
+                            sub: maven
                             mountPath: /root/.m2/
                     gradle:
-                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gradle_build:v4.0
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gradle_build:v4.5.2
                         volume:
-                            volume: gradle-repository-nfs
+                            sub: gradle
                             mountPath: /gradle
+

@@ -23,11 +23,11 @@ public class KubernetesFacadeTest extends MonitorBaseTest {
     @Test
     public void testGetAvailablePodName_getLatestPodNameWithMultiAvailablePod() {
         final KubernetesFacade kubernetesFacade = new RemoteKubernetesFacade(kubernetesGateway);
-        final RuntimeInfoDTO inst = instance(RuntimeInfoDTO.class);
+        final RuntimeInfoDTO inst = newInstance(RuntimeInfoDTO.class);
         setObjectValue(inst, "startTime", 1000L);
-        final RuntimeInfoDTO inst1 = instance(RuntimeInfoDTO.class);
+        final RuntimeInfoDTO inst1 = newInstance(RuntimeInfoDTO.class);
         setObjectValue(inst1, "startTime", 2000L);
-        final RuntimeInfoDTO inst2 = instance(RuntimeInfoDTO.class);
+        final RuntimeInfoDTO inst2 = newInstance(RuntimeInfoDTO.class);
         setObjectValue(inst2, "startTime", 3000L);
         when(kubernetesGateway.getAvailableRuntimeInfo(any(), any(), any(), any(), any())).thenReturn(Lists.newArrayList(inst1, inst2, inst));
 
@@ -49,7 +49,7 @@ public class KubernetesFacadeTest extends MonitorBaseTest {
     @Test
     public void testGetAvailablePodName_withSingleAvailablePod() {
         final KubernetesFacade kubernetesFacade = new RemoteKubernetesFacade(kubernetesGateway);
-        final RuntimeInfoDTO instance = instance(RuntimeInfoDTO.class);
+        final RuntimeInfoDTO instance = newInstance(RuntimeInfoDTO.class);
         when(kubernetesGateway.getAvailableRuntimeInfo(anyString(), anyString(), anyString(), anyString(), anyBoolean())).thenReturn(List.of(instance));
 
         final String availablePodName = kubernetesFacade.getAvailablePodName(str(), str(), str(), str());

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: default-eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service.name: default-eureka-server
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        service.name: default-eureka-server
+    spec:
+      containers:
+      - image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/springboot8:v0.0.1
+        name: default-eureka-server
+        volumeMounts:
+        - mountPath: /app/jar
+          name: app-volume
+      initContainers:
+      - command:
+        - sh
+        - app.sh
+        env:
+        - name: service.name
+          value: default-eureka-server
+        image: {{.Values.hawk.eureka.image}}:{{.Values.hawk.eureka.version}}
+        name: app-data
+        volumeMounts:
+        - mountPath: /tmp/app
+          name: app-volume
+      volumes:
+      - emptyDir: {}
+        name: app-volume
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-eureka-server
+spec:
+  ports:
+  - name: default-eureka-server
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    service.name: default-eureka-server
+

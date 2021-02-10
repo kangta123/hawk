@@ -9,11 +9,12 @@ ROOT=`pwd`
 export MAVEN_OPTS="-Xmx512m"
 
 package() {
-    ./mvnw clean install -DskipTests -Dsonar.skip=true -Dpmd.skip=true
+    ./mvnw clean install -DskipTests -Dsonar.skip=true -Dpmd.skip=truKubernetesProjectBuildLogUseCase.javae
     cd ${folder:-"."}
 }
 
 build_docker() {
+  mkdir -p docker
   JAR_FILE=$1
   pomFile=$(dirname ${JAR_FILE})
   pwd
@@ -24,7 +25,6 @@ build_docker() {
   tmp=$(mktemp dockerfile.XXXXXX)
   echo "FROM ${BASE_IMAGE}" >${tmp}
 
-  mkdir docker 2>/dev/null
   docker  build \
     --build-arg JAR_FILE=${JAR_FILE} \
     -t ${IMAGE_NAME}:${TAG} . -f - <${tmp}
@@ -32,6 +32,7 @@ build_docker() {
   docker push ${IMAGE_NAME}:${TAG}
 
   rm -fr ${tmp}
+  rm -fr docker
 }
 
 package

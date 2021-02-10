@@ -12,7 +12,7 @@ import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildLabel;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 import com.oc.hawk.container.domain.model.runtime.config.*;
 import com.oc.hawk.container.domain.model.runtime.config.volume.*;
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ public class InstanceRuntimeRepresentation {
     private final ContainerRuntimeConfig containerRuntimeConfig;
     private final ProjectFacade projectFacade;
 
-    public CreateRuntimeInfoSpecCommand buildRuntimeSpecCommand(Long buildJobId, ProjectBuildStartDTO data) {
+    public CreateRuntimeInfoSpecCommand buildRuntimeSpecCommand(Long buildJobId, ProjectBuildReadyDTO data) {
         final ContainerRuntimeConfig.ContainerConfig config = containerRuntimeConfig.getConfig(data.getRuntimeType(), data.getBuildType());
 
         final Map<String, Object> env = data.getEnv();
@@ -69,11 +69,10 @@ public class InstanceRuntimeRepresentation {
                 createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), false));
             } else if (volume instanceof AppInstanceVolume) {
                 spec.setAppVolume(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), true));
-            } else if (volume instanceof LogInstanceVolume) {
-                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), false, ((LogInstanceVolume) volume).getSubPath()));
-            } else if (volume instanceof BuildInstanceVolume) {
-                BuildInstanceVolume buildInstanceVolume = (BuildInstanceVolume) volume;
-                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), buildInstanceVolume.isHost()));
+            } else if (volume instanceof SharedInstanceVolume) {
+                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), false, ((SharedInstanceVolume) volume).getSubPath()));
+            } else if (volume instanceof HostedInstanceVolume) {
+                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), true));
             }
             spec.setVolume(createInstanceVolumeSpecCommands);
         }
@@ -92,7 +91,9 @@ public class InstanceRuntimeRepresentation {
 
         spec.setEnv(host.getEnv());
         spec.setPerformance(baseConfig.getPerformanceLevel().name());
-        spec.setHealthCheckPath(baseConfig.getHealthCheckPath());
+        final InstanceHealthCheck healthCheck = baseConfig.getHealthCheck();
+        spec.setHealthCheckPath(healthCheck.getPath());
+        spec.setHealthCheckEnabled(healthCheck.isEnabled());
         spec.setDataImage(image.getFullImage(containerConfiguration));
         spec.setMesh(network.isMesh());
         InstanceName name = baseConfig.getName();
@@ -116,9 +117,11 @@ public class InstanceRuntimeRepresentation {
 
         final ProjectType projectType = projectFacade.getProjectType(baseConfig.getProjectId());
 
-        final ContainerRuntimeConfig.ContainerConfig containerConfig = containerRuntimeConfig.getConfig(projectType.getRuntimeType(), projectType.getBuildType());
-        if (containerConfig != null) {
-            spec.setAppImage(containerConfig.getAppImage());
+        if (projectType != null) {
+            final ContainerRuntimeConfig.ContainerConfig containerConfig = containerRuntimeConfig.getConfig(projectType.getRuntimeType(), projectType.getBuildType());
+            if (containerConfig != null) {
+                spec.setAppImage(containerConfig.getAppImage());
+            }
         }
         return spec;
     }

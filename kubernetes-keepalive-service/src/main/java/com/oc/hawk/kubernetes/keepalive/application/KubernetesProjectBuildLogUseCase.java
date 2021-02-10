@@ -13,6 +13,7 @@ import com.oc.hawk.kubernetes.keepalive.port.driven.socket.WebSocketMessage;
 import com.oc.hawk.project.api.command.AddProjectBuildStageCommand;
 import com.oc.hawk.project.api.command.UpdateProjectAppCommand;
 import com.oc.hawk.project.api.event.ProjectDomainEventType;
+import io.fabric8.kubernetes.client.KubernetesClientTimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -79,6 +80,10 @@ public class KubernetesProjectBuildLogUseCase {
             });
         });
 
-        kubernetesApi.readLog(namespace, name, projectBuildMessageHandler::append);
+        try {
+            kubernetesApi.readLog(namespace, name, projectBuildMessageHandler::append);
+        }catch (PodStartFailedException exception){
+
+        }
     }
 }

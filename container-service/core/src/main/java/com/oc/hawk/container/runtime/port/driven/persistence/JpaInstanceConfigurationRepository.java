@@ -119,7 +119,9 @@ public class JpaInstanceConfigurationRepository implements InstanceConfigReposit
             instanceConfigPo.setId(baseConfig.getId().getId());
         }
 
-        instanceConfigPo.setHealthCheckPath(baseConfig.getHealthCheckPath());
+        final InstanceHealthCheck healthCheck = baseConfig.getHealthCheck();
+        instanceConfigPo.setHealthCheckPath(healthCheck.getPath());
+        instanceConfigPo.setHealthCheck(healthCheck.isEnabled());
 
         if (image.getApp() != null) {
             instanceConfigPo.setImage(image.getApp());

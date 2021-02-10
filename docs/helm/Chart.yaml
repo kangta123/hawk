@@ -1,0 +1,25 @@
+apiVersion: v2
+name: hawk
+description: A Helm chart for hawk
+
+type: application
+
+version: 0.1.0
+
+appVersion: 4.0.0
+dependencies:
+  - name: "mysql"
+    version: "=>8.0.22"
+    repository: "https://charts.bitnami.com/bitnami"
+  - name: "redis"
+    version: "12.2.2"
+    repository: "https://charts.bitnami.com/bitnami"
+  - name: "kafka"
+    version: "12.4.0"
+    repository: "https://charts.bitnami.com/bitnami"
+  - name: "prometheus"
+    version: "13.0.1"
+    repository: "https://prometheus-community.github.io/helm-charts"
+  - name: "ingress-nginx"
+    version: "1.10.0"
+    repository: "https://kubernetes.github.io/ingress-nginx"

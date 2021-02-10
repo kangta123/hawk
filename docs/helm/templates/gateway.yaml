@@ -1,0 +1,33 @@
+apiVersion: v1
+data:
+  application-prod.yaml: |+
+    spring:
+      application:
+        name: gateway
+      cloud:
+        gateway:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+    eureka:
+      client:
+        serviceUrl:
+          defaultZone: http://default-eureka-server:8080/eureka
+
+    hawk:
+      auth:
+        whiteList:
+          - /base/auth
+          - /performance/ws
+          - /container/ws
+          - /kubekeepalive/ws
+          - /container/file
+          - /actuator
+          - /gateway
+
+kind: ConfigMap
+metadata:
+  name: hawk-gateway-config
+

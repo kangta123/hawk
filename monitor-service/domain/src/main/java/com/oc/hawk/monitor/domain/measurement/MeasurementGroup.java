@@ -65,41 +65,4 @@ public class MeasurementGroup {
         }
         return scale;
     }
-
-    // private ServiceMetric createServiceMetric() {
-//        ServiceMetric serviceMetric = new ServiceMetric();
-//        serviceMetric.setTitle(getTitle());
-//        serviceMetric.setName(getName());
-//        serviceMetric.setMetric(getMetric());
-//        serviceMetric.setMetricUnit(getMetricUnit());
-//        serviceMetric.setMetricAggregate(metricAggregate);
-//
-//        List<ServiceMetricDescription> metricTypes = this.measurements.stream().map(m -> new ServiceMetricDescription(m.getTitle(), m.getMetric())).collect(Collectors.toList());
-//        serviceMetric.setDescn(metricTypes);
-//        return serviceMetric;
-//    }
-
-//    public ServiceMetric extract(ServiceMetricExtractor extractor) {
-//        ServiceMetric serviceMetric = createServiceMetric();
-//
-//        Stopwatch started = Stopwatch.createStarted();
-//        List<Future<List<PodMetric>>> result = getMeasurements().stream().map(measurement -> {
-//            return metricExtractThreadPool.submit(() -> {
-//                List<SeriesData> extract = extractor.extract(measurement);
-//                String metricUnit = serviceMetric.getMetricUnit();
-//                return this.getMetricAggregate().getAssembler().assembler(metricUnit, extract);
-//            });
-//        }).collect(Collectors.toList());
-//
-//
-//        result.forEach(d -> {
-//            try {
-//                serviceMetric.addMetrics(d.get());
-//            } catch (Exception e) {
-//                log.error("Add metric error", e);
-//            }
-//        });
-//        log.info("Query metric takes {}ms", started.elapsed(TimeUnit.MILLISECONDS));
-//        return serviceMetric;
-//    }
 }

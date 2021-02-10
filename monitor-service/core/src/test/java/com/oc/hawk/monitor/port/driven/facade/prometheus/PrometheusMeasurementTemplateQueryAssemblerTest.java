@@ -27,7 +27,7 @@ class PrometheusMeasurementTemplateQueryAssemblerTest extends MonitorBaseTest {
             .end(now)
             .template(MeasurementTemplate.builder().template("123$PODabc$POD$").build())
             .pod(pod)
-            .name(instance(MeasurementGroupName.class))
+            .name(newInstance(MeasurementGroupName.class))
             .build();
         final String assemble = prometheusMeasurementTemplateQueryAssembler.assemble(template).get("query").toString();
 

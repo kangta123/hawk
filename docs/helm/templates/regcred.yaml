@@ -1,0 +1,9 @@
+{{- if .Values.docker.enabled }}
+apiVersion: v1
+data:
+  .dockerconfigjson: {{ .Values.docker.dockerConfig }}
+kind: Secret
+metadata:
+  name: {{ .Values.docker.secretName }}
+type: kubernetes.io/dockerconfigjson
+{{- end }}

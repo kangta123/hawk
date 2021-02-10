@@ -6,7 +6,7 @@ import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.runtime.application.instance.InstanceExecutorUseCase;
 import com.oc.hawk.container.runtime.application.project.ProjectBuildJobUseCase;
 import com.oc.hawk.ddd.event.DomainEvent;
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import com.oc.hawk.project.api.event.ProjectDomainEventType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class DomainEventConsumer {
         }
 
         if (event.is(ProjectDomainEventType.PROJECT_BUILD_JOB_READY)) {
-            ProjectBuildStartDTO data = (ProjectBuildStartDTO) event.getData();
+            ProjectBuildReadyDTO data = (ProjectBuildReadyDTO) event.getData();
             projectBuildJobUseCase.startBuildJob(event.getDomainId(), data);
         }
 

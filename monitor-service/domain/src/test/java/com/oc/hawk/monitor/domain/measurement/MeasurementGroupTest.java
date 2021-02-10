@@ -14,17 +14,17 @@ class MeasurementGroupTest extends MonitorDomainBaseTest {
 
     @Test
     void getEnabledTemplates_withOutEnabledTemplates() {
-        final MeasurementGroup instance = instanceWith(MeasurementGroup.class, "templates", List.of(template(false), template(false)));
+        final MeasurementGroup instance = newInstance(MeasurementGroup.class, "templates", List.of(template(false), template(false)));
         Assertions.assertThat(instance.getEnabledTemplates()).isEmpty();
     }
 
     @Test
     void getEnabledTemplates_withOneEnabledTemplates() {
-        final MeasurementGroup instance = instanceWith(MeasurementGroup.class, "templates", List.of(template(false), template(true), template(false)));
+        final MeasurementGroup instance = newInstance(MeasurementGroup.class, "templates", List.of(template(false), template(true), template(false)));
         Assertions.assertThat(instance.getEnabledTemplates()).hasSize(1);
     }
 
     private MeasurementTemplate template(boolean enabled) {
-        return instanceWith(MeasurementTemplate.class, "enabled", enabled);
+        return newInstance(MeasurementTemplate.class, "enabled", enabled);
     }
 }

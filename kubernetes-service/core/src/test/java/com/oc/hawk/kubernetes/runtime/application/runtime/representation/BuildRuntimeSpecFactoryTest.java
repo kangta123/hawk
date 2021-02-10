@@ -13,7 +13,7 @@ class BuildRuntimeSpecFactoryTest extends KubernetesBaseTest {
 
     @Test
     void testToRuntimeConfiguration_UseDefaultWhenPerformanceLevelIsNull() {
-        BuildRuntimeSpecFactory buildRuntimeSpecFactory = new BuildRuntimeSpecFactory();
+        BuildRuntimeSpecFactory buildRuntimeSpecFactory = new BuildRuntimeSpecFactory(healthCheckProperties);
         CreateRuntimeInfoSpecCommand spec = TestHelper.newInstance(CreateRuntimeInfoSpecCommand.class);
         spec.setPerformance(null);
         spec.setRuntimeCatalog("build");

@@ -7,7 +7,7 @@ import com.oc.hawk.project.api.command.CreateProjectBuildJobCommand;
 import com.oc.hawk.project.api.dto.InstanceImageDTO;
 import com.oc.hawk.project.api.dto.ProjectBuildJobDTO;
 import com.oc.hawk.project.api.dto.ProjectBuildJobDetailDTO;
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import com.oc.hawk.project.api.event.ProjectDomainEventType;
 import com.oc.hawk.project.application.representation.ProjectBuildJobRepresentation;
 import com.oc.hawk.project.domain.model.buildjob.*;
@@ -71,7 +71,7 @@ public class ProjectBuildJobUseCase {
 
         ProjectBuildJob projectBuildJob = projectBuildJobExecutionService.readyProjectBuildJob(projectJobId);
 
-        ProjectBuildStartDTO data = getBuildReadyEventData(projectJobId, projectBuildJob);
+        ProjectBuildReadyDTO data = getBuildReadyEventData(projectJobId, projectBuildJob);
 
         domainEventPublisher.publishDomainEvent(DomainEvent.byData(projectJobId, ProjectDomainEventType.PROJECT_BUILD_JOB_READY, data));
     }
@@ -118,13 +118,13 @@ public class ProjectBuildJobUseCase {
         return Arrays.stream(JobStage.values()).map(JobStage::getTitle).collect(Collectors.toList());
     }
 
-    private ProjectBuildStartDTO getBuildReadyEventData(Long projectJobId, ProjectBuildJob projectBuildJob) {
+    private ProjectBuildReadyDTO getBuildReadyEventData(Long projectJobId, ProjectBuildJob projectBuildJob) {
         ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
 
         Project project = projectRepository.byId(projectBuildJob.getProjectId());
 
         ProjectBuild build = project.getBuild();
-        return ProjectBuildStartDTO.builder()
+        return ProjectBuildReadyDTO.builder()
             .env(executionPlan.getEnv().env())
             .runtimeType(project.getRuntime().toString())
             .buildType(build.getType().toString())
