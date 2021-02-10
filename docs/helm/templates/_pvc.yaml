@@ -1,0 +1,26 @@
+{{- define "hawk.persistent.pvc.new"}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{.name}}
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: {{.size}}
+  {{- if .storageClass | indent 2}}
+  storageClassName: {{.storageClass}}
+  {{- end }}
+{{- end}}
+
+
+{{- define "hawk.persistent.volume.required"}}
+- name: {{.name }}
+{{- if .enabled }}
+  persistentVolumeClaim:
+    claimName: {{.name}}
+{{- else}}
+  emptyDir: {}
+{{- end}}
+{{- end}}

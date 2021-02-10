@@ -3,6 +3,7 @@ package com.oc.hawk.kubernetes.runtime.application.runtime.spec;
 import com.oc.hawk.container.domain.config.HealthCheckProperties;
 import com.oc.hawk.container.domain.model.runtime.info.PerformanceLevel;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeCatalog;
+import com.oc.hawk.container.domain.model.runtime.info.RuntimeHealthCheck;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeImage;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -26,14 +27,9 @@ public class RuntimeConfigSpec {
     private final Map<String, String> labels;
     private final String serviceName;
     //    private final RemoteAccessConfigurationSpec remoteAccessConfigurationSpec;
-    private final String healthCheckPath;
+    private final RuntimeHealthCheck healthCheck;
     private final String runtimeType;
     private final RuntimeCatalog catalog;
-    private HealthCheckProperties healthCheckProperties;
-
-    public void withDefaultHealthCheckProperties(HealthCheckProperties healthCheckProperties) {
-        this.healthCheckProperties = healthCheckProperties;
-    }
 
     public String getImageName() {
         return this.getImage().getImage();

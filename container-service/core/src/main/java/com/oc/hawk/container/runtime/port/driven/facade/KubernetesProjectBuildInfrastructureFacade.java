@@ -9,7 +9,7 @@ import com.oc.hawk.container.runtime.application.representation.InstanceRuntimeR
 import com.oc.hawk.container.runtime.common.facade.ProjectBuildInfrastructureFacade;
 import com.oc.hawk.ddd.event.DomainEvent;
 import com.oc.hawk.ddd.event.EventPublisher;
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class KubernetesProjectBuildInfrastructureFacade implements ProjectBuildI
     private final InstanceRuntimeRepresentation instanceRuntimeRepresentation;
 
     @Override
-    public void createBuildRuntime(Long buildJobId, ProjectBuildStartDTO data) {
+    public void createBuildRuntime(Long buildJobId, ProjectBuildReadyDTO data) {
         log.info("Create build runtime Pod, {}", buildJobId);
         CreateRuntimeInfoSpecCommand spec = instanceRuntimeRepresentation.buildRuntimeSpecCommand(buildJobId, data);
 

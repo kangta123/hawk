@@ -28,5 +28,6 @@ public class ChangeInstanceConfigCommand {
     private String tag;
     private String app;
     private String healthCheckPath;
+    private Boolean healthCheck;
     private String nginxLocation;
 }

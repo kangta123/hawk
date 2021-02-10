@@ -4,10 +4,13 @@ import com.google.common.collect.Lists;
 import com.oc.hawk.container.api.command.CreateInstanceVolumeSpecCommand;
 import com.oc.hawk.container.api.command.CreateRuntimeInfoSpecCommand;
 import com.oc.hawk.container.api.command.CreateServiceEntryPointCommand;
+import com.oc.hawk.container.domain.config.HealthCheckProperties;
 import com.oc.hawk.container.domain.model.runtime.info.PerformanceLevel;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeCatalog;
+import com.oc.hawk.container.domain.model.runtime.info.RuntimeHealthCheck;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeImage;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.container.VolumeType;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class BuildRuntimeSpecFactory {
+    private final HealthCheckProperties healthCheckProperties;
 
     public RuntimeConfigSpec toRuntimeConfiguration(CreateRuntimeInfoSpecCommand spec) {
         if (StringUtils.isEmpty(spec.getRuntimeCatalog())) {
@@ -30,6 +35,7 @@ public class BuildRuntimeSpecFactory {
 
     private RuntimeConfigSpec buildBaseRuntimeConfiguration(RuntimeCatalog catalog, CreateRuntimeInfoSpecCommand spec) {
         NetworkConfigSpec configurationSpec = buildNetworkConfiguration(spec);
+        RuntimeHealthCheck healthCheck = null;
 
         PerformanceLevel level;
         switch (catalog) {
@@ -38,6 +44,9 @@ public class BuildRuntimeSpecFactory {
                 break;
             case BUSINESS:
                 level = PerformanceLevel.getWithDefaultPerformanceLevel(null);
+                if (configurationSpec != null) {
+                    healthCheck = new RuntimeHealthCheck(spec.getHealthCheckPath(), spec.getHealthCheckEnabled(), configurationSpec.getInnerPort(), healthCheckProperties);
+                }
                 break;
             default:
                 level = PerformanceLevel.UNLIMITED;
@@ -56,7 +65,7 @@ public class BuildRuntimeSpecFactory {
             .namespace(spec.getNamespace())
             .networkConfigSpec(configurationSpec)
             .volumes(getVolumes(spec))
-            .healthCheckPath(spec.getHealthCheckPath())
+            .healthCheck(healthCheck)
             .serviceName(spec.getEntryPoint() == null ? "" : spec.getEntryPoint().getServiceName())
             .build();
     }

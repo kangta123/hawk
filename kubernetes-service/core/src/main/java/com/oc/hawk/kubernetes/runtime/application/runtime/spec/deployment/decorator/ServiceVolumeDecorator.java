@@ -19,7 +19,7 @@ public class ServiceVolumeDecorator extends AbstractConfigurableRuntimeDecorator
     public void config(RuntimeComponent runtimeComponent) {
         super.config(runtimeComponent);
 
-        runtimeComponent.addVolume(new ServiceVolumeSpec("/app/shared", PLATFORM_VOLUME, VolumeType.pvc));
+//        runtimeComponent.addVolume(new ServiceVolumeSpec("/app/shared", PLATFORM_VOLUME, VolumeType.pvc));
         runtimeComponent.addVolume(new ServiceVolumeSpec("/tmp/files:/app/files", FILES_VOLUME, VolumeType.empty));
     }
 }

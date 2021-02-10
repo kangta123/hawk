@@ -87,7 +87,11 @@ public class InstanceConfigRepresentation {
         dto.setInnerPort(network.getInnerPort());
         dto.setExposePorts(network.getExposePorts());
         dto.setCustomExposePorts(network.getCustomExposePorts());
-        dto.setHealthCheckPath(baseConfig.getHealthCheckPath());
+
+        final InstanceHealthCheck healthCheck = baseConfig.getHealthCheck();
+        dto.setHealthCheckPath(healthCheck.getPath());
+        dto.setHealthCheck(healthCheck.isEnabled());
+
         if (baseConfig.getId() != null) {
             dto.setId(baseConfig.getId().getId());
         }

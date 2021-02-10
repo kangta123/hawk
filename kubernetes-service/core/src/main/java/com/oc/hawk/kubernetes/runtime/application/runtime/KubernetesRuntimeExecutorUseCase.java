@@ -49,7 +49,7 @@ public class KubernetesRuntimeExecutorUseCase {
 
         ServiceRuntimeStarter starter = KubernetesServiceStarterFactory.starter(configuration);
         if (starter == null) {
-            log.warn("No suitable starter , {}", spec.getName());
+            log.warn("No applicable starter , {}", spec.getName());
             notifyRuntimeStartFailed(spec);
             return;
         }

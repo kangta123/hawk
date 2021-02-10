@@ -4,7 +4,7 @@ package com.oc.hawk.monitor.domain.measurement.unit;
  * @author kangta123
  */
 public class CountMeasurementUnit implements MeasurementUnit {
-    private double value;
+    private final double value;
 
     public CountMeasurementUnit(double value) {
         this.value = value;

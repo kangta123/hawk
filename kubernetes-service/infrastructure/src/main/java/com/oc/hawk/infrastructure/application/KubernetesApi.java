@@ -14,6 +14,7 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.api.model.apps.DoneableDeployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
+import io.fabric8.kubernetes.client.KubernetesClientTimeoutException;
 import io.fabric8.kubernetes.client.dsl.NonNamespaceOperation;
 import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.dsl.RollableScalableResource;
@@ -105,18 +106,40 @@ public class KubernetesApi {
     }
 
     public boolean isPodReady(String namespace, String name) {
-        PodResource<Pod, DoneablePod> podDoneablePodPodResource = client.pods().inNamespace(namespace)
-            .withName(name);
+        log.info("waiting for pod {} ready ", name);
+
+        PodResource<Pod, DoneablePod> podDoneablePodPodResource = getPodResourceRepeatable(namespace, name, 10);
         try {
-            if (podDoneablePodPodResource.get() == null) {
-                throw new PodNotReadyException("服务启动失败, " + name);
-            }
             podDoneablePodPodResource.waitUntilReady(30, TimeUnit.SECONDS);
             return true;
-        } catch (InterruptedException e) {
+        } catch (KubernetesClientTimeoutException | InterruptedException e) {
             log.error("Cannot watch pod Because its not existed, {}", name, e);
             throw new PodStartFailedException("服务启动失败, " + name);
         }
+    }
+
+    protected PodResource<Pod, DoneablePod> getPodResourceRepeatable(String namespace, String name, int maxTimes) {
+        int i = 0;
+        PodResource<Pod, DoneablePod> podDoneablePodPodResource = null;
+        while (i++ < maxTimes) {
+            log.info("Get pod {} times: {}", name, i);
+            podDoneablePodPodResource = client.pods().inNamespace(namespace)
+                .withName(name);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                break;
+            }
+
+            if (podDoneablePodPodResource.get() != null) {
+                break;
+            }
+
+        }
+        if (podDoneablePodPodResource == null || podDoneablePodPodResource.get() == null) {
+            throw new PodNotReadyException("服务启动失败, " + name);
+        }
+        return podDoneablePodPodResource;
     }
 
 

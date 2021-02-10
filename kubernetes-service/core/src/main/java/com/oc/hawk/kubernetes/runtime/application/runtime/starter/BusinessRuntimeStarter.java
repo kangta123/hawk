@@ -15,13 +15,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class BusinessRuntimeStarter implements ServiceRuntimeStarter {
     private final KubernetesRuntimeSpecUseCase kubernetesRuntimeSpecUseCase;
-    private final HealthCheckProperties healthCheckProperties;
 
     @Override
     public void start(RuntimeConfigSpec configuration) {
         log.info("Start service {} in {} namespace", configuration.getName(), configuration.getNamespace());
 
-        ConfigurableRuntimeComponent configurableRuntimeComponent = new BusinessRuntimeComponent(healthCheckProperties);
+        ConfigurableRuntimeComponent configurableRuntimeComponent = new BusinessRuntimeComponent();
 
         RuntimeComponent componentHolder = new RuntimeComponent(configuration);
 

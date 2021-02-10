@@ -42,12 +42,16 @@ public class InstanceConfigRepositoryFactory {
         Map<Integer, Integer> extraPorts = getExposePorts(instanceConfigPo);
         String performanceLevel = instanceConfigPo.getPerformanceLevel();
 
+        InstanceHealthCheck healthCheck = new InstanceHealthCheck(instanceConfigPo.getHealthCheck(), instanceConfigPo.getHealthCheckPath());
+//        } else {
+//            healthCheck = new InstanceHealthCheck();
+//        }
         BaseInstanceConfig config = BaseInstanceConfig.builder()
             .image(image)
             .updatedTime(instanceConfigPo.getUpdateTime())
             .createdTime(instanceConfigPo.getCreateTime())
             .descn(instanceConfigPo.getDescn())
-            .healthCheckPath(instanceConfigPo.getHealthCheckPath())
+            .healthCheck(healthCheck)
             .id(instanceConfigPo.getId() == null ? null : new InstanceId(instanceConfigPo.getId()))
             .log(new InstanceLog(instanceConfigPo.getLogPath()))
             .managers(managers)

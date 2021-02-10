@@ -1,9 +1,9 @@
 package com.oc.hawk.container.runtime.common.facade;
 
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 
 public interface ProjectBuildInfrastructureFacade {
-    void createBuildRuntime(Long domainId, ProjectBuildStartDTO data);
+    void createBuildRuntime(Long domainId, ProjectBuildReadyDTO data);
 
 //    void watchLog(long domainId, CreateRuntimeInfoSpecCommand spec);
 

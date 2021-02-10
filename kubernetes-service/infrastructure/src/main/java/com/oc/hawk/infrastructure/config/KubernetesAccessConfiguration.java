@@ -8,4 +8,5 @@ public class KubernetesAccessConfiguration {
     private String apiServer;
     private String token;
     private String dockerConfigJson;
+    private String dockerSecretName;
 }

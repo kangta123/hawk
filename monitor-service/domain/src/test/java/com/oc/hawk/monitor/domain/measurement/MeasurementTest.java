@@ -31,7 +31,7 @@ class MeasurementTest extends MonitorDomainBaseTest {
     }
 
     private Measurement generateMeasurementOfStorage() {
-        final MeasurementTemplate template = instance(MeasurementTemplate.class);
+        final MeasurementTemplate template = newInstance(MeasurementTemplate.class);
         setObjectValue(template, "scale", MeasurementScale.storage);
         return Measurement.create(template, new String[][]{
             new String[]{"1000", "102.4"},

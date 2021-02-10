@@ -31,6 +31,7 @@ public class InstanceConfigPO extends BaseEntity {
     private String logPath;
     @Column(name = "health_check_path")
     private String healthCheckPath;
+    private Boolean healthCheck;
     private String property;
     private long projectId;
     private String branch;

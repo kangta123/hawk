@@ -41,6 +41,7 @@ public class InstanceConfigDTO {
 
     private String nginxLocation;
     private String healthCheckPath;
+    private Boolean healthCheck;
     private LocalDateTime updatedTime;
     private LocalDateTime createdTime;
 

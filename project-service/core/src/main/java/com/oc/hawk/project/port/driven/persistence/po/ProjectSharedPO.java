@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Table(name = "base_project_user")
+@Table(name = "project_shared")
 @Entity
 public class ProjectSharedPO extends BaseEntity {
     private Long project;

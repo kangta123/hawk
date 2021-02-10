@@ -20,11 +20,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class KubernetesRuntimeSpecUseCase {
-    private final String LOCAL_PROFILE = "local";
     private final KubernetesApi kubernetesApi;
     private final KubernetesAccessConfiguration accessConfiguration;
-    @Value("${spring.profiles.active}")
-    private String profile;
 
     public void createPod(RuntimeComponent runtimeComponent) {
 

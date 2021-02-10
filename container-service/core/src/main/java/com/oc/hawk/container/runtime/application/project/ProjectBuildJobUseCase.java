@@ -6,7 +6,7 @@ import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildPost;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceId;
 import com.oc.hawk.container.runtime.application.instance.InstanceConfigUseCase;
 import com.oc.hawk.container.runtime.common.facade.ProjectBuildInfrastructureFacade;
-import com.oc.hawk.project.api.dto.ProjectBuildStartDTO;
+import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class ProjectBuildJobUseCase {
     private final InstanceConfigUseCase instanceConfigUseCase;
     private final ProjectFacade projectFacade;
 
-    public void startBuildJob(Long domainId, ProjectBuildStartDTO data) {
+    public void startBuildJob(Long domainId, ProjectBuildReadyDTO data) {
         log.info("start build job with id {}", domainId);
         projectBuildInfrastructureFacade.createBuildRuntime(domainId, data);
     }

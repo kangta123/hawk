@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hawk-db
+data:
+  hawk.sql: |
+    {{ range .Files.Lines "db/hawk.sql" }}
+    {{ . }}
+    {{ end }}

@@ -1,8 +1,9 @@
 package com.oc.hawk.container.domain.config;
 
-import com.oc.hawk.container.domain.model.runtime.config.volume.BuildInstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildVolume;
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.config.volume.NormalInstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.config.volume.SharedInstanceVolume;
 import lombok.Data;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 @Setter
 public class ContainerRuntimeConfig {
     private Map<String, Config> config;
+    private String buildVolume;
 
     public ContainerConfig getConfig(String runtime, String build) {
         final Config containerConfig = config.get(runtime.toLowerCase());
@@ -30,17 +32,19 @@ public class ContainerRuntimeConfig {
             throw new RuntimeException("Invalid build config name " + build);
         }
 
-        return new ContainerConfig(runtimeConfig, buildConfig);
+        return new ContainerConfig(runtimeConfig, buildConfig, buildVolume);
     }
 
 
     public static class ContainerConfig {
         private final RuntimeConfig runtime;
         private final BuildConfig build;
+        private String buildVolume;
 
-        public ContainerConfig(RuntimeConfig runtime, BuildConfig build) {
+        public ContainerConfig(RuntimeConfig runtime, BuildConfig build, String buildVolume) {
             this.runtime = runtime;
             this.build = build;
+            this.buildVolume = buildVolume;
         }
 
         public String getDataImage() {
@@ -52,10 +56,10 @@ public class ContainerRuntimeConfig {
         }
 
         public List<InstanceVolume> getBuildVolumes() {
-            final List<InstanceVolume> buildInstanceVolumes = BuildInstanceVolume.defaultDockerVolumes();
+            final List<InstanceVolume> buildInstanceVolumes = ProjectBuildVolume.defaultVolumes();
             VolumeConfig volumeConfig = build.getVolume();
             if (volumeConfig != null) {
-                buildInstanceVolumes.add(new NormalInstanceVolume(volumeConfig.getVolume(), volumeConfig.getMountPath()));
+                buildInstanceVolumes.add(new SharedInstanceVolume(buildVolume, volumeConfig.getMountPath(), volumeConfig.getSub()));
             }
             return buildInstanceVolumes;
         }
@@ -87,6 +91,6 @@ public class ContainerRuntimeConfig {
     @Data
     static class VolumeConfig {
         private String mountPath;
-        private String volume;
+        private String sub;
     }
 }

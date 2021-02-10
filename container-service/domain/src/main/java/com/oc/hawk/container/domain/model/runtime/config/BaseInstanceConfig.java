@@ -34,7 +34,7 @@ public class BaseInstanceConfig implements InstanceConfig {
     private InstanceHost host;
     private String descn;
     private PerformanceLevel performanceLevel;
-    private String healthCheckPath;
+    private InstanceHealthCheck healthCheck;
     private InstanceLog log;
     private InstanceImage image;
     private List<InstanceManager> managers;
@@ -50,15 +50,12 @@ public class BaseInstanceConfig implements InstanceConfig {
     }
 
 
-    public void update(String descn, String performanceLevel, String healthCheckPath) {
+    public void update(String descn, String performanceLevel) {
         if (descn != null) {
             this.descn = descn;
         }
         if (performanceLevel != null) {
             this.performanceLevel = PerformanceLevel.valueOf(performanceLevel);
-        }
-        if (healthCheckPath != null) {
-            this.healthCheckPath = healthCheckPath;
         }
     }
 
@@ -150,6 +147,11 @@ public class BaseInstanceConfig implements InstanceConfig {
     }
 
 
+    public void updateHealthCheck(Boolean enable, String path) {
+        if (enable != null && path != null) {
+            healthCheck = new InstanceHealthCheck(enable, path);
+        }
+    }
 }
 
 

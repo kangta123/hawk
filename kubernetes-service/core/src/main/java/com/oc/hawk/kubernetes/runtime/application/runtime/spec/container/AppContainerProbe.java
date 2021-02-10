@@ -1,6 +1,7 @@
 package com.oc.hawk.kubernetes.runtime.application.runtime.spec.container;
 
 import com.oc.hawk.container.domain.config.HealthCheckProperties;
+import com.oc.hawk.container.domain.model.runtime.info.RuntimeHealthCheck;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.NetworkConfigSpec;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.RuntimeConfigSpec;
 import io.fabric8.kubernetes.api.model.Container;
@@ -14,16 +15,16 @@ public class AppContainerProbe {
     public static final String HTTP_PROTOCOL = "HTTP";
     private final Container appContainer;
 
-    public void configContainerProbe(RuntimeConfigSpec configuration) {
-        appContainer.setLivenessProbe(getLivenessProbe(configuration));
-        if (StringUtils.isNotEmpty(configuration.getHealthCheckPath())) {
-            appContainer.setReadinessProbe(getHttpReadinessProbe(configuration));
-        }
+    public void configContainerProbe(RuntimeHealthCheck healthCheck) {
+        appContainer.setLivenessProbe(getLivenessProbe(healthCheck));
+        appContainer.setReadinessProbe(getHttpReadinessProbe(healthCheck));
     }
 
-    private Probe getHttpReadinessProbe(RuntimeConfigSpec configuration) {
-        NetworkConfigSpec networkConfigSpec = configuration.getNetworkConfigSpec();
-        HealthCheckProperties healthCheckProperties = configuration.getHealthCheckProperties();
+    private Probe getHttpReadinessProbe(RuntimeHealthCheck healthCheck) {
+        if (!healthCheck.isReadinessEnabled()) {
+            return null;
+        }
+        HealthCheckProperties healthCheckProperties = healthCheck.getHealthCheckProperties();
 
         return new ProbeBuilder()
             .withFailureThreshold(healthCheckProperties.getReadinessProbeFailureThreshold())
@@ -32,23 +33,25 @@ public class AppContainerProbe {
             .withSuccessThreshold(healthCheckProperties.getReadinessProbeSuccessThreshold())
             .withNewHttpGet()
             .withScheme(HTTP_PROTOCOL)
-            .withNewPort(networkConfigSpec.getInnerPort())
-            .withNewPath(configuration.getHealthCheckPath())
+            .withNewPort(healthCheck.getPort())
+            .withNewPath(healthCheck.getPath())
             .endHttpGet()
             .withTimeoutSeconds(healthCheckProperties.getReadinessProbeTimeoutSeconds())
             .build();
     }
 
-    private Probe getLivenessProbe(RuntimeConfigSpec configuration) {
-        HealthCheckProperties healthCheckProperties = configuration.getHealthCheckProperties();
-        NetworkConfigSpec networkConfigSpec = configuration.getNetworkConfigSpec();
+    private Probe getLivenessProbe(RuntimeHealthCheck healthCheck) {
+        if (!healthCheck.isLivenessEnabled()) {
+            return null;
+        }
+        HealthCheckProperties healthCheckProperties = healthCheck.getHealthCheckProperties();
         return new ProbeBuilder()
             .withFailureThreshold(healthCheckProperties.getLivenessProbeFailureThreshold())
             .withInitialDelaySeconds(healthCheckProperties.getLivenessProbeInitialDelaySeconds())
             .withPeriodSeconds(healthCheckProperties.getLivenessProbePeriodSeconds())
             .withSuccessThreshold(healthCheckProperties.getLivenessProbeSuccessThreshold())
             .withNewTcpSocket()
-            .withNewPort(networkConfigSpec.getInnerPort())
+            .withNewPort(healthCheck.getPort())
             .endTcpSocket()
             .withTimeoutSeconds(healthCheckProperties.getLivenessProbeTimeoutSeconds())
             .build();

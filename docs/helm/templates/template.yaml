@@ -1,0 +1,105 @@
+{{ $logvolume := index .Values.persistent.volume 0 }}
+
+{{- range .Values.hawk.modules }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+spec:
+  replicas: {{ default 1 .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        server: hawk
+        app: {{ .name }}
+    spec:
+      containers:
+      - env:
+        - name: EUREKA_INSTANCE_IP_ADDRESS
+          value: {{ .name }}
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod
+        - name: PERFORMANCE_LEVEL
+          value: {{ $.Values.hawk.performance }}
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: {{ .name }}
+        name: app
+        image: {{ $.Values.hawk.app.image }}:{{ default $.Values.hawk.deps.version $.Values.hawk.app.version }}
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: {{ default $.Values.hawk.readiness .readiness }}
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3
+        livenessProbe:
+          failureThreshold: 2
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 3
+        volumeMounts:
+        - mountPath: /app/jar
+          name: app-volume
+        - mountPath: /app/bin/config
+          name: config
+        - mountPath: /app/logs
+          name: hawk-log
+          subPath: {{ .name }}
+      {{- range .pvc }}
+        - mountPath: {{ .path }}
+          name: {{ .name }}
+      {{- end }}
+      initContainers:
+      - command:
+        - sh
+        - app.sh
+        env:
+        - name: service.name
+          value: {{ .name }}
+        image: {{ .image }}:{{ default $.Values.hawk.version .version }}
+        imagePullPolicy: IfNotPresent
+        name: app-data
+        volumeMounts:
+        - mountPath: /tmp/app
+          name: app-volume
+      volumes:
+      - emptyDir: {}
+        name: app-volume
+      {{- include "hawk.persistent.volume.required" $logvolume | indent 6 }}
+      {{- range .pvc }}
+      {{- include "hawk.pvc.volume" . | indent 6}}
+      {{- end }}
+      - configMap:
+          items:
+          - key: application-prod.yaml
+            path: application-prod.yaml
+          name: {{ .name }}-config
+        name: config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: {{ .name }}
+
+{{- end }}
+
+
