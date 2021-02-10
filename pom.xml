@@ -263,6 +263,7 @@
         <module>kubernetes-keepalive-service</module>
         <module>message-service</module>
         <module>monitor-service</module>
+        <module>transfer-service</module>
     </modules>
 
     <repositories>
