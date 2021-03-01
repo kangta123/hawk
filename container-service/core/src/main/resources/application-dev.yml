@@ -49,7 +49,7 @@ hawk:
                     podInteractionVolume: /tmp/app:/usr/local/apache-tomcat-8.5.46/webapps/ROOT
                 build:
                     npm:
-                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_tomcat_build:v4.5
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:v4.5
                         volume:
                             volume: maven-repository-nfs
                             sub: maven
@@ -60,7 +60,7 @@ hawk:
                     podInteractionVolume: /tmp/app:/app/jar
                 build:
                     maven:
-                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_springboot_build:v4.5
+                        image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:v4.5
                         volume:
                             volume: lib-repository
                             sub: maven
