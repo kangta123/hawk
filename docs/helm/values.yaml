@@ -8,7 +8,7 @@ persistent:
   enabled: true
   volume:
     # 为应用保存日志
-    - name: hawk-log 
+    - name: hawk-log
       enabled: false
       storageClass: rook-cephfs
       size: 20Gi
@@ -29,21 +29,21 @@ hawk:
   appImagePrefix: registry.cn-qingdao.aliyuncs.com/kangta123
   appns: default
   # hawk app 运行版本
-  version: v4.1.6
+  version: v4.2
   # hawk app 健康检查地址
   readiness: /actuator/health/readiness
   # 访问hawk应用域名，配合ingress 需要支持dns泛解析
-  host: hawk.cn 
+  host: hawk.cn
   # hawk app 运行性能级别
   performance: NORMAL
   deps:
     # hawk app 依赖服务版本 @ https://github.com/kangta123/hawk-deps.git
-    version: v4.5.1
-  build: 
+      version: v4.5.5
+  build:
     # 构建服务所在命名空间
     namespace: build
   # 每一个module 可以单独指定version
-  modules: 
+  modules:
   - name: hawk-base
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_base-core
   - name: hawk-message
@@ -126,13 +126,13 @@ prometheus:
     enabled: false
   server:
     retention: "7d"
-    persistentVolume: 
+    persistentVolume:
       enabled: false
       storageClass: rook-ceph-block
       size: 100Gi
   pushgateway:
      enabled: false
-     
+
 ingress-nginx:
   controller:
     hostPort:
@@ -140,7 +140,7 @@ ingress-nginx:
     service:
       nodePorts:
         http: 80
-    image: 
+    image:
       repository:  registry.cn-qingdao.aliyuncs.com/kangta123/k8s/ingress-nginx/controller
       digest: ""
     admissionWebhooks:

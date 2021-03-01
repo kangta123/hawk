@@ -43,9 +43,6 @@ public class InstanceConfigRepositoryFactory {
         String performanceLevel = instanceConfigPo.getPerformanceLevel();
 
         InstanceHealthCheck healthCheck = new InstanceHealthCheck(instanceConfigPo.getHealthCheck(), instanceConfigPo.getHealthCheckPath());
-//        } else {
-//            healthCheck = new InstanceHealthCheck();
-//        }
         BaseInstanceConfig config = BaseInstanceConfig.builder()
             .image(image)
             .updatedTime(instanceConfigPo.getUpdateTime())
