@@ -1,12 +1,8 @@
 package com.oc.hawk.project.port.driven.persistence.po;
 
-import com.oc.hawk.api.exception.BaseException;
 import com.oc.hawk.common.hibernate.BaseEntity;
 import com.oc.hawk.project.domain.model.codebase.CodeBase;
-import com.oc.hawk.project.domain.model.codebase.git.CodeBaseAuthentication;
-import com.oc.hawk.project.domain.model.codebase.git.GitCodeBase;
-import com.oc.hawk.project.domain.model.codebase.git.PasswordAuthentication;
-import com.oc.hawk.project.domain.model.codebase.git.PasswordCodeBaseAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -32,12 +28,17 @@ public class GitCodeBasePO extends BaseEntity {
 
         gitCodeBasePo.setProtocol(gitCodeBase.urlProtocol());
 
-        CodeBaseAuthentication authentication = gitCodeBase.getAuthentication();
-        PasswordAuthentication passwordAuthentication = authentication.encode();
-        if (authentication instanceof PasswordCodeBaseAuthentication) {
-            gitCodeBasePo.setPassword(passwordAuthentication.getKey());
+        CodeBaseAuthenticator authentication = gitCodeBase.getAuthenticator();
+        if (authentication != null) {
+            CodeBaseIdentity codeBaseIdentity = authentication.encode();
+            if (authentication instanceof PasswordCodeBaseAuthenticator) {
+                gitCodeBasePo.setPassword(codeBaseIdentity.getKey());
+            }
+            if (authentication instanceof TokenCodeBaseAuthenticator) {
+                gitCodeBasePo.setToken(codeBaseIdentity.getKey());
+            }
+            gitCodeBasePo.setUsername(codeBaseIdentity.getUsername());
         }
-        gitCodeBasePo.setUsername(passwordAuthentication.getUsername());
 
         gitCodeBasePo.setUrl(gitCodeBase.url(false));
         return gitCodeBasePo;
@@ -45,15 +46,13 @@ public class GitCodeBasePO extends BaseEntity {
 
 
     public CodeBase toGitCodeBase() {
-        CodeBaseAuthentication authentication = null;
+        CodeBaseAuthenticator authentication = null;
         if (StringUtils.isNotEmpty(this.password)) {
-            authentication = new PasswordCodeBaseAuthentication(username, password);
+            authentication = new PasswordCodeBaseAuthenticator(username, password);
+        } else if (StringUtils.isNotEmpty(this.token)) {
+            authentication = new TokenCodeBaseAuthenticator(username, token);
         }
 
-        if (authentication == null) {
-            throw new BaseException("不支持此验证类型");
-        }
-
-        return new GitCodeBase(url, authentication);
+        return new GitCodeBase(url, protocol, authentication);
     }
 }

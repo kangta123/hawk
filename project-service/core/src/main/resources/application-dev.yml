@@ -16,6 +16,4 @@ hawk:
         codebase:
             git:
                 repoPath: /tmp/repo
-                defaultPassword: git-admin-password
-                defaultUsername: git-admin-username
 

@@ -9,8 +9,12 @@ import java.util.List;
 @AggregateRoot
 @Getter
 public class GitCodeBase extends CodeBase {
-    public GitCodeBase(String url, CodeBaseAuthentication authentication) {
-        super(url, authentication);
+    public GitCodeBase(String url, CodeBaseAuthenticator authentication) {
+        super(new CodeBaseUrl(url), authentication);
+    }
+
+    public GitCodeBase(String url, String protocol, CodeBaseAuthenticator authentication) {
+        super(new CodeBaseUrl(url, protocol), authentication);
     }
 
     public List<String> loadGitBranches(GitRepoKey key, GitRepository gitRepository) {
@@ -19,9 +23,13 @@ public class GitCodeBase extends CodeBase {
 
 
     @Override
-    public String urlWithAuthentication() {
-        PasswordAuthentication passwordAuthentication = getAuthentication().decode();
-        return "http://" + passwordAuthentication.getUsername() + ":" + passwordAuthentication.getKey() + "@" + url.url(false);
+    public String getUrlWithAuthentication() {
+        final CodeBaseAuthenticator authenticator = getAuthenticator();
+        if (authenticator == null) {
+            return url.url(true);
+        }
+        CodeBaseIdentity codeBaseIdentity = authenticator.decode();
+        return url.protocol(true) + codeBaseIdentity.getUsername() + ":" + codeBaseIdentity.getKey() + "@" + url.url(false);
     }
 
     public String urlProtocol() {

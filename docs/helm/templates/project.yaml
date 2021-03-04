@@ -18,10 +18,6 @@ data:
         codebase:
           git:
             repoPath: /app/repo
-            {{- with .Values.hawk.git }}
-            defaultPassword: {{ .password }}
-            defaultUsername: {{ .username }}
-            {{ end }}
 
 kind: ConfigMap
 metadata:

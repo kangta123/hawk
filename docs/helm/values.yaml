@@ -78,10 +78,6 @@ hawk:
   eureka:
     image: registry.cn-beijing.aliyuncs.com/9fbank/onecard-arch_discovery
     version: "1210000"
-  # git 默认账户密码，项目注册时未填写git账户信息，会尝试使用此账户拉取代码
-  git:
-    username: hanyaoxiang
-    password: HDs52qjs
   # hawk ui
   ui:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui

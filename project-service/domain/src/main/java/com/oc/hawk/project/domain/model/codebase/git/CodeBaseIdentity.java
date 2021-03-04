@@ -5,11 +5,11 @@ import lombok.Data;
 
 @DomainValueObject
 @Data
-public class PasswordAuthentication {
+public class CodeBaseIdentity {
     private String username;
     private String key;
 
-    public PasswordAuthentication(String username, String key) {
+    public CodeBaseIdentity(String username, String key) {
         this.username = username;
         this.key = key;
     }

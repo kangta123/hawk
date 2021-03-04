@@ -1,6 +1,6 @@
 package com.oc.hawk.project.domain.model.codebase.git.service;
 
-import com.oc.hawk.project.domain.model.codebase.git.PasswordAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseIdentity;
 import com.oc.hawk.project.domain.model.project.exception.CodeBasePasswordDecodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.crypto.cipher.CryptoCipher;
@@ -60,7 +60,7 @@ public class AesEncryptStrategy implements GitPasswordEncryptStrategy {
     }
 
     @Override
-    public PasswordAuthentication getPlainText(String username, String password) {
+    public CodeBaseIdentity getPlainText(String username, String password) {
         Properties properties = new Properties();
         final ByteBuffer outBuffer;
         final int bufferSize = 1024;
@@ -79,12 +79,12 @@ public class AesEncryptStrategy implements GitPasswordEncryptStrategy {
             throw new CodeBasePasswordDecodeException("无法解密密码", e);
         }
 
-        return new PasswordAuthentication(username, asString(decoded));
+        return new CodeBaseIdentity(username, asString(decoded));
 
     }
 
     @Override
-    public PasswordAuthentication getCipherText(String username, String password) {
+    public CodeBaseIdentity getCipherText(String username, String password) {
         try {
             Properties properties = new Properties();
             final ByteBuffer outBuffer;
@@ -114,7 +114,7 @@ public class AesEncryptStrategy implements GitPasswordEncryptStrategy {
             outBuffer.duplicate().get(encoded);
             String encodedString = Base64Utils.encodeToString(encoded);
             log.debug("Code base password encode={}", encodedString);
-            return new PasswordAuthentication(username, encodedString);
+            return new CodeBaseIdentity(username, encodedString);
         } catch (Exception e) {
             throw new CodeBasePasswordDecodeException("无法加密密码", e);
         }

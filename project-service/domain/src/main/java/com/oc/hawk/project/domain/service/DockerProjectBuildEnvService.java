@@ -39,7 +39,9 @@ public class DockerProjectBuildEnvService implements ProjectBuildEnv {
 
         env.put("GROUP", project.getGroupName());
         env.put("MODE", project.getMode());
-        env.put("GIT_URL", codebase.urlWithAuthentication());
+
+        env.put("GIT_URL", codebase.getUrlWithAuthentication());
+
 
         env.put("PROJECT_ID", project.getProjectId().toString());
         env.put("PROJECT_NAME", project.getName().toString());

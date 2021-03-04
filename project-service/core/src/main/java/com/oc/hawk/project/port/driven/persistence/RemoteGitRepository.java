@@ -38,8 +38,10 @@ public class RemoteGitRepository implements GitRepository {
 
     public GitRepo getGitRepo(GitRepoKey key, CodeBase codeBase) {
         final String gitRepoLocalPath = getGitRepoLocalPath(key);
-        PasswordAuthentication authentication = codeBase.getAuthentication().decode();
-        return new GitRepo(codeBase.url(true), authentication.getUsername(), authentication.getKey(), gitRepoLocalPath);
+        final CodeBaseAuthenticator authentication = codeBase.getAuthenticator();
+
+        CodeBaseIdentity identity = authentication == null ? null : authentication.decode();
+        return new GitRepo(codeBase.url(true), identity, gitRepoLocalPath);
     }
 
     private String getGitRepoLocalPath(GitRepoKey key) {
