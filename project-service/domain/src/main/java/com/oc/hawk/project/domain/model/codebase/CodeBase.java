@@ -1,31 +1,27 @@
 package com.oc.hawk.project.domain.model.codebase;
 
-import com.oc.hawk.project.domain.model.codebase.git.CodeBaseAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseAuthenticator;
 import com.oc.hawk.project.domain.model.codebase.git.CodeBaseUrl;
 
 
 public abstract class CodeBase {
     protected CodeBaseID codeBaseId;
     protected CodeBaseUrl url;
-    protected CodeBaseAuthentication authentication;
+    protected CodeBaseAuthenticator authenticator;
 
-    public CodeBase(String url, CodeBaseAuthentication authentication) {
-        this.url = new CodeBaseUrl(url);
-        this.authentication = authentication;
+    public CodeBase(CodeBaseUrl url, CodeBaseAuthenticator authenticator) {
+        this.url = url;
+        this.authenticator = authenticator;
     }
 
-    public abstract String urlWithAuthentication();
-
-    public CodeBaseID getCodeBaseId() {
-        return codeBaseId;
-    }
+    public abstract String getUrlWithAuthentication();
 
     public CodeBaseUrl getUrl() {
         return url;
     }
 
-    public CodeBaseAuthentication getAuthentication() {
-        return authentication;
+    public CodeBaseAuthenticator getAuthenticator() {
+        return authenticator;
     }
 
     public String url(boolean protocol) {

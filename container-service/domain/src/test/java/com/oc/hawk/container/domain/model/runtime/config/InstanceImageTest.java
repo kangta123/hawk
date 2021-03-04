@@ -5,8 +5,6 @@ import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author kangta123
  */
@@ -21,6 +19,6 @@ class InstanceImageTest extends ContainerBaseTest {
         final String fullImage = instanceImage.getFullImage(containerConfiguration);
 
 
-        Assertions.assertThat(fullImage).startsWith(containerConfiguration.getAppImagePrefix()+"/");
+        Assertions.assertThat(fullImage).startsWith(containerConfiguration.getAppImagePrefix());
     }
 }

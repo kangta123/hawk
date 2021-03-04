@@ -1,9 +1,9 @@
 package com.oc.hawk.project.domain.model.codebase.git.service;
 
-import com.oc.hawk.project.domain.model.codebase.git.PasswordAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseIdentity;
 
 public interface GitPasswordEncryptStrategy {
-    PasswordAuthentication getPlainText(String username, String password);
+    CodeBaseIdentity getPlainText(String username, String password);
 
-    PasswordAuthentication getCipherText(String username, String password);
+    CodeBaseIdentity getCipherText(String username, String password);
 }

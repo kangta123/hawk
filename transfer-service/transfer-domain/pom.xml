@@ -22,14 +22,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.oc.hawk</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oc.hawk</groupId>
-            <artifactId>api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>

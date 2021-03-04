@@ -2,6 +2,7 @@ package com.oc.hawk.project.port.driven.persistence;
 
 import com.google.common.collect.Lists;
 import com.oc.hawk.api.exception.AppBusinessException;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseIdentity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,14 +29,23 @@ public class GitRepo {
     private final String HEAD_REF = "HEAD";
     private final String url;
     private final String username;
-    private final String password;
+    private final String key;
     private final File localDir;
 
-    public GitRepo(String url, String username, String password, String localDir) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
+    private final String DEFAULT_BRANCH = "master";
+
+
+    public GitRepo(String url, CodeBaseIdentity identity, String localDir) {
         Assert.notNull(localDir, "dir cannot be null");
+        this.url = url;
+        if (identity != null) {
+            this.username = identity.getUsername();
+            this.key = identity.getKey();
+        } else {
+            this.username = "";
+            this.key = "";
+
+        }
         Path path = Paths.get(localDir);
         this.localDir = path.toFile();
         if (!this.localDir.exists()) {
@@ -143,13 +153,16 @@ public class GitRepo {
     }
 
     private UsernamePasswordCredentialsProvider getUsernamePasswordCredentialsProvider() {
-        return new UsernamePasswordCredentialsProvider(username, password);
+        if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(key)) {
+            return new UsernamePasswordCredentialsProvider(username, key);
+        }
+        return null;
     }
 
     private void pull() {
         try {
             Git git = getGit();
-            git.pull().setRemoteBranchName("master").setCredentialsProvider(getUsernamePasswordCredentialsProvider()).call();
+            git.pull().setRemoteBranchName(DEFAULT_BRANCH).setCredentialsProvider(getUsernamePasswordCredentialsProvider()).call();
         } catch (Exception e) {
             log.error("git repo pull error", e);
             throw new AppBusinessException("Git仓库更新失败");

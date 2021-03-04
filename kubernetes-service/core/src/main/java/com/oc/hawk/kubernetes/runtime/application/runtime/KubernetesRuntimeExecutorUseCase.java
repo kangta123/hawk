@@ -57,7 +57,7 @@ public class KubernetesRuntimeExecutorUseCase {
         try {
             starter.start(configuration);
         } catch (KubernetesClientException e) {
-            log.error("Start service failed", e);
+            log.error("Failed to start runtime ", e);
             notifyRuntimeStartFailed(spec);
         }
 

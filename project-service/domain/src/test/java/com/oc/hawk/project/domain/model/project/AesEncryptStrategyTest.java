@@ -1,7 +1,7 @@
 package com.oc.hawk.project.domain.model.project;
 
 import com.oc.hawk.project.ProjectBaseTest;
-import com.oc.hawk.project.domain.model.codebase.git.PasswordAuthentication;
+import com.oc.hawk.project.domain.model.codebase.git.CodeBaseIdentity;
 import com.oc.hawk.project.domain.model.codebase.git.service.AesEncryptStrategy;
 import com.oc.hawk.test.TestHelper;
 import org.assertj.core.api.Assertions;
@@ -22,13 +22,13 @@ class AesEncryptStrategyTest extends ProjectBaseTest {
     @Test
     void testAesEncryptStrategy() {
         AesEncryptStrategy aesEncryptStrategy = new AesEncryptStrategy();
-        PasswordAuthentication cipherText = aesEncryptStrategy.getCipherText(username, password);
+        CodeBaseIdentity cipherText = aesEncryptStrategy.getCipherText(username, password);
         Assertions.assertThat(cipherText.getKey()).isNotEmpty();
         Assertions.assertThat(cipherText.getUsername()).isEqualTo(username);
 
 
         aesEncryptStrategy = new AesEncryptStrategy();
-        PasswordAuthentication plain = aesEncryptStrategy.getPlainText(cipherText.getUsername(), cipherText.getKey());
+        CodeBaseIdentity plain = aesEncryptStrategy.getPlainText(cipherText.getUsername(), cipherText.getKey());
         Assertions.assertThat(plain.getKey()).isEqualTo(password);
         Assertions.assertThat(plain.getUsername()).isEqualTo(username);
     }

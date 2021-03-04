@@ -12,6 +12,7 @@ public class RegisterProjectCommand {
     private String buildCommand;
 
     private String url;
+    private String token;
     private String username;
     private String password;
 

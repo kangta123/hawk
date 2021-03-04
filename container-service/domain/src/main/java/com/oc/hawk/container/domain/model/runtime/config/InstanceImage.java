@@ -12,6 +12,7 @@ public class InstanceImage {
     private final String app;
     private final String tag;
     private final String branch;
+    private final String BACKSLASH = "/";
 
     public InstanceImage(String app, String tag, String branch) {
         this.app = app;
@@ -20,8 +21,8 @@ public class InstanceImage {
     }
 
     public String getApp() {
-        if (app.contains("/")) {
-            return StringUtils.substringAfterLast(app, "/");
+        if (app.contains(BACKSLASH)) {
+            return StringUtils.substringAfterLast(app, BACKSLASH);
         }
         return app;
     }
