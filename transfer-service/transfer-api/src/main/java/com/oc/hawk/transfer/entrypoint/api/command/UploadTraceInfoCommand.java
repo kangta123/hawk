@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class CreateEntryPointHistoryCommand {
+public class UploadTraceInfoCommand {
 	
 	private Long start;
 	private Long end;
