@@ -1,6 +1,8 @@
 package com.oc.hawk.transfer.entrypoint.port.driving.facade.rest;
 
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -134,4 +136,12 @@ public class EntryPointController {
 		return null;
 	}
 	
+	/**
+	 * 删除接口
+	 */
+	@DeleteMapping("/{id}")
+	public BooleanWrapper deleteEntryPoint(@PathVariable Long id) {
+		
+		return null;
+	}
 }
