@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.oc.hawk.api.constant.AccountHolder;
 import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.transfer.entrypoint.api.command.CreateEntryPointCommand;
-import com.oc.hawk.transfer.entrypoint.api.command.CreateEntryPointHistoryCommand;
+import com.oc.hawk.transfer.entrypoint.api.command.UploadTraceInfoCommand;
 import com.oc.hawk.transfer.entrypoint.api.dto.ImportGroupDTO.ImportApiDTO;
 import com.oc.hawk.transfer.entrypoint.domain.model.entrypointconfig.EntryPointConfig;
 import com.oc.hawk.transfer.entrypoint.domain.model.entrypointconfig.EntryPointConfigGroup;
@@ -90,7 +90,7 @@ public class EntryPointConfigFactory {
 		return idList;
 	}
 	
-	public EntryPointHistory createHistory(CreateEntryPointHistoryCommand command) {
+	public EntryPointHistory createHistory(UploadTraceInfoCommand command) {
 		
 		HttpRequest httpRequest = createHttpRequest(command);
 		HttpResponse httpResponse = createHttpResponse(command);
@@ -150,7 +150,7 @@ public class EntryPointConfigFactory {
 		return resultFlag;
 	}
 	
-	private HttpResponse createHttpResponse(CreateEntryPointHistoryCommand command) {
+	private HttpResponse createHttpResponse(UploadTraceInfoCommand command) {
 		List<List<String>> responseHeaderList = command.getResponseHeaders();
 		String responseCode = null;
 		Map<String,String> headerMap = new HashMap<String,String>();
@@ -170,7 +170,7 @@ public class EntryPointConfigFactory {
 				.build();
 	}
 	
-	private HttpRequest createHttpRequest(CreateEntryPointHistoryCommand command) {
+	private HttpRequest createHttpRequest(UploadTraceInfoCommand command) {
 		List<List<String>> requestHeaderList = command.getRequestHeaders();
 		String path = null;
 		HttpRequestMethod method = null;
