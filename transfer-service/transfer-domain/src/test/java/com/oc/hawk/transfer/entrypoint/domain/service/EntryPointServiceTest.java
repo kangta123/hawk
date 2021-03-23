@@ -18,8 +18,11 @@ import java.util.List;
 
 public class EntryPointServiceTest extends EntryPointBaseTest{
 	
+	/**
+	 * 测试获取当前可见分组及接口(分组id列表存在)
+	 */
 	@Test
-	public void testGetCurrentEntryPointVisibily_groupIdListAlreadyExist() {
+	public void testGetCurrentEntryPointVisible_groupIdListAlreadyExist() {
 		when(entryPointConfigRepository.byGroupIdList(List.of(1L))).thenReturn(List.of(getEntryPointConfig()));
 		
 		List<EntryPointConfigGroup> entryPointGroupConfigList = new ArrayList<EntryPointConfigGroup>();
@@ -29,8 +32,11 @@ public class EntryPointServiceTest extends EntryPointBaseTest{
 		Assertions.assertThat(configList).isNotEmpty();
 	}
 	
+	/**
+	 * 测试获取当前可见分组及接口(分组id列表不存在)
+	 */
 	@Test
-	public void testGetCurrentEntryPointVisibily_groupIdListNotExist() {
+	public void testGetCurrentEntryPointVisible_groupIdListNotExist() {
 		when(entryPointConfigRepository.byGroupIdList(List.of())).thenReturn(null);
 		
 		List<EntryPointConfigGroup> entryPointGroupConfigList = new ArrayList<EntryPointConfigGroup>();
@@ -38,16 +44,22 @@ public class EntryPointServiceTest extends EntryPointBaseTest{
 		Assertions.assertThat(configList).isNull();
 	}
 	
+	/**
+	 * 测试获取当前可见分组列表(分组存在)
+	 */
 	@Test
-	public void testGetCurrentGroupList_currentGroupList() {
+	public void testGetCurrentGroupList_groupListExist() {
 		when(entryPointConfigRepository.findGroups()).thenReturn(List.of(getEntryPointConfigGroup()));
 		
 		List<EntryPointConfigGroup> entryPointConfigGroupList = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentGroupList();
 		Assertions.assertThat(entryPointConfigGroupList).isNotNull();
 	}
 	
+	/**
+	 * 测试获取当前全部分组列表(分组存在)
+	 */
 	@Test
-	public void testGetCurrentAllGroupList_currentAllGroupList() {
+	public void testGetCurrentAllGroupList_groupListExist() {
 		List<EntryPointConfigGroup> visibleGroupList = new ArrayList<>();
 		when(entryPointConfigRepository.findAllGroup()).thenReturn(visibleGroupList);
 		
@@ -55,8 +67,11 @@ public class EntryPointServiceTest extends EntryPointBaseTest{
 		Assertions.assertThat(entryPointConfigGroupList).isNotNull();
 	}
 	
+	/**
+	 * 测试设置分组可见度(设置分组id列表存在)
+	 */
 	@Test
-	public void testUpdateVisibility_updateVisibility() {
+	public void testUpdateVisibility_groupIdListExist() {
 		List<EntryPointGroupID> entryPointGroupIdList = new ArrayList<>();
 		doNothing().when(entryPointConfigRepository).update(entryPointGroupIdList);
 		
@@ -64,6 +79,9 @@ public class EntryPointServiceTest extends EntryPointBaseTest{
 		verify(entryPointConfigRepository, times(1)).update(entryPointGroupIdList);
 	}
 	
+	/**
+	 * 测试关键字查询接口(关键字存在)
+	 */
 	@Test
 	public void testGetEntryPointByKey_keyExist() {
 		List<EntryPointConfig> entryPointConfigList = new ArrayList<>();
@@ -73,11 +91,11 @@ public class EntryPointServiceTest extends EntryPointBaseTest{
 		Assertions.assertThat(configList).isNotNull();
 	}
 	
-	public EntryPointConfig getEntryPointConfig() {
+	private EntryPointConfig getEntryPointConfig() {
         return TestHelper.newInstance(EntryPointConfig.class);
     }
 	
-	public EntryPointConfigGroup getEntryPointConfigGroup() {
+	private EntryPointConfigGroup getEntryPointConfigGroup() {
 		return EntryPointConfigGroup
 				.builder()
 				.groupId(new EntryPointGroupID(1L))

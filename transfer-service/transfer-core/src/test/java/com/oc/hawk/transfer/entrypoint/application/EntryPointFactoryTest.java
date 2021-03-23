@@ -29,6 +29,9 @@ public class EntryPointFactoryTest extends EntryPointBaseTest{
 		entryPointConfigFactory = new EntryPointConfigFactory(entryPointConfigRepository);
     }
 	
+	/**
+	 * 测试工厂根据入参创建配置接口(入参不为空)
+	 */
 	@Test
 	@DisplayName("entry point config created by factory cannot be null")
 	void create_entryPointConfigNotNull() {
@@ -39,6 +42,9 @@ public class EntryPointFactoryTest extends EntryPointBaseTest{
 		Assertions.assertThat(entryPointConfig.getGroupId()).isNotNull();
 	}
 	
+	/**
+	 * 测试工厂根据不可见分组id创建分组id列表
+	 */
 	@Test
     void createGroupInvisibility() {
 		List<EntryPointGroupID> groupIdList = entryPointConfigFactory.createGroupInvisibility(List.of(along()));

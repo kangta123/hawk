@@ -10,6 +10,9 @@ import com.oc.hawk.transfer.entrypoint.domain.model.entrypointconfig.EntryPointG
 
 public class EntryPointConfigTest extends EntryPointBaseTest {
 	
+	/**
+	 * 测试构建接口配置实例(配置id不为空)
+	 */
 	@Test
 	public void testEntryPointConfig_configIdIsNotNull() {
 		final EntryPointConfig entryPointConfig = 

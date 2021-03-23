@@ -9,8 +9,11 @@ import com.oc.hawk.transfer.entrypoint.domain.model.entrypointconfig.EntryPointG
 
 public class EntryPointConfigGroupTest extends EntryPointBaseTest {
 
+	/**
+	 * 测试构建配置分组实例(分组id不为空)
+	 */
 	@Test
-	public void testEntryPointConfigGroup() {
+	public void testEntryPointConfigGroup_groupIdIsNotNull() {
 		final EntryPointConfigGroup group = EntryPointConfigGroup.builder()
 				.groupId(new EntryPointGroupID(along()))
 				.groupName(str())
