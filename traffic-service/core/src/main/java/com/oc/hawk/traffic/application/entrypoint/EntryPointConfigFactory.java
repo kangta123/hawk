@@ -78,11 +78,7 @@ public class EntryPointConfigFactory {
         Long end = command.getEnd();
 
         return Trace.builder()
-            .httpRequest(httpRequest)
-            .httpResponse(httpResponse)
             .start(start)
-            .end(end)
-            .configId(new EntryPointConfigID(configId))
             .build();
     }
 

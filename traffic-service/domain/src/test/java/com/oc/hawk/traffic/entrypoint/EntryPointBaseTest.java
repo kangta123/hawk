@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public abstract class EntryPointBaseTest extends BaseTest{
+public abstract class EntryPointBaseTest extends BaseTest {
 
     @Mock
-	protected EntryPointConfigRepository entryPointConfigRepository;
+    protected EntryPointConfigRepository entryPointConfigRepository;
 
 }
