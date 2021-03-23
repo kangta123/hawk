@@ -6,7 +6,7 @@ import lombok.Data;
 public class EntryPointHistoryListItemDTO {
 
     private Long id;
-	private String requestTime;
-	private Long executeTime;
+    private String requestTime;
+    private Long executeTime;
 
 }

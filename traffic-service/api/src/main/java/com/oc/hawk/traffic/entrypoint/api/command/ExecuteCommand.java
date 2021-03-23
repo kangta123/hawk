@@ -11,12 +11,12 @@ public class ExecuteCommand {
     private List<Map<String, String>> form;
     //header头
     private List<Map<String, String>> header;
-	//请求体
-	private String body;
-	//请求路径参数
-	private List<Map<String,String>> path;
-	//配置接口id
-	private Long entryPointId;
-	//实例名
-	private String instanceName;
+    //请求体
+    private String body;
+    //请求路径参数
+    private List<Map<String, String>> path;
+    //配置接口id
+    private Long entryPointId;
+    //实例名
+    private String instanceName;
 }

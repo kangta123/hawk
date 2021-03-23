@@ -6,6 +6,6 @@ import lombok.Data;
 public class UserGroupDTO {
 
     private Long groupId;
-	private String groupName;
-	private Integer groupStatus;
+    private String groupName;
+    private Integer groupStatus;
 }

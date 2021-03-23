@@ -6,12 +6,12 @@ import lombok.Data;
 public class UserEntryPointDTO {
 
     private Long id;
-	private Long groupId;
-	private String apiName;
-	private String apiPath;
-	private String apiMethod;
-	private String apiDesc;
-	private String projectId;
-	private String app;
+    private Long groupId;
+    private String apiName;
+    private String apiPath;
+    private String apiMethod;
+    private String apiDesc;
+    private String projectId;
+    private String app;
 
 }
