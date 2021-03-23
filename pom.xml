@@ -34,6 +34,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <caffeine.version>2.8.8</caffeine.version>
+        <grpc.version>1.25.0</grpc.version>
     </properties>
 
     <dependencyManagement>
@@ -182,6 +183,11 @@
                 <artifactId>caffeine</artifactId>
                 <version>${caffeine.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-all</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -263,20 +269,7 @@
         <module>kubernetes-keepalive-service</module>
         <module>message-service</module>
         <module>monitor-service</module>
-        <module>transfer-service</module>
+        <module>traffic-service</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-        </repository>
-        <repository>
-            <id>spring-releases</id>
-            <name>Spring Releases</name>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-    </repositories>
 
 </project>

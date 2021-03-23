@@ -78,7 +78,7 @@ public class JpaProjectBuildJobJobRepository implements ProjectBuildJobRepositor
         ProjectBuildJobPO projectBuildJobPo = ProjectBuildJobPO.createdBy(projectBuildJob);
         projectBuildPORepository.save(projectBuildJobPo);
 
-        ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
         if (executionPlan != null) {
             List<ProjectBuildStagePO> stages = executionPlan.getStages().stream().map(stage -> ProjectBuildStagePO.createdBy(projectBuildJobPo.getId(), stage)).collect(Collectors.toList());
             projectBuildStagePORepository.saveAll(stages);

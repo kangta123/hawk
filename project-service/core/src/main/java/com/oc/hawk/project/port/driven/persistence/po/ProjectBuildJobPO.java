@@ -68,7 +68,7 @@ class ProjectBuildJobPO extends BaseEntity {
     }
 
     private static void configExecutionPlan(ProjectBuildJob projectBuildJob, ProjectBuildJobPO projectBuildJobPo) {
-        ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
         if (executionPlan != null) {
             projectBuildJobPo.setEndTime(executionPlan.getEndTime());
 
@@ -123,7 +123,7 @@ class ProjectBuildJobPO extends BaseEntity {
             Collections.sort(stages);
         }
 
-        ProjectBuildExecutionPlan executionPlan = new ProjectBuildExecutionPlan(state, stages, images, new ProjectBuildExecutionEnv(this.getEnv()), this.getEndTime());
+        BuildJobExecutionPlan executionPlan = new BuildJobExecutionPlan(state, stages, images, new ProjectBuildExecutionEnv(this.getEnv()), this.getEndTime());
         GitCommitLogID commitLogId = null;
         if (this.getCommitLogId() != null) {
             commitLogId = new GitCommitLogID(this.getCommitLogId());

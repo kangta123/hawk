@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class NormalRuntimeStarter implements ServiceRuntimeStarter {
+public class NormalRuntimeStarter implements RuntimeStarter {
     private final KubernetesRuntimeSpecUseCase kubernetesRuntimeSpecUseCase;
 
     @Override

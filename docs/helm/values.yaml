@@ -29,7 +29,7 @@ hawk:
   appImagePrefix: registry.cn-qingdao.aliyuncs.com/kangta123
   appns: default
   # hawk app 运行版本
-  version: v4.2
+  version: v4.2.3
   # hawk app 健康检查地址
   readiness: /actuator/health/readiness
   # 访问hawk应用域名，配合ingress 需要支持dns泛解析
@@ -52,10 +52,8 @@ hawk:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_project-core
   - name: hawk-container
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_container-core
-    version: v4.1.6.1
   - name: hawk-kubernetes
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_kubernetes-core
-    version: v4.1.5.1
   - name: hawk-kubernetes-keepalive
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_kubernetes-keepalive
   - name: hawk-monitor
@@ -80,9 +78,9 @@ hawk:
     version: "1210000"
   # hawk ui
   ui:
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
+      image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
     # ui 版本
-    version: v4.2
+      version: v4.2.3
     # ui将api转发到网关模块hawk gateway, gateway地址
     gateway: hawk-gateway:8080
 

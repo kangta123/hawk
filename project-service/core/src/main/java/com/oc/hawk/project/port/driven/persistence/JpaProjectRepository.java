@@ -105,7 +105,6 @@ public class JpaProjectRepository implements ProjectRepository {
                 predicates.add(criteriaBuilder.or(orPredicates.toArray(new Predicate[0])));
             }
 
-
             if (predicates.isEmpty()) {
                 return null;
             } else {

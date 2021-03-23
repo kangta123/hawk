@@ -20,7 +20,7 @@ public class ProjectBuildJob {
     private final LocalDateTime createdAt;
     private final JobCreator creator;
     private final List<ProjectAppID> subApps;
-    private final ProjectBuildExecutionPlan executionPlan;
+    private final BuildJobExecutionPlan executionPlan;
     private final GitCommitLogID gitCommitLogId;
 
     public void ready(ProjectBuildExecutionEnv env) {

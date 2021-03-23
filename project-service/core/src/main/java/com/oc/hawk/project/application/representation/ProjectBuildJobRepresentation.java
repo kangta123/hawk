@@ -46,7 +46,7 @@ public class ProjectBuildJobRepresentation {
         projectBuildJobDTO.setCreator(creator.getCreateId().getId());
         projectBuildJobDTO.setCreatorName(creator.getName());
 
-        ProjectBuildExecutionPlan executionPlan = job.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = job.getExecutionPlan();
         if (executionPlan != null) {
             projectBuildJobDTO.setEndTime(executionPlan.getEndTime());
             if (executionPlan.getState() != null) {
@@ -63,7 +63,7 @@ public class ProjectBuildJobRepresentation {
         transferToJobDetail(projectBuildJobDTO, gitCommitLog, executionPlan);
     }
 
-    private void transferToJobDetail(ProjectBuildJobDTO projectBuildJobDTO, GitCommitLog commitLogRecord, ProjectBuildExecutionPlan executionPlan) {
+    private void transferToJobDetail(ProjectBuildJobDTO projectBuildJobDTO, GitCommitLog commitLogRecord, BuildJobExecutionPlan executionPlan) {
         if (projectBuildJobDTO instanceof ProjectBuildJobDetailDTO) {
             ProjectBuildJobDetailDTO detail = (ProjectBuildJobDetailDTO) projectBuildJobDTO;
 
