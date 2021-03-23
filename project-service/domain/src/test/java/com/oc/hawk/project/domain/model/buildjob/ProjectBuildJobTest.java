@@ -16,7 +16,7 @@ class ProjectBuildJobTest extends ProjectBaseTest {
         projectBuildJob.ready(new ProjectBuildExecutionEnv(s));
 
 
-        ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
         Assertions.assertThat(executionPlan).isNotNull();
         Assertions.assertThat(executionPlan.getEnv().envStr()).isEqualTo("{\"a\":\"1\",\"b\":\"2\"}");
     }
@@ -26,7 +26,7 @@ class ProjectBuildJobTest extends ProjectBaseTest {
         ProjectBuildJob projectBuildJob = getProjectBuildJob();
         projectBuildJob.ready(new ProjectBuildExecutionEnv(""));
 
-        ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
         Assertions.assertThat(executionPlan.getStages()).extracting("stage").contains(JobStage.Created, JobStage.Ready);
     }
 
@@ -39,7 +39,7 @@ class ProjectBuildJobTest extends ProjectBaseTest {
     }
 
     private ProjectBuildJob getProjectBuildJob() {
-        return ProjectBuildJob.builder().executionPlan(ProjectBuildExecutionPlan.createNew()).build();
+        return ProjectBuildJob.builder().executionPlan(BuildJobExecutionPlan.createNew()).build();
     }
 
     @Test

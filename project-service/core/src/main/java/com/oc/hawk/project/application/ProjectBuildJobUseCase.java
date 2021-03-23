@@ -119,7 +119,7 @@ public class ProjectBuildJobUseCase {
     }
 
     private ProjectBuildReadyDTO getBuildReadyEventData(Long projectJobId, ProjectBuildJob projectBuildJob) {
-        ProjectBuildExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
+        BuildJobExecutionPlan executionPlan = projectBuildJob.getExecutionPlan();
 
         Project project = projectRepository.byId(projectBuildJob.getProjectId());
 

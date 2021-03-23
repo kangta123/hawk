@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KubernetesServiceStarterFactory {
 
-    public static ServiceRuntimeStarter starter(RuntimeConfigSpec configuration) {
+    public static RuntimeStarter starter(RuntimeConfigSpec configuration) {
         if (configuration.isBusiness()) {
             return ApplicationContextHolder.getBean(BusinessRuntimeStarter.class);
         } else {

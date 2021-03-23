@@ -47,7 +47,7 @@ public class ProjectBuildJobFactory {
             .creator(getJobCreator())
             .subApps(subApps)
             .gitCommitLogId(commitLogId)
-            .executionPlan(ProjectBuildExecutionPlan.createNew())
+            .executionPlan(BuildJobExecutionPlan.createNew())
             .build();
     }
 

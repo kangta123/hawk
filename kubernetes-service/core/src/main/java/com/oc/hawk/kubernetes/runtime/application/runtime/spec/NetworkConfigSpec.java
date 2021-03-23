@@ -52,7 +52,7 @@ public class NetworkConfigSpec {
 
         // https://preliminary.istio.io/zh/docs/ops/deployment/requirements/
         if (!nonNullExtraPorts.containsKey(ENV_DEFAULT_SERVER_PORT)) {
-            ports.add(new ServicePort(HTTP_PROTOCOL, serviceName + "-" + PORT_NAME_HTTP, 0, ENV_DEFAULT_SERVER_PORT, HTTP_PROTOCOL, targetPort));
+            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, 0, ENV_DEFAULT_SERVER_PORT, HTTP_PROTOCOL, targetPort));
         }
         return ports.toArray(new ServicePort[0]);
     }

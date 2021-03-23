@@ -12,7 +12,7 @@ import java.util.Set;
 
 @DomainEntity
 @Getter
-public class ProjectBuildExecutionPlan {
+public class BuildJobExecutionPlan {
     private ProjectBuildState state;
     private List<ProjectBuildStage> stages;
     private Set<ProjectImage> projectImages;
@@ -20,7 +20,7 @@ public class ProjectBuildExecutionPlan {
 
     private LocalDateTime endTime;
 
-    public ProjectBuildExecutionPlan(ProjectBuildState state, List<ProjectBuildStage> stages, Set<ProjectImage> projectImages, ProjectBuildExecutionEnv env, LocalDateTime endTime) {
+    public BuildJobExecutionPlan(ProjectBuildState state, List<ProjectBuildStage> stages, Set<ProjectImage> projectImages, ProjectBuildExecutionEnv env, LocalDateTime endTime) {
         this.state = state;
         this.stages = stages;
         this.projectImages = projectImages;
@@ -28,15 +28,15 @@ public class ProjectBuildExecutionPlan {
         this.endTime = endTime;
     }
 
-    public ProjectBuildExecutionPlan(ProjectBuildExecutionEnv env) {
+    public BuildJobExecutionPlan(ProjectBuildExecutionEnv env) {
         this.env = env;
         this.state = ProjectBuildState.START;
     }
 
-    public static ProjectBuildExecutionPlan createNew() {
-        ProjectBuildExecutionPlan projectBuildExecutionPlan = new ProjectBuildExecutionPlan(new ProjectBuildExecutionEnv(""));
-        projectBuildExecutionPlan.addNewStage(JobStage.Created, true, null);
-        return projectBuildExecutionPlan;
+    public static BuildJobExecutionPlan createNew() {
+        BuildJobExecutionPlan buildJobExecutionPlan = new BuildJobExecutionPlan(new ProjectBuildExecutionEnv(""));
+        buildJobExecutionPlan.addNewStage(JobStage.Created, true, null);
+        return buildJobExecutionPlan;
     }
 
     void addNewStage(JobStage jobStage, boolean isSuccess, ProjectImage image) {

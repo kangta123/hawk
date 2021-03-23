@@ -18,7 +18,7 @@ import com.oc.hawk.kubernetes.runtime.application.runtime.spec.BuildRuntimeSpecF
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.NetworkConfigSpec;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.RuntimeConfigSpec;
 import com.oc.hawk.kubernetes.runtime.application.runtime.starter.KubernetesServiceStarterFactory;
-import com.oc.hawk.kubernetes.runtime.application.runtime.starter.ServiceRuntimeStarter;
+import com.oc.hawk.kubernetes.runtime.application.runtime.starter.RuntimeStarter;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class KubernetesRuntimeExecutorUseCase {
             }
         }
 
-        ServiceRuntimeStarter starter = KubernetesServiceStarterFactory.starter(configuration);
+        RuntimeStarter starter = KubernetesServiceStarterFactory.starter(configuration);
         if (starter == null) {
             log.warn("No applicable starter , {}", spec.getName());
             notifyRuntimeStartFailed(spec);
