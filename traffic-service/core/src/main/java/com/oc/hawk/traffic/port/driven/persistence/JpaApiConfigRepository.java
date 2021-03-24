@@ -8,7 +8,7 @@ import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigGroupPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointGroupManagerPO;
-import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointHistoryManagerPo;
+import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointTracePo;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     private final ApiConfigPoRepository apiConfigPoRepository;
     private final EntryPointConfigGroupPoRepository apiConfigGroupPoRepository;
     private final EntryPointGroupManagerPoRepository apiGroupManagerPoRepository;
-    private final EntryPointHistoryManagerPoRepository entryPointHistoryManagerPoRepository;
+    private final EntryPointTracePoRepository entryPointHistoryManagerPoRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -212,9 +212,13 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public void saveHistoy(Trace history) {
-        EntryPointHistoryManagerPo historyPo = EntryPointHistoryManagerPo.createBy(history);
-        entryPointHistoryManagerPoRepository.save(historyPo);
+    public void saveTrace(List<Trace> traceList) {
+    	List<EntryPointTracePo> poList = new ArrayList<>();
+    	for(Trace trace : traceList) {
+    		 EntryPointTracePo historyPo = EntryPointTracePo.createBy(trace);
+    		 poList.add(historyPo);
+    	};
+        entryPointHistoryManagerPoRepository.saveAll(poList);
     }
 
     @Override
@@ -225,18 +229,18 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
         Predicate conditionPath = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath());
         Predicate conditionPathPrefix = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath() + "/");
-
+        
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
-
+        
         Predicate conditionWhere = criteriaBuilder.and(conditionMethod, orClause);
         criteriaQuery.where(conditionWhere);
-
-        EntryPointConfigPO resultPo = entityManager.createQuery(criteriaQuery).getSingleResult();
-        if (Objects.isNull(resultPo)) {
+        
+        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
+        if (Objects.isNull(resultPoList) || resultPoList.isEmpty()) {
             return null;
         }
-        return resultPo.toEntryPointConfig();
+        return resultPoList.get(0).toEntryPointConfig();
     }
 
     @Override

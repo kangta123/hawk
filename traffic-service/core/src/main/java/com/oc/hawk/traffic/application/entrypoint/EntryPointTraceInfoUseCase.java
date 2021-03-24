@@ -8,22 +8,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EntryPointRequestHistoryUseCase {
-
+public class EntryPointTraceInfoUseCase {
+	
     private final EntryPointConfigFactory entryPointConfigFactory;
     private final EntryPointConfigRepository entryPointConfigRepository;
-
+    
     @Transactional(rollbackFor = Exception.class)
-    public void createRequestHistory(List<UploadTraceInfoCommand> commandList) {
-        for (UploadTraceInfoCommand command : commandList) {
-            Trace history = entryPointConfigFactory.createHistory(command);
-            entryPointConfigRepository.saveHistoy(history);
-        }
+    public void createTrace(List<UploadTraceInfoCommand> commandList) {
+        List<Trace> traceList = new ArrayList<Trace>();
+        
+    	for(UploadTraceInfoCommand command : commandList) {
+    		Trace trace = entryPointConfigFactory.createTrace(command);
+    		traceList.add(trace);
+    	}
+        
+    	entryPointConfigRepository.saveTrace(traceList);
     }
 
 }

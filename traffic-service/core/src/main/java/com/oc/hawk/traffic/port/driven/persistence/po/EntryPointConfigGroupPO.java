@@ -16,7 +16,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Table(name = "transfer_endpoint_group")
+@Table(name = "traffic_entrypoint_group")
 @Entity
 @DynamicUpdate
 public class EntryPointConfigGroupPO extends BaseEntity {

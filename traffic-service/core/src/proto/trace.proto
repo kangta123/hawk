@@ -22,7 +22,6 @@ message WriteLogRequest {
 
     string referer = 8;
     string request_id = 9;
-    uint32 response_code = 12;
     string protocol = 13;
     string method = 14;
     string request_headers = 15;

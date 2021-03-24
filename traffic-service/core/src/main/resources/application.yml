@@ -1,6 +1,6 @@
 spring:
     application:
-        name: transfer
+        name: traffic
     profiles:
         active: dev
     jpa:

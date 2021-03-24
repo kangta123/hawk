@@ -16,7 +16,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Table(name = "transfer_endpoint_group_manager")
+@Table(name = "traffic_entrypoint_group_manager")
 @Entity
 @DynamicUpdate
 public class EntryPointGroupManagerPO extends BaseEntity {

@@ -67,19 +67,31 @@ public class EntryPointConfigFactory {
         List<EntryPointGroupID> idList = groupIdList.stream().map(obj -> new EntryPointGroupID(obj)).collect(Collectors.toList());
         return idList;
     }
-
-    public Trace createHistory(UploadTraceInfoCommand command) {
-
-        HttpRequest httpRequest = createHttpRequest(command);
-        HttpResponse httpResponse = createHttpResponse(command);
-
-        Long configId = matchPath(httpRequest.getRequestAddr(), httpRequest.getRequestMethod().name());
-        Long start = command.getStart();
-        Long end = command.getEnd();
-
-        return Trace.builder()
-            .start(start)
-            .build();
+    
+    public Trace createTrace(UploadTraceInfoCommand command) {
+    	Long configId = matchPath(command.getPath(), command.getMethod());
+    	
+    	return Trace.builder()
+    			.host(command.getHost())
+    			.path(command.getPath())
+    			.method(command.getMethod())
+    			.destAddr(command.getDestAddr())
+    			.dstNamespace(command.getDstNamespace())
+    			.dstWorkload(command.getDstWorkload())
+    			.sourceAddr(command.getSourceAddr())
+    			.timestamp(command.getTimestamp())
+    			.latency(command.getLatency())
+    			.requestId(command.getRequestId())
+    			.protocol(command.getProtocol())
+    			.requestBody(command.getRequestBody())
+    			.requestHeaders(command.getRequestHeaders())
+    			.responseBody(command.getResponseBody())
+    			.responseHeaders(command.getResponseHeaders())
+    			.responseCode(command.getResponseCode())
+    			.spanId(command.getSpanId())
+    			.traceId(command.getTraceId())
+    			.configId(configId)
+    			.build();
     }
 
     private Long matchPath(String path, String method) {
@@ -123,7 +135,7 @@ public class EntryPointConfigFactory {
         boolean resultFlag = m.find();
         return resultFlag;
     }
-
+/**
     private HttpResponse createHttpResponse(UploadTraceInfoCommand command) {
         List<List<String>> responseHeaderList = command.getResponseHeaders();
         String responseCode = null;
@@ -183,4 +195,6 @@ public class EntryPointConfigFactory {
             .host(host)
             .build();
     }
+    
+    */
 }

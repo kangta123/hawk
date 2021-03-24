@@ -34,7 +34,7 @@ public interface EntryPointConfigRepository {
 
     void batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
 
-    void saveHistoy(Trace history);
+    void saveTrace(List<Trace> history);
 
     EntryPointConfig findByPathAndMethod(EntryPointPath path, EntryPointMethod method);
 
