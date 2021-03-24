@@ -31,6 +31,7 @@ public class EntryPointTracePo extends BaseEntity {
     private Integer latency;
     private String protocol;
     private String spanId;
+    private String parentSpanId;
     private String traceId;
     private Long configId;
     private String requestBody;
@@ -55,6 +56,7 @@ public class EntryPointTracePo extends BaseEntity {
         historyPo.setLatency(history.getLatency());
         historyPo.setProtocol(history.getProtocol());
         historyPo.setSpanId(history.getSpanId());
+        historyPo.setParentSpanId(history.getParentSpanId());
         historyPo.setTraceId(history.getTraceId());
         historyPo.setConfigId(history.getConfigId());
         historyPo.setRequestBody(history.getRequestBody());

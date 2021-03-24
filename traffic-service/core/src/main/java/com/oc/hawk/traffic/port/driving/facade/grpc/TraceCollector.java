@@ -72,6 +72,8 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             			command.setTraceId(list.get(1));
             		}else if(list.get(0).equalsIgnoreCase("x-b3-traceid")) {
             			command.setSpanId(list.get(1));
+            		}else if(list.get(0).equalsIgnoreCase("x-b3-parentspanid")) {
+            			command.setParentSpanId(list.get(1));
             		}else {
             			requestMap.put((String)list.get(0), (String)list.get(1));
             		}

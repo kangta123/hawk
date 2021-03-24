@@ -89,6 +89,7 @@ public class EntryPointConfigFactory {
     			.responseHeaders(command.getResponseHeaders())
     			.responseCode(command.getResponseCode())
     			.spanId(command.getSpanId())
+    			.parentSpanId(command.getParentSpanId())
     			.traceId(command.getTraceId())
     			.configId(configId)
     			.build();

@@ -24,6 +24,7 @@ public class UploadTraceInfoCommand {
     private String responseBody;
     private String requestBody;
     private String spanId;
+    private String parentSpanId;
     private String traceId;
     private String responseCode;
     

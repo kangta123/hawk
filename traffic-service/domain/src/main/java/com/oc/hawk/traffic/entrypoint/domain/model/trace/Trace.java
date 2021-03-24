@@ -27,6 +27,7 @@ public class Trace {
     private String responseBody;
     private String requestBody;
     private String spanId;
+    private String parentSpanId;
     private String traceId;
     private String responseCode;
     private Long configId;
