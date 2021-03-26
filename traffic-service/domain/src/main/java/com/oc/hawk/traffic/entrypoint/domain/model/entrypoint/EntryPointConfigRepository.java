@@ -1,6 +1,7 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.entrypoint;
 
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
 import java.util.List;
 
@@ -39,4 +40,10 @@ public interface EntryPointConfigRepository {
     EntryPointConfig findByPathAndMethod(EntryPointPath path, EntryPointMethod method);
 
     List<EntryPointConfig> findByMethodAndRestfulPath(EntryPointMethod method);
+    
+    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace);
+    
+    void deleteById(EntryPointConfigID entryPointConfigID);
+    
+    Trace byTraceId(TraceId traceId);
 }

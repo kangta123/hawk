@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.trace;
 
 import java.util.Map;
+import java.util.Objects;
+
 import com.oc.hawk.ddd.DomainEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +12,7 @@ import lombok.Getter;
 @DomainEntity
 public class Trace {
 
-    private final TraceId historyId;
+    private final TraceId id;
     private String host;
     private String path;
     private String destAddr;
@@ -30,7 +32,20 @@ public class Trace {
     private String parentSpanId;
     private String traceId;
     private String responseCode;
-    private Long configId;
+    private Long entryPointId;
+    private String entryPointName;
+    
+    public void updateEntryPointId(Long entryPointId) {
+        if(Objects.nonNull(entryPointId)) {
+            this.entryPointId = entryPointId;
+        }
+    }
+    
+    public void updateEntryPointName(String entryPointName) {
+        if(Objects.nonNull(entryPointName)) {
+            this.entryPointName = entryPointName;
+        }
+    }
     
 }
 

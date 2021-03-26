@@ -7,6 +7,8 @@ import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,8 +102,8 @@ public class EntryPointController {
      * 根据接口id,查询历史请求列表
      */
     @GetMapping("/history/page")
-    public DomainPage<EntryPointHistoryListItemDTO> queryApiHistoryList(@PathVariable Long id) {
-
+    public DomainPage<EntryPointTraceListItemDTO> queryApiHistoryList(@PathVariable Long id) {
+    	
         return null;
     }
 
@@ -109,17 +111,29 @@ public class EntryPointController {
      * 根据历史请求id,查询单个历史请求信息
      */
     @GetMapping("/history/{id}")
-    public EntryPointHistoryDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
-
-        return null;
+    public EntryPointTraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
+        return entryPointUseCase.queryApiHistoryInfo(new TraceId(id));
     }
-
+    
     /**
      * 删除接口
      */
     @DeleteMapping("/{id}")
     public BooleanWrapper deleteEntryPoint(@PathVariable Long id) {
-
-        return null;
+        entryPointUseCase.deleteEntryPoint(id);
+        return BooleanWrapper.TRUE;
     }
+    
+    /**
+     * 链路列表信息查询
+     */
+    @GetMapping("/trace")
+    public List<EntryPointTraceDetailDTO> queryApiTraceInfoList(
+            @RequestParam(required=false) Integer page,
+            @RequestParam(required=false) Integer size,
+            @RequestParam(required=false) String path,
+            @RequestParam(required=false) String instanceName){
+    	return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
+    }
+    
 }

@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.entrypoint.domain.service;
 
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -59,4 +61,11 @@ public class EntryPointConfigGroups {
 		//List<EntryPointConfig> resultList = keyList.stream().filter(obj -> groupIdList.contains(obj.getGroupId().getId())).collect(Collectors.toList());
 		return keyList;
 	}
+    
+    /**
+     * 根据id删除api配置
+     */
+    public void deleteEntryPoint(EntryPointConfigID entryPointConfigId) {
+        apiConfigRepository.deleteById(entryPointConfigId);
+    }
 }

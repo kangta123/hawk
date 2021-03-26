@@ -69,9 +69,7 @@ public class EntryPointConfigFactory {
     }
     
     public Trace createTrace(UploadTraceInfoCommand command) {
-    	Long configId = matchPath(command.getPath(), command.getMethod());
-    	
-    	return Trace.builder()
+        return Trace.builder()
     			.host(command.getHost())
     			.path(command.getPath())
     			.method(command.getMethod())
@@ -91,111 +89,8 @@ public class EntryPointConfigFactory {
     			.spanId(command.getSpanId())
     			.parentSpanId(command.getParentSpanId())
     			.traceId(command.getTraceId())
-    			.configId(configId)
     			.build();
     }
 
-    private Long matchPath(String path, String method) {
-        if (StringUtils.isBlank(path)) {
-            return null;
-        }
-        int n = path.indexOf("?");
-        if (n >= 0) {
-            path = path.substring(0, n);
-        }
-        if (path.endsWith("/")) {
-            n = path.lastIndexOf("/");
-            if (n > 0) {
-                path = path.substring(0, n);
-            }
-        }
-
-        //查找path 与 method匹配项
-        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new EntryPointPath(path), EntryPointMethod.valueOf(method));
-        if (Objects.nonNull(entryPointConfig)) {
-            return entryPointConfig.getConfigId().getId();
-        }
-
-        //查找method 与 restful匹配项
-        List<EntryPointConfig> configList = entryPointConfigRepository.findByMethodAndRestfulPath(EntryPointMethod.valueOf(method));
-        for (EntryPointConfig config : configList) {
-            String pathValue = config.getHttpResource().getPath().getPath();
-            boolean result = checkPath(pathValue);
-            if (result) {
-                return config.getConfigId().getId();
-            }
-        }
-        return null;
-    }
-
-    private boolean checkPath(String path) {
-        String tempPath = path.replaceAll("\\/", "\\\\/");
-        String replacePath = tempPath.replaceAll("\\{[a-zA-Z\\d]+\\}", "[a-zA-Z\\\\d]+");
-        Pattern p = Pattern.compile(replacePath, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(path);
-        boolean resultFlag = m.find();
-        return resultFlag;
-    }
-/**
-    private HttpResponse createHttpResponse(UploadTraceInfoCommand command) {
-        List<List<String>> responseHeaderList = command.getResponseHeaders();
-        String responseCode = null;
-        Map<String, String> headerMap = new HashMap<String, String>();
-        for (List<String> headers : responseHeaderList) {
-            String key = headers.get(0);
-            String value = headers.get(1);
-            if (":status".equalsIgnoreCase(key)) {
-                responseCode = value;
-            }
-            headerMap.put(key, value);
-        }
-        String responseBody = command.getResponseBody();
-        return HttpResponse.builder()
-            .responseCode(responseCode)
-            .responseHeader(HttpResponseHeader.createHttpResponseHeader(headerMap))
-            .responseBody(HttpResponseBody.createHttpResponseBody(responseBody))
-            .build();
-    }
-
-    private HttpRequest createHttpRequest(UploadTraceInfoCommand command) {
-        List<List<String>> requestHeaderList = command.getRequestHeaders();
-        String path = null;
-        HttpRequestMethod method = null;
-        String host = "http://";
-        Map<String, String> headerMap = new HashMap<String, String>();
-        for (List<String> headers : requestHeaderList) {
-            String key = headers.get(0);
-            String value = headers.get(1);
-            if (":authority".equalsIgnoreCase(key)) {
-                host += value;
-            } else if (":path".equalsIgnoreCase(key)) {
-                path = value;
-            } else if (":method".equalsIgnoreCase(key)) {
-                method = HttpRequestMethod.valueOf(value);
-            } else if ("content-type".equalsIgnoreCase(key)) {
-                headerMap.put("Content-Type", value);
-            } else {
-                headerMap.put(key, value);
-            }
-        }
-
-        HttpBody body = null;
-        if (StringUtils.equals("GET", method.name())) {
-            int n = path.indexOf("?");
-            if (n > 0) {
-                String params = path.substring(n + 1);
-                body = new JsonHttpBody(params);
-            }
-        }
-
-        return HttpRequest.builder()
-            .httpHeader(new HttpHeader(headerMap))
-            .requestAddr(path)
-            .requestBody(body)
-            .requestMethod(method)
-            .host(host)
-            .build();
-    }
     
-    */
 }

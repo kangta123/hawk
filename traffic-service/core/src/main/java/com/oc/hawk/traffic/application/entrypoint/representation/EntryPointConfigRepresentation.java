@@ -1,5 +1,7 @@
 package com.oc.hawk.traffic.application.entrypoint.representation;
 
+import com.oc.hawk.api.utils.JsonUtils;
+import com.oc.hawk.traffic.entrypoint.api.dto.EntryPointTraceDetailDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.ExecuteResponseDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.UserEntryPointDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupDTO;
@@ -8,6 +10,8 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -118,6 +122,42 @@ public class EntryPointConfigRepresentation {
         dto.setResponseTime(httpResponse.getResponseTime());
         dto.setResponseBody(httpResponse.getResponseBody().getBody());
         dto.setResponseHeader(httpResponse.getResponseHeader().getResponeseHeader());
+        return dto;
+    }
+    
+    public List<EntryPointTraceDetailDTO> toEntryPointTraceDetailList(List<Trace> traceList) {
+        List<EntryPointTraceDetailDTO> list = new ArrayList<>();
+        for(Trace trace : traceList) {
+            EntryPointTraceDetailDTO dto = toEntryPointTraceDetailDTO(trace);
+            list.add(dto);
+        }
+        return list;
+    }
+    
+    public EntryPointTraceDetailDTO toEntryPointTraceDetailDTO(Trace trace){
+        EntryPointTraceDetailDTO dto = new EntryPointTraceDetailDTO();
+        dto.setId(trace.getId().getId());
+        dto.setHost(trace.getHost());
+        dto.setPath(trace.getPath());
+        dto.setMethod(trace.getMethod());
+        dto.setDestAddr(trace.getDestAddr());
+        dto.setRequestId(trace.getRequestId());
+        dto.setSourceAddr(trace.getSourceAddr());
+        dto.setDstWorkload(trace.getDstWorkload());
+        dto.setDstNamespace(trace.getDstNamespace());
+        dto.setLatency(trace.getLatency());
+        dto.setProtocol(trace.getProtocol());
+        dto.setSpanId(trace.getSpanId());
+        dto.setParentSpanId(trace.getParentSpanId());
+        dto.setTraceId(trace.getTraceId());
+        dto.setRequestBody(trace.getRequestBody());
+        dto.setRequestHeaders(JsonUtils.object2Json(trace.getRequestHeaders()));
+        dto.setResponseCode(trace.getResponseCode());
+        dto.setResponseBody(trace.getRequestBody());
+        dto.setResponseHeaders(JsonUtils.object2Json(trace.getResponseHeaders()));
+        dto.setStartTime(trace.getTimestamp());
+        dto.setEntryPointId(trace.getEntryPointId());
+        dto.setEntryPointName(trace.getEntryPointName());
         return dto;
     }
 }

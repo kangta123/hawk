@@ -5,6 +5,7 @@ import com.oc.hawk.api.constant.AccountHolder;
 import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigGroupPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointGroupManagerPO;
@@ -12,6 +13,8 @@ import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointTracePo;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.hibernate.query.criteria.internal.OrderImpl;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -250,13 +253,62 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
         Predicate conditionPath = criteriaBuilder.like(fromObj.get("apiPath"), "%{%}%");
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
-
+        
         Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
         criteriaQuery.where(conditionWhere);
 
         List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
         List<EntryPointConfig> entryPointConfigList = resultPoList.stream().map(obj -> obj.toEntryPointConfig()).collect(Collectors.toList());
         return entryPointConfigList;
+    }
+
+    @Override
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace) {
+        Integer pageSize = size==null ? 10 : size;
+        Integer pageNum = page==null ? 0 : (page-1)*pageSize;
+        //多查一条
+        pageSize+=1;
+        
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<EntryPointTracePo> criteriaQuery = criteriaBuilder.createQuery(EntryPointTracePo.class);
+        Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
+        
+        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), trace.getPath());
+        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getPath()+"?%");
+        Predicate conditionInstanceName = criteriaBuilder.equal(fromObj.get("dstWorkload"), trace.getDstWorkload());
+        
+        Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
+        if(StringUtils.isBlank(trace.getPath()) && StringUtils.isBlank(trace.getDstWorkload())) {
+            criteriaQuery.select(fromObj);
+            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
+        }else if(StringUtils.isBlank(trace.getDstWorkload())){
+            criteriaQuery.where(orClause);
+        }else if(StringUtils.isBlank(trace.getPath())) {
+            criteriaQuery.where(conditionInstanceName);
+        }else {
+            Predicate whereClause = criteriaBuilder.and(orClause,conditionInstanceName);
+            criteriaQuery.where(whereClause);
+        }
+        List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(pageNum)
+                .setMaxResults(pageSize)
+                .getResultList();
+        List<Trace> traceList = resultPoList.stream().map(obj -> obj.toTrace()).collect(Collectors.toList());
+        return traceList;
+    }
+    
+    @Override
+    public void deleteById(EntryPointConfigID entryPointConfigId) {
+        apiConfigPoRepository.deleteById(entryPointConfigId.getId());
+    }
+
+    @Override
+    public Trace byTraceId(TraceId traceId) {
+        Optional<EntryPointTracePo> entryPointTracePo = entryPointHistoryManagerPoRepository.findById(traceId.getId());
+        if (Objects.isNull(entryPointTracePo) || entryPointTracePo.isEmpty()) {
+            return null;
+        }
+        return entryPointTracePo.get().toTrace();
     }
 
 }

@@ -7,9 +7,12 @@ import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointConfigExecutor;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointConfigGroups;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointGroupImportance;
+import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointTraces;
 import com.oc.hawk.traffic.entrypoint.domain.service.excutor.EntryPointExcutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -117,11 +120,34 @@ public class EntryPointUseCase {
     public ExecuteResponseDTO execute(ExecuteCommand executeCommand) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(executeCommand.getEntryPointId()));
         HttpRequest httpRequest = httpRequestFactory.create(entryPointConfig, executeCommand);
-
+        
         HttpResponse httpResponse = new EntryPointConfigExecutor(entryPointExcutor).execute(httpRequest);
-
+        
         ExecuteResponseDTO excuteResponseDTO = entryPointConfigRepresentation.toExecuteResponseDTO(httpResponse);
         return excuteResponseDTO;
     }
-
+    
+    /**
+     * 链路信息查询
+     */
+    public List<EntryPointTraceDetailDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
+    	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName);
+    	return entryPointConfigRepresentation.toEntryPointTraceDetailList(traceList);
+    }
+    
+    /**
+     * 根据id删除Api
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteEntryPoint(Long id) {
+        new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPoint(new EntryPointConfigID(id));
+    }
+    
+    /**
+     * 根据traceId查询单个请求历史详情
+     */
+    public EntryPointTraceDetailDTO queryApiHistoryInfo(TraceId traceId) {
+        Trace trace = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryInfo(traceId);
+        return entryPointConfigRepresentation.toEntryPointTraceDetailDTO(trace);
+    }
 }
