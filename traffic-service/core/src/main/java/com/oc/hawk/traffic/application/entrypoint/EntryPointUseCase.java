@@ -4,6 +4,7 @@ import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfi
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
+import com.oc.hawk.traffic.entrypoint.domain.facade.FileFacade;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
@@ -35,6 +36,8 @@ public class EntryPointUseCase {
 
     private final HttpRequestFactory httpRequestFactory;
     private final EntryPointExcutor entryPointExcutor;
+    private final FileFacade fileFacade;
+    
 
     /**
      * 查询可见分组及接口
@@ -169,4 +172,10 @@ public class EntryPointUseCase {
         return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
     }
     
+    /**
+     * 获取下载文件
+     */
+    public byte[] getDownloanFile() {
+        return fileFacade.getDownloanFile();
+    }
 }
