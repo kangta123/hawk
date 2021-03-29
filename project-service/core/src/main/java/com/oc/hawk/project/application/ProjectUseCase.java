@@ -97,6 +97,11 @@ public class ProjectUseCase {
         return projectRepresentation.toProjectDTO(project, codeBase);
     }
 
+    /**
+     * 查询用户可见项目，根据指定ids与用户可见项目取交集
+     * @param ids 指定查询项目ids， ids可以为空。
+     * @return 用户可见项目列表{id, name}
+     */
     public List<ProjectNameDTO> getProjectNames(List<Long> ids) {
 
         UserDepartment userDepartment = userFacade.currentUserDepartment();
@@ -129,4 +134,5 @@ public class ProjectUseCase {
         projectRepository.deleteProject(id);
         eventPublisher.publishDomainEvent(DomainEvent.byType(id, ProjectDomainEventType.PROJECT_DELETED));
     }
+
 }

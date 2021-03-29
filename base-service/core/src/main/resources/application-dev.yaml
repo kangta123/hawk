@@ -1,0 +1,16 @@
+server:
+    port: 8804
+
+spring:
+    datasource:
+        url: jdbc:mysql://192.168.16.34:41123/hawk?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+        username: root
+        password: Password
+    jpa:
+        show-sql: true
+eureka:
+    instance:
+        hostname: localhost
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8080/eureka/

@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class InstanceImageDTO {
     private String tag;
     private String app;
-    //    private String image;
     private String branch;
     private Long jobId;
     private LocalDateTime time;
