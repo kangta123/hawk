@@ -10,9 +10,11 @@ import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,12 +26,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/entrypoint")
 @RequiredArgsConstructor
+@Slf4j
 public class EntryPointController {
 
     private final EntryPointUseCase entryPointUseCase;
@@ -183,7 +187,8 @@ public class EntryPointController {
         FileReader fileReader = null;
         BufferedReader br = null;
         try {
-            File file = new File("./file/wasm");
+            Resource resource = new ClassPathResource("files/wasm");
+            File file = resource.getFile();
             fileReader = new FileReader(file);
             br = new BufferedReader(fileReader);
             String temp = "";
@@ -201,7 +206,7 @@ public class EntryPointController {
                     br.close();
                 }
             }catch(Exception e) {
-                
+                log.error("read wasm file exception");
             }
         }
         return sb.toString();
