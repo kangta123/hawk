@@ -14,5 +14,5 @@ data:
 
 kind: ConfigMap
 metadata:
-  name: hawk-message-config
+  name: hawk-traffic-config
 
