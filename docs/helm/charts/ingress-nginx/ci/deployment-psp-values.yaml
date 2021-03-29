@@ -1,6 +1,6 @@
 controller:
-    service:
-        type: ClusterIP
+  service:
+    type: ClusterIP
 
 podSecurityPolicy:
-    enabled: true
+  enabled: true

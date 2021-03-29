@@ -3,26 +3,25 @@ docker:
   secretName: ""
   dockerConfig: ""
 
-persistent:
-  # 是否需要支持存储卷，建议至少使用nfs
+persistent: # 是否需要支持存储卷，建议至少使用nfs
   enabled: true
   volume:
-    # 为应用保存日志
-    - name: hawk-log
-      enabled: false
-      storageClass: rook-cephfs
-      size: 20Gi
-      namespace: default
-    # hawk构建项目时的本地仓库，支持npm，maven，gradle
-    - name: lib-repo
-      enabled: true
-      # nfs地址
-      nfs: 192.168.16.34
-      # nfs export path
-      path: /app/nfs/repo
-      # 需要的存储空间
-      size: 30Gi
-      namespace: build
+  # 为应用保存日志
+  - name: hawk-log
+    enabled: false
+    storageClass: rook-cephfs
+    size: 20Gi
+    namespace: default
+  # hawk构建项目时的本地仓库，支持npm，maven，gradle
+  - name: lib-repo
+    enabled: true
+    # nfs地址
+    nfs: 192.168.16.34
+    # nfs export path
+    path: /app/nfs/repo
+    # 需要的存储空间
+    size: 30Gi
+    namespace: build
 # 部署hawk app配置
 hawk:
   # hawk 构建应用image前缀，用于表示仓库
@@ -58,6 +57,8 @@ hawk:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_kubernetes-keepalive
   - name: hawk-monitor
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_monitor-core
+  - name: hawk-traffic
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_traffic-core
   - name: hawk-gateway
     readiness: /actuator/health
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gateway
@@ -78,9 +79,9 @@ hawk:
     version: "1210000"
   # hawk ui
   ui:
-      image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
     # ui 版本
-      version: v4.2.3
+    version: v4.2.3
     # ui将api转发到网关模块hawk gateway, gateway地址
     gateway: hawk-gateway:8080
 

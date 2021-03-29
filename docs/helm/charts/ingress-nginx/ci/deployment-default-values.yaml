@@ -1,4 +1,4 @@
 # Left blank to test default values
 controller:
-    service:
-        type: ClusterIP
+  service:
+    type: ClusterIP

@@ -8,10 +8,9 @@ import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -22,9 +21,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
-	
+
 	private final EntryPointTraceInfoUseCase entryPointTraceInfoUseCase;
-	
+
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
     	List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
@@ -44,7 +43,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             System.out.println("response headers: " + logEntry.getResponseHeaders());
             System.out.println("response body: " + logEntry.getResponseBody());
             System.out.println("request body: " + logEntry.getRequestBody());
-            
+
             UploadTraceInfoCommand command = new UploadTraceInfoCommand();
             command.setHost(logEntry.getHost());
             command.setPath(logEntry.getPath());
@@ -59,8 +58,8 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             command.setMethod(logEntry.getMethod());
             command.setRequestBody(logEntry.getRequestBody());
             command.setResponseBody(logEntry.getResponseBody());
-            
-            String requestHeader = logEntry.getRequestHeaders();         
+
+            String requestHeader = logEntry.getRequestHeaders();
             Object[] reqHeaderList = JsonUtils.json2Object(requestHeader,Object[].class);
             Map<String,String> requestMap = new HashMap<String,String>();
             for(Object obj : reqHeaderList) {
@@ -80,7 +79,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             	}
             }
             command.setRequestHeaders(requestMap);
-            
+
             String responseHeader = logEntry.getResponseHeaders();
             Object[] respHeaderList = JsonUtils.json2Object(responseHeader,Object[].class);
             Map<String,String> responseMap = new HashMap<String,String>();
@@ -96,10 +95,10 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             	}
             }
             command.setResponseHeaders(responseMap);
-            
+
             commandList.add(command);
         }
-    	
+
         entryPointTraceInfoUseCase.createTrace(commandList);
         log.info("complete");
         responseObserver.onNext(com.oc.hawk.trace_logging.Trace.WriteLogResponse.getDefaultInstance());

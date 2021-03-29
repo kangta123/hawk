@@ -1,6 +1,6 @@
 controller:
-    kind: DaemonSet
-    admissionWebhooks:
-        enabled: false
-    service:
-        type: NodePort
+  kind: DaemonSet
+  admissionWebhooks:
+    enabled: false
+  service:
+    type: NodePort
