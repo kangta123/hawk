@@ -10,9 +10,22 @@ import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
 import lombok.RequiredArgsConstructor;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -20,6 +33,8 @@ import java.util.List;
 public class EntryPointController {
 
     private final EntryPointUseCase entryPointUseCase;
+    
+    private final String contentType = "application/octet-stream";
 
     /**
      * 创建API
@@ -102,16 +117,17 @@ public class EntryPointController {
      * 根据接口id,查询历史请求列表
      */
     @GetMapping("/history/page")
-    public DomainPage<EntryPointTraceListItemDTO> queryApiHistoryList(@PathVariable Long id) {
-    	
-        return null;
+    public TraceResponseDTO queryApiHistoryList(@RequestParam(required=false) Integer page,
+                                                @RequestParam(required=false) Integer size,
+                                                @RequestParam(required=false) Long entryPointId) {
+        return entryPointUseCase.queryApiHistoryList(page,size,entryPointId);
     }
 
     /**
      * 根据历史请求id,查询单个历史请求信息
      */
     @GetMapping("/history/{id}")
-    public EntryPointTraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
+    public TraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
         return entryPointUseCase.queryApiHistoryInfo(new TraceId(id));
     }
     
@@ -128,7 +144,7 @@ public class EntryPointController {
      * 链路列表信息查询
      */
     @GetMapping("/trace")
-    public List<EntryPointTraceDetailDTO> queryApiTraceInfoList(
+    public List<TraceDetailDTO> queryApiTraceInfoList(
             @RequestParam(required=false) Integer page,
             @RequestParam(required=false) Integer size,
             @RequestParam(required=false) String path,
@@ -136,4 +152,58 @@ public class EntryPointController {
     	return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
     }
     
+    /**
+     * 链路节点列表查询
+     */
+    @GetMapping("/trace/node")
+    public List<TraceNodeDTO> queryTraceNodeList(@RequestParam(required=false) String spanId) {
+        return entryPointUseCase.queryTraceNodeList(spanId);
+    }
+    
+    @GetMapping("/file/wasmconfig")
+    public ResponseEntity<Resource> wasmConfigFile(@RequestParam(required=false) String fileName) {
+        String wasmFile = readWasmFile();
+        return textToFile(wasmFile,fileName);
+    }
+    
+    private ResponseEntity<Resource> textToFile(String text,String fileName) {
+        if (StringUtils.isNotEmpty(text)) {
+            Resource resource = new ByteArrayResource(text.getBytes());
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileName)
+                .body(resource);
+        }
+        return ResponseEntity.of(Optional.empty());
+    }
+    
+    
+    private String readWasmFile(){
+        StringBuilder sb = new StringBuilder("");
+        FileReader fileReader = null;
+        BufferedReader br = null;
+        try {
+            File file = new File("./file/wasm");
+            fileReader = new FileReader(file);
+            br = new BufferedReader(fileReader);
+            String temp = "";
+            while ((temp = br.readLine()) != null) {
+              sb.append(temp + "\n");
+            }
+        }catch(Exception e) {
+            sb = new StringBuilder(""); 
+        }finally {
+            try {
+                if(fileReader!=null) {
+                    fileReader.close();
+                }
+                if(br!=null) {
+                    br.close();
+                }
+            }catch(Exception e) {
+                
+            }
+        }
+        return sb.toString();
+    }
 }

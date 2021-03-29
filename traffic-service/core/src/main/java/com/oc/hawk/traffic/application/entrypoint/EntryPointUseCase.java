@@ -130,9 +130,9 @@ public class EntryPointUseCase {
     /**
      * 链路信息查询
      */
-    public List<EntryPointTraceDetailDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
+    public List<TraceDetailDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
     	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName);
-    	return entryPointConfigRepresentation.toEntryPointTraceDetailList(traceList);
+    	return entryPointConfigRepresentation.toTraceDetailList(traceList);
     }
     
     /**
@@ -144,10 +144,29 @@ public class EntryPointUseCase {
     }
     
     /**
-     * 根据traceId查询单个请求历史详情
+     * 根据链路id查询单个请求历史详情
      */
-    public EntryPointTraceDetailDTO queryApiHistoryInfo(TraceId traceId) {
+    public TraceDetailDTO queryApiHistoryInfo(TraceId traceId) {
         Trace trace = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryInfo(traceId);
-        return entryPointConfigRepresentation.toEntryPointTraceDetailDTO(trace);
+        return entryPointConfigRepresentation.toTraceDetailDTO(trace);
     }
+    
+    /**
+     * 链路节点列表查询
+     */
+    public List<TraceNodeDTO> queryTraceNodeList(String spanId){
+        Trace traceParam = Trace.builder().spanId(spanId).build();
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
+    }
+    
+    /**
+     * 接口历史链路信息查询
+     */
+    public TraceResponseDTO queryApiHistoryList(Integer page,Integer size,Long entryPointId) {
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryList(page,size,new EntryPointConfigID(entryPointId));
+        Long countNum = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryCount(new EntryPointConfigID(entryPointId));
+        return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
+    }
+    
 }

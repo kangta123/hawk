@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
-public class EntryPointTraceDetailDTO {
+public class TraceDetailDTO {
 	
     private Long id;
 	private String host;

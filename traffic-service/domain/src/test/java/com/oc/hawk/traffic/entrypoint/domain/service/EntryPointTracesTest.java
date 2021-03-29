@@ -70,6 +70,31 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
         Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
     }
     
+    /**
+     * 测试查询链路节点信息,spanId存在
+     */
+    @Test
+    void testQueryTraceNodeList_spanIdAlreadyExists() {
+        Trace traceParam = Trace.builder().spanId("1").build();
+        when(entryPointConfigRepository.findBySpanId(any())).thenReturn(getTrace());
+        when(entryPointConfigRepository.findByTraceId(any())).thenReturn(List.of(getTrace()));
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        
+        Assertions.assertThat(traceList).isNotEmpty();
+    }
+    
+    /**
+     * 测试查询链路节点信息,spanId不存在
+     */
+    @Test
+    void testQueryTraceNodeList_spanIdIsNull() {
+        Trace traceParam = Trace.builder().spanId(null).build();
+        when(entryPointConfigRepository.findBySpanId(eq(traceParam))).thenReturn(null);
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        
+        Assertions.assertThat(traceList).isEmpty();
+    }
+    
     private Trace getTrace() {
         return TestHelper.newInstance(Trace.class);
     }

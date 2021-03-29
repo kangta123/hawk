@@ -29,8 +29,6 @@ public interface EntryPointConfigRepository {
 
     List<EntryPointConfig> byGroupIdList(List<Long> groupIdList);
 
-    //EntryPointGroupVisibility byGroupManagerUserId(Long userId);
-
     void updateList(Long userId, List<EntryPointConfigGroup> groupList);
 
     void batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
@@ -46,4 +44,12 @@ public interface EntryPointConfigRepository {
     void deleteById(EntryPointConfigID entryPointConfigID);
     
     Trace byTraceId(TraceId traceId);
+    
+    Trace findBySpanId(Trace traceParam);
+    
+    List<Trace> findByTraceId(Trace trace);
+    
+    List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfigID entryPointId);
+    
+    Long queryApiHistoryCount(EntryPointConfigID entryPointId);
 }

@@ -48,8 +48,8 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     private final ApiConfigPoRepository apiConfigPoRepository;
     private final EntryPointConfigGroupPoRepository apiConfigGroupPoRepository;
     private final EntryPointGroupManagerPoRepository apiGroupManagerPoRepository;
-    private final EntryPointTracePoRepository entryPointHistoryManagerPoRepository;
-
+    private final EntryPointTracePoRepository entryPointTracePoRepository;
+    
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -221,7 +221,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     		 EntryPointTracePo historyPo = EntryPointTracePo.createBy(trace);
     		 poList.add(historyPo);
     	};
-        entryPointHistoryManagerPoRepository.saveAll(poList);
+    	entryPointTracePoRepository.saveAll(poList);
     }
 
     @Override
@@ -304,11 +304,62 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
     @Override
     public Trace byTraceId(TraceId traceId) {
-        Optional<EntryPointTracePo> entryPointTracePo = entryPointHistoryManagerPoRepository.findById(traceId.getId());
+        Optional<EntryPointTracePo> entryPointTracePo = entryPointTracePoRepository.findById(traceId.getId());
         if (Objects.isNull(entryPointTracePo) || entryPointTracePo.isEmpty()) {
             return null;
         }
         return entryPointTracePo.get().toTrace();
+    }
+
+    @Override
+    public Trace findBySpanId(Trace traceParam) {
+        EntryPointTracePo tracePo = entryPointTracePoRepository.findBySpanIdOrderByStartTimeAsc(traceParam.getSpanId());
+        if(Objects.isNull(tracePo)) {
+            return null;
+        }
+        return tracePo.toTrace();
+    }
+
+    @Override
+    public List<Trace> findByTraceId(Trace trace) {
+        List<EntryPointTracePo> tracePoList = entryPointTracePoRepository.findByTraceIdOrderByStartTimeAsc(trace.getTraceId());
+        if(Objects.isNull(tracePoList) || tracePoList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return tracePoList.stream().map(obj -> obj.toTrace()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Trace> queryApiHistoryList(Integer page, Integer size, EntryPointConfigID entryPointId) {
+        Integer pageSize = size==null ? 10 : size;
+        Integer pageNum = page==null ? 0 : (page-1)*pageSize;
+        
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<EntryPointTracePo> criteriaQuery = criteriaBuilder.createQuery(EntryPointTracePo.class);
+        Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
+        
+        Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
+        criteriaQuery.where(conditionEntryPointId);
+        criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
+        
+        List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
+                .setFirstResult(pageNum)
+                .setMaxResults(pageSize)
+                .getResultList();
+        List<Trace> traceList = resultPoList.stream().map(obj -> obj.toTrace()).collect(Collectors.toList());
+        return traceList;
+    }
+
+    @Override
+    public Long queryApiHistoryCount(EntryPointConfigID entryPointId) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
+        criteriaQuery.select(criteriaBuilder.count(fromObj));
+        
+        Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
+        criteriaQuery.where(conditionEntryPointId);
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
 }
