@@ -4,8 +4,12 @@ import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
 import com.oc.hawk.ddd.web.DomainPage;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
+import com.oc.hawk.traffic.entrypoint.api.command.ApiQueryKeyCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.FileCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.HistoryPageCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -54,8 +58,8 @@ public class EntryPointController {
      * 创建分组
      */
     @PostMapping("/group")
-    public BooleanWrapper createUserGroup(@RequestParam(required = false) String groupName) {
-        entryPointUseCase.createGroup(groupName);
+    public BooleanWrapper createUserGroup(@RequestBody CreateGroupCommand groupCommand) {
+        entryPointUseCase.createGroup(groupCommand.getGroupName());
         return BooleanWrapper.TRUE;
     }
 
@@ -88,8 +92,8 @@ public class EntryPointController {
      * 根据api地址模糊查询
      */
     @GetMapping("/path")
-    public List<UserEntryPointDTO> queryApiByPath(@RequestParam(required = false) String key) {
-        return entryPointUseCase.queryApiByResource(key);
+    public List<UserEntryPointDTO> queryApiByPath(@RequestBody ApiQueryKeyCommand command) {
+        return entryPointUseCase.queryApiByResource(command.getKey());
     }
 
     /**
@@ -122,10 +126,8 @@ public class EntryPointController {
      * 根据接口id,查询历史请求列表
      */
     @GetMapping("/history/page")
-    public TraceResponseDTO queryApiHistoryList(@RequestParam(required=false) Integer page,
-                                                @RequestParam(required=false) Integer size,
-                                                @RequestParam(required=false) Long entryPointId) {
-        return entryPointUseCase.queryApiHistoryList(page,size,entryPointId);
+    public TraceResponseDTO queryApiHistoryList(@RequestBody HistoryPageCommand command) {
+        return entryPointUseCase.queryApiHistoryList(command.getPage(),command.getSize(),command.getEntryPointId());
     }
 
     /**
@@ -150,25 +152,22 @@ public class EntryPointController {
      */
     @GetMapping("/trace")
     public List<TraceDetailDTO> queryApiTraceInfoList(
-            @RequestParam(required=false) Integer page,
-            @RequestParam(required=false) Integer size,
-            @RequestParam(required=false) String path,
-            @RequestParam(required=false) String instanceName){
-    	return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
+            @RequestBody HistoryPageCommand command){
+    	return entryPointUseCase.queryTraceInfoList(command.getPage(),command.getSize(),command.getPath(),command.getInstanceName());
     }
     
     /**
      * 链路节点列表查询
      */
     @GetMapping("/trace/node")
-    public List<TraceNodeDTO> queryTraceNodeList(@RequestParam(required=false) String spanId) {
-        return entryPointUseCase.queryTraceNodeList(spanId);
+    public List<TraceNodeDTO> queryTraceNodeList(@RequestBody HistoryPageCommand command) {
+        return entryPointUseCase.queryTraceNodeList(command.getSpanId());
     }
     
     @GetMapping("/file")
-    public ResponseEntity<Resource> wasmConfigFile(@RequestParam(required=false) String fileName) {
+    public ResponseEntity<Resource> wasmConfigFile(@RequestBody FileCommand fileCommand) {
         byte[] fileBytes = entryPointUseCase.getDownloanFile();
-        return textToFile(fileBytes,fileName);
+        return textToFile(fileBytes,fileCommand.getFileName());
     }
     
     private ResponseEntity<Resource> textToFile(byte[] fileBytes,String fileName) {
