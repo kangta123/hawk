@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -24,10 +25,8 @@ public class EntryPointGroupManagerPO extends BaseEntity {
     private Long userId;
     private String groupids;
 
-    @CreatedDate
-    private Timestamp createTime;
-    @CreatedDate
-    private Timestamp updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     public static EntryPointGroupManagerPO createBy(Long userId, List<EntryPointGroupID> entryPointGroupIDList) {
         EntryPointGroupManagerPO po = new EntryPointGroupManagerPO();
@@ -39,7 +38,7 @@ public class EntryPointGroupManagerPO extends BaseEntity {
 
     @PreUpdate
     protected void onUpdate() {
-        updateTime = new Timestamp(System.currentTimeMillis());
+        updateTime = LocalDateTime.now();
     }
 
 }

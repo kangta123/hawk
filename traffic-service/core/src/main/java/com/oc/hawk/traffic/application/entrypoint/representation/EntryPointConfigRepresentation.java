@@ -206,11 +206,11 @@ public class EntryPointConfigRepresentation {
         List<TraceListItemDTO> traceListItemList = traceList.stream().map(item -> {
             TraceListItemDTO traceListItemDTO = new TraceListItemDTO();
             traceListItemDTO.setId(item.getId().getId());
+            
             Date date = new Date(item.getTimestamp());
-            ZoneId zoneId = ZoneId.of(ZoneId.SHORT_IDS.get("PST"));
-            LocalDateTime localDateTime = LocalDateTime.ofInstant(date.toInstant(), zoneId);
+            LocalDateTime localDateTime = DateUtils.dateToLocalDateTime(date);
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String localTime = df.format(localDateTime);
+            String localTime = localDateTime.format(df);
             traceListItemDTO.setRequestTime(localTime);
             traceListItemDTO.setExecuteTime(item.getLatency());
             return traceListItemDTO;

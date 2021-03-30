@@ -2,6 +2,7 @@ package com.oc.hawk.traffic.port.driven.persistence.po;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.hibernate.BaseEntity;
+import com.oc.hawk.common.utils.DateUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -12,6 +13,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +46,8 @@ public class EntryPointTracePo extends BaseEntity {
     private String responseCode;
     private String responseBody;
     private String responseHeaders;
-    private Timestamp startTime;
-    private Timestamp createTime;
+    private LocalDateTime startTime;
+    private LocalDateTime createTime;
     
 
     public static EntryPointTracePo createBy(Trace history) {
@@ -69,8 +72,9 @@ public class EntryPointTracePo extends BaseEntity {
         historyPo.setResponseBody(history.getResponseBody());
         historyPo.setResponseHeaders(JsonUtils.object2Json(history.getResponseHeaders()));
         historyPo.setResponseCode(history.getResponseCode());
-        historyPo.setStartTime(new Timestamp(history.getTimestamp()));
-        historyPo.setCreateTime(new Timestamp(new Date().getTime()));
+        Date historyDate = new Date(history.getTimestamp());
+        historyPo.setStartTime(DateUtils.dateToLocalDateTime(historyDate));
+        historyPo.setCreateTime(LocalDateTime.now());
         return historyPo;
     }
     
@@ -100,7 +104,7 @@ public class EntryPointTracePo extends BaseEntity {
                 .responseCode(responseCode)
                 .responseBody(responseBody)
                 .responseHeaders(responseHeadersMap)
-                .timestamp(startTime.getTime())
+                .timestamp(startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli())
                 .build();
     }
 
