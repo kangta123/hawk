@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -120,17 +121,6 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         return groupList;
     }
 
-    /**
-     * @Override public EntryPointGroupVisibility byGroupManagerUserId(Long userId){
-     * //通过userid获取groupmanager
-     * ApiGroupManagerPO managerPO = apiGroupManagerPoRepository.findByUserId(userId);
-     * String groupids = managerPO.getGroupids();
-     * <p>
-     * EntryPointGroupVisibility groupManager = EntryPointGroupVisibility.create(userId, groupids);
-     * return groupManager;
-     * }
-     */
-
     @Override
     public EntryPointConfigGroup byId(EntryPointGroupID apiConfigGroupId) {
         EntryPointConfigGroupPO groupPO = apiConfigGroupPoRepository.findById(apiConfigGroupId.getId()).get();
@@ -140,7 +130,12 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public List<EntryPointConfigGroup> findGroups() {
         AccountHolder holder = AccountHolderUtils.getAccountHolder();
-        EntryPointGroupManagerPO managerPO = apiGroupManagerPoRepository.findByUserId(holder.getId());
+        
+        EntryPointGroupManagerPO managerPO = null;
+        if(Objects.nonNull(holder)) {
+            managerPO = apiGroupManagerPoRepository.findByUserId(holder.getId());
+        }
+        
         List<EntryPointConfigGroup> allGroupList = findAllGroup();
         if (Objects.isNull(managerPO) || StringUtils.isBlank(managerPO.getGroupids())) {
             return allGroupList;
@@ -162,16 +157,19 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public void update(List<EntryPointGroupID> entryPointGroupIdList) {
         AccountHolder accountHolder = AccountHolderUtils.getAccountHolder();
-        EntryPointGroupManagerPO managerPO = apiGroupManagerPoRepository.findByUserId(accountHolder.getId());
+        EntryPointGroupManagerPO managerPO = null;
+        if(Objects.nonNull(accountHolder)) {
+            managerPO = apiGroupManagerPoRepository.findByUserId(accountHolder.getId());
+        }
         if (Objects.isNull(managerPO)) {
             managerPO = new EntryPointGroupManagerPO();
-            managerPO.setUserId(1L);
+            managerPO.setUserId(accountHolder.getId());
         }
         List<Long> groupIdList = entryPointGroupIdList.stream().map(obj -> obj.getId()).collect(Collectors.toList());
         String groupids = Joiner.on(",").join(groupIdList);
         managerPO.setGroupids(groupids);
-        managerPO.setCreateTime(new Timestamp(new Date().getTime()));
-        managerPO.setUpdateTime(new Timestamp(new Date().getTime()));
+        managerPO.setCreateTime(LocalDateTime.now());
+        managerPO.setUpdateTime(LocalDateTime.now());
         apiGroupManagerPoRepository.save(managerPO);
     }
 
@@ -256,7 +254,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         
         Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
         criteriaQuery.where(conditionWhere);
-
+        
         List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
         List<EntryPointConfig> entryPointConfigList = resultPoList.stream().map(obj -> obj.toEntryPointConfig()).collect(Collectors.toList());
         return entryPointConfigList;

@@ -4,8 +4,12 @@ import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
 import com.oc.hawk.ddd.web.DomainPage;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
+import com.oc.hawk.traffic.entrypoint.api.command.ApiQueryKeyCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.FileCommand;
+import com.oc.hawk.traffic.entrypoint.api.command.HistoryPageCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -54,8 +58,8 @@ public class EntryPointController {
      * 创建分组
      */
     @PostMapping("/group")
-    public BooleanWrapper createUserGroup(@RequestParam(required = false) String groupName) {
-        entryPointUseCase.createGroup(groupName);
+    public BooleanWrapper createUserGroup(@RequestBody CreateGroupCommand groupCommand) {
+        entryPointUseCase.createGroup(groupCommand.getGroupName());
         return BooleanWrapper.TRUE;
     }
 
@@ -123,8 +127,8 @@ public class EntryPointController {
      */
     @GetMapping("/history/page")
     public TraceResponseDTO queryApiHistoryList(@RequestParam(required=false) Integer page,
-                                                @RequestParam(required=false) Integer size,
-                                                @RequestParam(required=false) Long entryPointId) {
+            @RequestParam(required=false) Integer size,
+            @RequestParam(required=false) Long entryPointId) {
         return entryPointUseCase.queryApiHistoryList(page,size,entryPointId);
     }
 
