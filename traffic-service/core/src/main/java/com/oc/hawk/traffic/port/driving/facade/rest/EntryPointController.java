@@ -28,6 +28,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -164,15 +165,15 @@ public class EntryPointController {
         return entryPointUseCase.queryTraceNodeList(spanId);
     }
     
-    @GetMapping("/file/wasmconfig")
+    @GetMapping("/file")
     public ResponseEntity<Resource> wasmConfigFile(@RequestParam(required=false) String fileName) {
-        String wasmFile = readWasmFile();
-        return textToFile(wasmFile,fileName);
+        byte[] fileBytes = entryPointUseCase.getDownloanFile();
+        return textToFile(fileBytes,fileName);
     }
     
-    private ResponseEntity<Resource> textToFile(String text,String fileName) {
-        if (StringUtils.isNotEmpty(text)) {
-            Resource resource = new ByteArrayResource(text.getBytes());
+    private ResponseEntity<Resource> textToFile(byte[] fileBytes,String fileName) {
+        if (Objects.nonNull(fileBytes) && fileBytes.length>0) {
+            Resource resource = new ByteArrayResource(fileBytes);
             return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileName)
@@ -181,34 +182,4 @@ public class EntryPointController {
         return ResponseEntity.of(Optional.empty());
     }
     
-    
-    private String readWasmFile(){
-        StringBuilder sb = new StringBuilder("");
-        FileReader fileReader = null;
-        BufferedReader br = null;
-        try {
-            Resource resource = new ClassPathResource("files/wasm");
-            File file = resource.getFile();
-            fileReader = new FileReader(file);
-            br = new BufferedReader(fileReader);
-            String temp = "";
-            while ((temp = br.readLine()) != null) {
-              sb.append(temp + "\n");
-            }
-        }catch(Exception e) {
-            sb = new StringBuilder(""); 
-        }finally {
-            try {
-                if(fileReader!=null) {
-                    fileReader.close();
-                }
-                if(br!=null) {
-                    br.close();
-                }
-            }catch(Exception e) {
-                log.error("read wasm file exception");
-            }
-        }
-        return sb.toString();
-    }
 }
