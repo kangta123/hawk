@@ -17,6 +17,7 @@ import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpRespon
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class EntryPointConfigRepresentation {
 
     public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
@@ -94,31 +96,22 @@ public class EntryPointConfigRepresentation {
     }
 
     public List<UserGroupEntryPointDTO> toUserGroupEntryPointDTOList(List<EntryPointConfig> entryPointList, List<EntryPointConfigGroup> entryPointGroupList) {
-
-        Map<EntryPointGroupID, List<EntryPointConfig>> entryPointMap = entryPointList.stream().collect(Collectors.groupingBy(EntryPointConfig::getGroupId));
-
-        Map<EntryPointGroupID, String> entryPointGroupMap = entryPointGroupList.stream().collect(Collectors.toMap(EntryPointConfigGroup::getGroupId, EntryPointConfigGroup::getGroupName, (oldValue, newValue) -> newValue));
-        Map<Long, String> groupIdMap = new HashMap<>();
-        entryPointGroupMap.entrySet().forEach(entry -> {
-            groupIdMap.put(entry.getKey().getId(), entry.getValue());
-        });
-
-        List<UserGroupEntryPointDTO> userGroupApiDTOList = new ArrayList<UserGroupEntryPointDTO>();
-        entryPointMap.forEach((key, value) -> {
+        List<UserGroupEntryPointDTO> userGroupApiDTOList = new ArrayList<>();
+        entryPointGroupList.forEach( obj -> {
             UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
-            userGroupApiDTO.setGroupId(key.getId());
-
-            String groupName = groupIdMap.get(key.getId());
-            userGroupApiDTO.setGroupName(groupName);
-
+            Long id = obj.getGroupId().getId();
             List<UserEntryPointDTO> userApiDTOList = new ArrayList<>();
-            for (EntryPointConfig config : value) {
-                userApiDTOList.add(toUserEntryPointDTO(config, key.getId()));
-            }
-            userGroupApiDTO.setApiList(userApiDTOList);
+            entryPointList.forEach(item -> {
+                if(item.getGroupId().getId()==id) {
+                    userApiDTOList.add(toUserEntryPointDTO(item, item.getGroupId().getId()));
+                    userGroupApiDTO.setApiList(userApiDTOList);
+                }
+            });
+            String groupName = obj.getGroupName();
+            userGroupApiDTO.setGroupId(id);
+            userGroupApiDTO.setGroupName(groupName);
             userGroupApiDTOList.add(userGroupApiDTO);
         });
-
         return userGroupApiDTOList;
     }
 
