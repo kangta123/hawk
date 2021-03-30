@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -27,10 +28,8 @@ public class EntryPointConfigPO extends BaseEntity {
     private String apiDesc;
     private Long projectId;
     private String app;
-    @CreatedDate
-    private Timestamp createTime;
-    @CreatedDate
-    private Timestamp updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     public static EntryPointConfigPO createBy(EntryPointConfig apiConfig) {
         EntryPointConfigPO apiConfigPO = new EntryPointConfigPO();
@@ -41,14 +40,9 @@ public class EntryPointConfigPO extends BaseEntity {
         apiConfigPO.setApiDesc(apiConfig.getDesign().getDesc());
         apiConfigPO.setApp(apiConfig.getHttpResource().getTarget().getApp());
         apiConfigPO.setProjectId(apiConfig.getHttpResource().getTarget().getProjectId());
-        apiConfigPO.setCreateTime(new Timestamp(new Date().getTime()));
-        apiConfigPO.setUpdateTime(new Timestamp(new Date().getTime()));
+        apiConfigPO.setCreateTime(LocalDateTime.now());
+        apiConfigPO.setUpdateTime(LocalDateTime.now());
         return apiConfigPO;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updateTime = new Timestamp(System.currentTimeMillis());
     }
 
     public EntryPointConfig toEntryPointConfig() {

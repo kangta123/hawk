@@ -18,19 +18,6 @@ public class EntryPointGroupImportance {
         EntryPointGroupID apiConfigGroupID = apiConfigRepository.save(entryPointGroup);
         //保存导入api
         apiConfigRepository.batchSave(apiConfigGroupID, entryPointList);
-
-        //String groupName = importGroupDTO.getName();
-        //AccountHolder holder = AccountHolderUtils.getAccountHolder();
-        //List<EntryPointConfigGroup> groupList = apiConfigRepository.findGroupsByUserId(holder.getId());
-        //EntryPointConfigGroup newGroup = apiConfigGroupFactory.create(holder.getId(),groupName,new ArrayList<EntryPointConfigGroup>());
-
-//		if(Objects.isNull(apiConfigGroupID) || Objects.isNull(apiConfigGroupID.getId())) {
-//			throw new ApiGroupNotFoundException();
-//		}
-//		groupList.add(newGroup);
-
-        //保存关联表
-        //apiConfigRepository.updateList(holder.getId(), groupList);
     }
 
 }

@@ -26,7 +26,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
 
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
-    	List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();	
+    	List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
     	for (com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry : request.getLogEntriesList()) {
             UploadTraceInfoCommand command = new UploadTraceInfoCommand();
             command.setHost(logEntry.getHost());

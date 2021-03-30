@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ public class RemoteFileFacade implements FileFacade{@Override
     
     public byte[] getDownloanFile() {
         Resource resource = new ClassPathResource("files/agent.wasm");
-        try(BufferedInputStream bin = new BufferedInputStream(new FileInputStream(resource.getFile()));
+        try(BufferedInputStream bin = new BufferedInputStream(resource.getInputStream());
             ByteArrayOutputStream  bout = new ByteArrayOutputStream()
             ){
             int len = bin.read();
