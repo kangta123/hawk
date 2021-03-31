@@ -126,8 +126,10 @@ public class EntryPointController {
      * 根据接口id,查询历史请求列表
      */
     @GetMapping("/history/page")
-    public TraceResponseDTO queryApiHistoryList(@RequestBody HistoryPageCommand command) {
-        return entryPointUseCase.queryApiHistoryList(command.getPage(),command.getSize(),command.getEntryPointId());
+    public TraceResponseDTO queryApiHistoryList(@RequestParam(required=false) Integer page,
+            @RequestParam(required=false) Integer size,
+            @RequestParam(required=false) Long entryPointId) {
+        return entryPointUseCase.queryApiHistoryList(page,size,entryPointId);
     }
 
     /**
