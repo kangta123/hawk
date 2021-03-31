@@ -170,7 +170,7 @@ public class EntryPointController {
     }
     
     @GetMapping("/file")
-    public ResponseEntity<Resource> wasmConfigFile(@RequestParam(required=false) String fileName) {
+    public ResponseEntity<Resource> configFile(@RequestParam(required=false) String fileName) {
         byte[] fileBytes = entryPointUseCase.getDownloanFile();
         return textToFile(fileBytes,fileName);
     }
