@@ -27,11 +27,11 @@ public class EntryPointConfigGroupPO extends BaseEntity {
     private LocalDateTime updateTime;
 
     public static EntryPointConfigGroupPO createBy(EntryPointConfigGroup group) {
-        EntryPointConfigGroupPO groupPO = new EntryPointConfigGroupPO();
-        groupPO.setGroupName(group.getGroupName());
-        groupPO.setCreateTime(LocalDateTime.now());
-        groupPO.setUpdateTime(LocalDateTime.now());
-        return groupPO;
+        EntryPointConfigGroupPO groupPo = new EntryPointConfigGroupPO();
+        groupPo.setGroupName(group.getGroupName());
+        groupPo.setCreateTime(LocalDateTime.now());
+        groupPo.setUpdateTime(LocalDateTime.now());
+        return groupPo;
     }
 
     public EntryPointConfigGroup toEntryPointConfigGroup() {

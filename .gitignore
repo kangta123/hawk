@@ -32,3 +32,5 @@ rebel.xml
 *.class
 target/
 *.swp
+
+traffic-service/core/src/main/java/com/oc/hawk/trace_logging/*

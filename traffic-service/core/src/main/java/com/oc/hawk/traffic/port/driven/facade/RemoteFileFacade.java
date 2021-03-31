@@ -23,21 +23,22 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RemoteFileFacade implements FileFacade{@Override
+public class RemoteFileFacade implements FileFacade{
     
-    public byte[] getDownloanFile() {
+    @Override
+    public byte[] getDownloadFile() {
         Resource resource = new ClassPathResource("files/agent.wasm");
         try(BufferedInputStream bin = new BufferedInputStream(resource.getInputStream());
             ByteArrayOutputStream  bout = new ByteArrayOutputStream()
             ){
-            int len = bin.read();
+            int len = 0;
             byte[] buf = new byte[1024];
             while ((len = bin.read(buf)) != -1) {
                 bout.write(buf, 0, len);
             }
             return bout.toByteArray();
         }catch(Exception e) {
-            log.error("get downloan file error:{}",e.getMessage(),e);
+            log.error("get download file error:{}",e.getMessage(),e);
         }
         return null;
     }
