@@ -92,8 +92,8 @@ public class EntryPointController {
      * 根据api地址模糊查询
      */
     @GetMapping("/path")
-    public List<UserEntryPointDTO> queryApiByPath(@RequestBody ApiQueryKeyCommand command) {
-        return entryPointUseCase.queryApiByResource(command.getKey());
+    public List<UserEntryPointDTO> queryApiByPath(@RequestParam(required = false) String key) {
+        return entryPointUseCase.queryApiByResource(key);
     }
 
     /**
@@ -154,22 +154,25 @@ public class EntryPointController {
      */
     @GetMapping("/trace")
     public List<TraceDetailDTO> queryApiTraceInfoList(
-            @RequestBody HistoryPageCommand command){
-    	return entryPointUseCase.queryTraceInfoList(command.getPage(),command.getSize(),command.getPath(),command.getInstanceName());
+            @RequestParam(required=false) Integer page,
+            @RequestParam(required=false) Integer size,
+            @RequestParam(required=false) String path,
+            @RequestParam(required=false) String instanceName){
+    	return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
     }
     
     /**
      * 链路节点列表查询
      */
     @GetMapping("/trace/node")
-    public List<TraceNodeDTO> queryTraceNodeList(@RequestBody HistoryPageCommand command) {
-        return entryPointUseCase.queryTraceNodeList(command.getSpanId());
+    public List<TraceNodeDTO> queryTraceNodeList(@RequestParam(required=false) String spanId) {
+        return entryPointUseCase.queryTraceNodeList(spanId);
     }
     
     @GetMapping("/file")
-    public ResponseEntity<Resource> wasmConfigFile(@RequestBody FileCommand fileCommand) {
+    public ResponseEntity<Resource> configFile(@RequestParam(required=false) String fileName) {
         byte[] fileBytes = entryPointUseCase.getDownloanFile();
-        return textToFile(fileBytes,fileCommand.getFileName());
+        return textToFile(fileBytes,fileName);
     }
     
     private ResponseEntity<Resource> textToFile(byte[] fileBytes,String fileName) {
