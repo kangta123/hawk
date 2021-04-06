@@ -13,5 +13,6 @@ public class UserEntryPointDTO {
     private String apiDesc;
     private String projectId;
     private String app;
+    private String projectName;
 
 }

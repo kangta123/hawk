@@ -8,5 +8,7 @@ public class TraceListItemDTO {
     private Long id;
     private String requestTime;
     private Integer executeTime;
+    private String spanId;
+    private String responseCode;
 
 }
