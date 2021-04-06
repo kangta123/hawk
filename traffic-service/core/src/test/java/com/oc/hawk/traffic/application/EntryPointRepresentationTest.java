@@ -1,10 +1,11 @@
 package com.oc.hawk.traffic.application;
 
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
-import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupEntryPointDTO;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
+import com.oc.hawk.traffic.port.driven.facade.RemoteProjectFacade;
+import com.oc.hawk.traffic.port.driven.facade.feign.ProjectGateway;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,12 +15,13 @@ import java.util.List;
 public class EntryPointRepresentationTest extends TrafficBaseTest {
 
     EntryPointConfigRepresentation entryPointConfigRepresentation;
-    ContainerFacade containerFacade;
     ProjectFacade projectFacade;
+    ProjectGateway projectGateway;
 
     @BeforeEach
     public void setup() {
-        entryPointConfigRepresentation = new EntryPointConfigRepresentation(containerFacade, projectFacade);
+        projectFacade = new RemoteProjectFacade(projectGateway);
+        entryPointConfigRepresentation = new EntryPointConfigRepresentation(projectFacade);
     }
 
     /**

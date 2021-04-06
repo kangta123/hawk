@@ -1,5 +1,6 @@
 package com.oc.hawk.traffic.application.entrypoint;
 
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
@@ -22,9 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -137,15 +138,13 @@ public class EntryPointUseCase {
     /**
      * 链路信息查询
      */
-    public List<TraceItemDTO> queryTraceInfoList(Integer page, Integer size, String path, String instanceName) {
-        /**
-         List<Long> projectIds = projectFacade.queryVisibleProjectIds();
-         List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
-         List<String> visibleInstances = instanceProjectList.stream().map(obj->{
-         return obj.getInstanceName();
-         }).collect(Collectors.toList());
-         */
-        List<String> visibleInstances = new ArrayList<>();
+    public TraceItemPageDTO queryTraceInfoList(Integer page, Integer size, String path, String instanceName) {
+        List<Long> projectIds = projectFacade.queryVisibleProjectIds();
+        List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
+        List<String> visibleInstances = instanceProjectList.stream().map(obj -> {
+            return obj.getInstanceName();
+        }).collect(Collectors.toList());
+
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page, size, path, instanceName, visibleInstances);
         return entryPointConfigRepresentation.toTraceDetailList(traceList);
     }

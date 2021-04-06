@@ -1,6 +1,8 @@
 spring:
     application:
         name: container
+    profiles:
+        active: dev
     jpa:
         open-in-view: false
         show-sql: false

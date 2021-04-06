@@ -3,7 +3,6 @@ package com.oc.hawk.traffic.application.entrypoint.representation;
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.utils.DateUtils;
 import com.oc.hawk.project.api.dto.ProjectDetailDTO;
-import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
@@ -27,10 +26,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EntryPointConfigRepresentation {
-
-    private final ContainerFacade containerFacade;
-
     private final ProjectFacade projectFacade;
+
+    private static final Integer PAGE_SIZE = 10;
 
     public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
         UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
@@ -126,13 +124,22 @@ public class EntryPointConfigRepresentation {
         return dto;
     }
 
-    public List<TraceItemDTO> toTraceDetailList(List<Trace> traceList) {
+    public TraceItemPageDTO toTraceDetailList(List<Trace> traceList) {
         List<TraceItemDTO> list = new ArrayList<>();
         for (Trace trace : traceList) {
             TraceItemDTO dto = toTraceItemDTO(trace);
             list.add(dto);
         }
-        return list;
+
+        TraceItemPageDTO itemPage = new TraceItemPageDTO();
+        if (list.size() > PAGE_SIZE) {
+            itemPage.setHasNext(true);
+            itemPage.setItems(list.subList(0, 10));
+        } else {
+            itemPage.setHasNext(false);
+            itemPage.setItems(list);
+        }
+        return itemPage;
     }
 
     public TraceDetailDTO toTraceDetailDTO(Trace trace) {
