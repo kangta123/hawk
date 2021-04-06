@@ -1,11 +1,16 @@
 package com.oc.hawk.traffic.application;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.oc.hawk.project.api.dto.ProjectDetailDTO;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
@@ -40,10 +45,9 @@ public class EntryPointRepresentationTest extends TrafficBaseTest {
     @Test
     public void testToUserGroupEntryPointDTOList_groupAlreadyExists() {
         List<EntryPointConfig> entryPointList = List.of(getEntryPointConfig(),getEntryPointConfig(),getEntryPointConfig());
-        List<EntryPointConfigGroup> entryPointGroupList = List.of(getEntryPointConfigGroup());
         
-        List<UserGroupEntryPointDTO> dtoList = entryPointConfigRepresentation.toUserGroupEntryPointDTOList(entryPointList,entryPointGroupList);
-        Assertions.assertThat(dtoList.get(0)).isNotNull();
+        UserGroupEntryPointDTO result = entryPointConfigRepresentation.toUserGroupEntryPointDTO(getEntryPointConfigGroup(),entryPointList);
+        Assertions.assertThat(result).isNotNull();
     }
     
     EntryPointConfig getEntryPointConfig() {
