@@ -39,7 +39,7 @@ public interface EntryPointConfigRepository {
 
     List<EntryPointConfig> findByMethodAndRestfulPath(EntryPointMethod method);
     
-    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace);
+    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances);
     
     void deleteById(EntryPointConfigID entryPointConfigID);
     

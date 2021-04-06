@@ -261,7 +261,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace) {
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances) {
         Integer pageSize = size==null ? 10 : size;
         Integer pageNum = page==null ? 0 : (page-1)*pageSize;
         //多查一条
@@ -275,16 +275,23 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getPath()+"?%");
         Predicate conditionInstanceName = criteriaBuilder.equal(fromObj.get("dstWorkload"), trace.getDstWorkload());
         
+        Path<String> dstWorkload = fromObj.get("dstWorkload");
+        In<String> inClause = criteriaBuilder.in(dstWorkload);
+        visibleInstances.stream().forEach(inClause::value);
+        
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
+        
         if(StringUtils.isBlank(trace.getPath()) && StringUtils.isBlank(trace.getDstWorkload())) {
-            criteriaQuery.select(fromObj);
+            criteriaQuery.where(inClause);
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-        }else if(StringUtils.isBlank(trace.getDstWorkload())){
-            criteriaQuery.where(orClause);
+        }else if(StringUtils.isBlank(trace.getDstWorkload())){          
+            criteriaQuery.where(criteriaBuilder.and(orClause,inClause));
+            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else if(StringUtils.isBlank(trace.getPath())) {
-            criteriaQuery.where(conditionInstanceName);
+            criteriaQuery.where(criteriaBuilder.and(conditionInstanceName,inClause));
+            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else {
-            Predicate whereClause = criteriaBuilder.and(orClause,conditionInstanceName);
+            Predicate whereClause = criteriaBuilder.and(orClause,conditionInstanceName,inClause);
             criteriaQuery.where(whereClause);
         }
         List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)

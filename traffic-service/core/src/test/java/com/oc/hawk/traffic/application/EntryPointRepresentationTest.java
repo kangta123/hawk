@@ -19,16 +19,19 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointHttpReso
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointTarget;
+import com.oc.hawk.traffic.port.driven.facade.RemoteProjectFacade;
+import com.oc.hawk.traffic.port.driven.facade.feign.ProjectGateway;
 
 public class EntryPointRepresentationTest extends TrafficBaseTest {
     
     EntryPointConfigRepresentation entryPointConfigRepresentation;
-    ContainerFacade containerFacade;
     ProjectFacade projectFacade;
+    ProjectGateway projectGateway;
     
     @BeforeEach
     public void setup() {
-        entryPointConfigRepresentation = new EntryPointConfigRepresentation(containerFacade,projectFacade);
+        projectFacade = new RemoteProjectFacade(projectGateway);
+        entryPointConfigRepresentation = new EntryPointConfigRepresentation(projectFacade);
     }
     
     /**

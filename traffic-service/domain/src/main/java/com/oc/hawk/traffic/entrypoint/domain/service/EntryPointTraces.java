@@ -28,7 +28,7 @@ public class EntryPointTraces {
                 .path(path)
                 .dstWorkload(instanceName)
                 .build();
-        List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam);
+        List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
             Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),path,trace.getMethod());
             updateTrace(traceInfo,trace);

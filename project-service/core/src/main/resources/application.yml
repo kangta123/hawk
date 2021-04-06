@@ -1,6 +1,8 @@
 spring:
     application:
         name: project
+    profiles:
+        active: dev
     jpa:
         open-in-view: false
         show-sql: true

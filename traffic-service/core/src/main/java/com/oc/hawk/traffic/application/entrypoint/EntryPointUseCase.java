@@ -139,7 +139,7 @@ public class EntryPointUseCase {
     /**
      * 链路信息查询
      */
-    public List<TraceItemDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
+    public TraceItemPageDTO queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
         /**
         List<Long> projectIds = projectFacade.queryVisibleProjectIds();
         List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
@@ -147,7 +147,8 @@ public class EntryPointUseCase {
             return obj.getInstanceName();
         }).collect(Collectors.toList());
         */
-        List<String> visibleInstances = new ArrayList<>();
+        List<String> visibleInstances = List.of("demomessage","demouser","testdemo");
+        
     	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName,visibleInstances);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList);
     }

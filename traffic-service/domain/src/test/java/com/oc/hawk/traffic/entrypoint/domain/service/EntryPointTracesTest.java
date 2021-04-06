@@ -29,7 +29,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceInfoList_pathIsNull() {
-        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any())).thenReturn(List.of(getTrace()));
+        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), null, str(),any());
         Assertions.assertThat(traceList).isNotEmpty();
     }
@@ -39,7 +39,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceInfoList_instanceNameIsNull() {
-        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any())).thenReturn(List.of(getTrace()));
+        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(), null,any());
         Assertions.assertThat(traceList).isNotEmpty();
     }
@@ -49,7 +49,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceInfoList_pathAndInstanceNameIsNull() {
-        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any())).thenReturn(List.of(getTrace()));
+        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), null, null,any());
         Assertions.assertThat(traceList).isNotEmpty();
     }
@@ -60,7 +60,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_pathAndInstanceNameAlreadyExists() {
         Trace traceParam = Trace.builder().path("/a/b").dstWorkload("abcd").method(EntryPointMethod.GET.name()).build();
-        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any())).thenReturn(List.of(traceParam));
+        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(traceParam));
         when(entryPointConfigRepository.findByPathAndMethod(any(),eq(EntryPointMethod.GET))).thenReturn(null);
         
         when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(EntryPointMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
