@@ -175,7 +175,7 @@ public class EntryPointUseCase {
     /**
      * 获取下载文件
      */
-    public byte[] getDownloanFile() {
-        return fileFacade.getDownloanFile();
+    public byte[] getDownloadFile() {
+        return fileFacade.getDownloadFile();
     }
 }

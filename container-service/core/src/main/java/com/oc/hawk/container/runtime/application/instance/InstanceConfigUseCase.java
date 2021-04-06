@@ -4,6 +4,7 @@ import com.oc.hawk.container.api.command.ChangeInstanceConfigCommand;
 import com.oc.hawk.container.api.command.CreateInstanceConfigCommand;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
 import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.container.api.event.ContainerDomainEventType;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.facade.InfrastructureLifeCycleFacade;
@@ -41,7 +42,6 @@ public class InstanceConfigUseCase {
     private final ContainerConfiguration containerConfiguration;
     private final ProjectFacade projectFacade;
     private final InfrastructureLifeCycleFacade infrastructureLifeCycleFacade;
-
 
     public List<InstanceConfigDTO> queryDefaultNsInstanceConfig(Long projectId) {
         List<InstanceConfig> configurations = instanceConfigRepository.byProject(projectId, containerConfiguration.getDefaultInstanceNamespace());
@@ -120,4 +120,10 @@ public class InstanceConfigUseCase {
         eventPublisher.publishDomainEvent(DomainEvent.byData(instanceId.getId(), ContainerDomainEventType.INSTANCE_CREATED, instanceConfigDTO));
         return instanceConfigDTO;
     }
+
+    public List<InstanceProjectDTO> listProjectInstances(List<Long> projectIds) {
+        List<InstanceConfig> configList = instanceConfigRepository.byProjectIds(projectIds);
+        return instanceConfigRepresentation.instanceProjectDTO(configList);
+    }
+
 }

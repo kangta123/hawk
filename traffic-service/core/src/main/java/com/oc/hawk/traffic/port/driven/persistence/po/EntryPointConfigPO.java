@@ -5,14 +5,10 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -32,17 +28,17 @@ public class EntryPointConfigPO extends BaseEntity {
     private LocalDateTime updateTime;
 
     public static EntryPointConfigPO createBy(EntryPointConfig apiConfig) {
-        EntryPointConfigPO apiConfigPO = new EntryPointConfigPO();
-        apiConfigPO.setApiName(apiConfig.getDesign().getName());
-        apiConfigPO.setApiPath(apiConfig.getHttpResource().getPath().getPath());
-        apiConfigPO.setApiMethod(apiConfig.getHttpResource().getMethod().name());
-        apiConfigPO.setGroupId(apiConfig.getGroupId().getId());
-        apiConfigPO.setApiDesc(apiConfig.getDesign().getDesc());
-        apiConfigPO.setApp(apiConfig.getHttpResource().getTarget().getApp());
-        apiConfigPO.setProjectId(apiConfig.getHttpResource().getTarget().getProjectId());
-        apiConfigPO.setCreateTime(LocalDateTime.now());
-        apiConfigPO.setUpdateTime(LocalDateTime.now());
-        return apiConfigPO;
+        EntryPointConfigPO apiConfigPo = new EntryPointConfigPO();
+        apiConfigPo.setApiName(apiConfig.getDesign().getName());
+        apiConfigPo.setApiPath(apiConfig.getHttpResource().getPath().getPath());
+        apiConfigPo.setApiMethod(apiConfig.getHttpResource().getMethod().name());
+        apiConfigPo.setGroupId(apiConfig.getGroupId().getId());
+        apiConfigPo.setApiDesc(apiConfig.getDesign().getDesc());
+        apiConfigPo.setApp(apiConfig.getHttpResource().getTarget().getApp());
+        apiConfigPo.setProjectId(apiConfig.getHttpResource().getTarget().getProjectId());
+        apiConfigPo.setCreateTime(LocalDateTime.now());
+        apiConfigPo.setUpdateTime(LocalDateTime.now());
+        return apiConfigPo;
     }
 
     public EntryPointConfig toEntryPointConfig() {

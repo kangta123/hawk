@@ -2,35 +2,21 @@ package com.oc.hawk.traffic.port.driving.facade.rest;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
-import com.oc.hawk.ddd.web.DomainPage;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
-import com.oc.hawk.traffic.entrypoint.api.command.ApiQueryKeyCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
-import com.oc.hawk.traffic.entrypoint.api.command.FileCommand;
-import com.oc.hawk.traffic.entrypoint.api.command.HistoryPageCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,7 +28,7 @@ import java.util.Optional;
 public class EntryPointController {
 
     private final EntryPointUseCase entryPointUseCase;
-    
+
     private final String contentType = "application/octet-stream";
 
     /**
@@ -139,7 +125,7 @@ public class EntryPointController {
     public TraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
         return entryPointUseCase.queryApiHistoryInfo(new TraceId(id));
     }
-    
+
     /**
      * 删除接口
      */
@@ -148,7 +134,7 @@ public class EntryPointController {
         entryPointUseCase.deleteEntryPoint(id);
         return BooleanWrapper.TRUE;
     }
-    
+
     /**
      * 链路列表信息查询
      */
@@ -160,7 +146,7 @@ public class EntryPointController {
             @RequestParam(required=false) String instanceName){
     	return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
     }
-    
+
     /**
      * 链路节点列表查询
      */
@@ -168,13 +154,13 @@ public class EntryPointController {
     public List<TraceNodeDTO> queryTraceNodeList(@RequestParam(required=false) String spanId) {
         return entryPointUseCase.queryTraceNodeList(spanId);
     }
-    
+
     @GetMapping("/file")
-    public ResponseEntity<Resource> configFile(@RequestParam(required=false) String fileName) {
-        byte[] fileBytes = entryPointUseCase.getDownloanFile();
-        return textToFile(fileBytes,fileName);
+    public ResponseEntity<Resource> downloadConfigFile(@RequestParam(required = false) String fileName) {
+        byte[] fileBytes = entryPointUseCase.getDownloadFile();
+        return textToFile(fileBytes, fileName);
     }
-    
+
     private ResponseEntity<Resource> textToFile(byte[] fileBytes,String fileName) {
         if (Objects.nonNull(fileBytes) && fileBytes.length>0) {
             Resource resource = new ByteArrayResource(fileBytes);
@@ -185,5 +171,5 @@ public class EntryPointController {
         }
         return ResponseEntity.of(Optional.empty());
     }
-    
+
 }

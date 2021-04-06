@@ -6,12 +6,10 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +26,10 @@ public class EntryPointGroupManagerPO extends BaseEntity {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
-    public static EntryPointGroupManagerPO createBy(Long userId, List<EntryPointGroupID> entryPointGroupIDList) {
+    public static EntryPointGroupManagerPO createBy(Long userId, List<EntryPointGroupID> entryPointGroupIdList) {
         EntryPointGroupManagerPO po = new EntryPointGroupManagerPO();
         po.setUserId(userId);
-        String groupids = Joiner.on(",").join(entryPointGroupIDList);
+        String groupids = Joiner.on(",").join(entryPointGroupIdList);
         po.setGroupids(groupids);
         return po;
     }

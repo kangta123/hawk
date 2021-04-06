@@ -6,14 +6,10 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Entity;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -27,11 +23,11 @@ public class EntryPointConfigGroupPO extends BaseEntity {
     private LocalDateTime updateTime;
 
     public static EntryPointConfigGroupPO createBy(EntryPointConfigGroup group) {
-        EntryPointConfigGroupPO groupPO = new EntryPointConfigGroupPO();
-        groupPO.setGroupName(group.getGroupName());
-        groupPO.setCreateTime(LocalDateTime.now());
-        groupPO.setUpdateTime(LocalDateTime.now());
-        return groupPO;
+        EntryPointConfigGroupPO groupPo = new EntryPointConfigGroupPO();
+        groupPo.setGroupName(group.getGroupName());
+        groupPo.setCreateTime(LocalDateTime.now());
+        groupPo.setUpdateTime(LocalDateTime.now());
+        return groupPo;
     }
 
     public EntryPointConfigGroup toEntryPointConfigGroup() {

@@ -1,36 +1,26 @@
 package com.oc.hawk.traffic.port.driven.facade;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
+import com.oc.hawk.traffic.entrypoint.domain.facade.FileFacade;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import com.oc.hawk.traffic.entrypoint.domain.facade.FileFacade;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class RemoteFileFacade implements FileFacade{
-    
+
     @Override
-    public byte[] getDownloanFile() {
+    public byte[] getDownloadFile() {
         Resource resource = new ClassPathResource("files/agent.wasm");
-        try(BufferedInputStream bin = new BufferedInputStream(resource.getInputStream());
-            ByteArrayOutputStream  bout = new ByteArrayOutputStream()
-            ){
+        try (BufferedInputStream bin = new BufferedInputStream(resource.getInputStream());
+             ByteArrayOutputStream bout = new ByteArrayOutputStream()
+        ) {
             int len = 0;
             byte[] buf = new byte[1024];
             while ((len = bin.read(buf)) != -1) {
@@ -38,7 +28,7 @@ public class RemoteFileFacade implements FileFacade{
             }
             return bout.toByteArray();
         }catch(Exception e) {
-            log.error("get downloan file error:{}",e.getMessage(),e);
+            log.error("get download file error:{}", e.getMessage(), e);
         }
         return null;
     }

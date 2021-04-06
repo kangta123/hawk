@@ -22,4 +22,5 @@ public interface InstanceConfigRepository {
 
     InstanceConfig byServiceName(String serviceName, String namespace);
 
+    List<InstanceConfig> byProjectIds(List<Long> projectId);
 }
