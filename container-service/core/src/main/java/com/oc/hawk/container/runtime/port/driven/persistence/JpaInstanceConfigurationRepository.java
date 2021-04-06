@@ -39,6 +39,10 @@ interface InstanceConfigPORepository extends CrudRepository<InstanceConfigPO, Lo
 
     @EntityGraph(attributePaths = {"managers", "volume"})
     InstanceConfigPO findByServiceNameAndNamespace(String serviceName, String namespace);
+    
+    List<InstanceConfigPO> findByProjectId(Long projectId);
+    
+    List<InstanceConfigPO> findByProjectIdIn(List<Long> projectIdList);
 }
 
 @Repository
@@ -230,4 +234,12 @@ public class JpaInstanceConfigurationRepository implements InstanceConfigReposit
             }
         }
     }
+    
+    @Override
+    public List<InstanceConfig> byProjectIds(List<Long> projectIds){
+        return instanceConfigPORepository.findByProjectIdIn(projectIds).stream()
+                .map(instanceConfigRepositoryFactory::toInstanceConfig)
+                .collect(Collectors.toList());
+    }
+    
 }

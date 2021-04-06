@@ -3,6 +3,7 @@ package com.oc.hawk.container.runtime.application.representation;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
 import com.oc.hawk.container.api.dto.InstanceDeploymentDTO;
 import com.oc.hawk.container.api.dto.InstanceManagerDTO;
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.container.api.dto.InstanceVolumeDTO;
 import com.oc.hawk.container.domain.config.ContainerConfiguration;
 import com.oc.hawk.container.domain.model.runtime.config.*;
@@ -168,5 +169,18 @@ public class InstanceConfigRepresentation {
             }
         }
         return null;
+    }
+    
+    private static final Boolean ENABLED = true;
+    
+    public List<InstanceProjectDTO> instanceProjectDTO(List<InstanceConfig> instanceConfigList) {
+        return instanceConfigList.stream().map(m -> {
+            InstanceProjectDTO dto = new InstanceProjectDTO();
+            BaseInstanceConfig config = (BaseInstanceConfig)m.getBaseConfig();
+            dto.setApp(config.getImage().getApp());
+            dto.setInstanceName(config.getName().getName());
+            dto.setEnabled(ENABLED);
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

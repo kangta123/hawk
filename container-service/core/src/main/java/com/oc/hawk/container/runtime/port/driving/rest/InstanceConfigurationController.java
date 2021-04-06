@@ -4,6 +4,7 @@ import com.oc.hawk.common.spring.mvc.BooleanWrapper;
 import com.oc.hawk.container.api.command.ChangeInstanceConfigCommand;
 import com.oc.hawk.container.api.command.CreateInstanceConfigCommand;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.container.domain.model.runtime.config.InstanceId;
 import com.oc.hawk.container.runtime.application.instance.InstanceConfigUseCase;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,10 @@ public class InstanceConfigurationController {
         instanceConfigUseCase.deleteConfiguration(id);
         return BooleanWrapper.TRUE;
     }
-
-
+    
+    @GetMapping("/names")
+    public List<InstanceProjectDTO> getProjectInstances(@RequestParam List<Long> projectIds){
+        return instanceConfigUseCase.listProjectInstances(projectIds);
+    }
+    
 }

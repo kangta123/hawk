@@ -44,5 +44,5 @@ public class InstanceConfigDTO {
     private Boolean healthCheck;
     private LocalDateTime updatedTime;
     private LocalDateTime createdTime;
-
+    
 }
