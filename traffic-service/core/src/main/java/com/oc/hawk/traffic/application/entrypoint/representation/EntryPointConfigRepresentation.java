@@ -192,10 +192,10 @@ public class EntryPointConfigRepresentation {
             TraceNodeDTO dto = toTraceNodeDTO(trace);
             nodeList.add(dto);
         }
-        //
-        Map<String, List<TraceNodeDTO>> child = nodeList.stream().filter(node -> StringUtils.isNotBlank(node.getParentSpanId())).collect(Collectors.groupingBy(node -> node.getParentSpanId()));
-        nodeList.forEach(node -> node.setChildNodeList(child.get(node.getSpanId())));
-        return nodeList.stream().filter(node -> StringUtils.isBlank(node.getParentSpanId())).collect(Collectors.toList());
+        return nodeList;
+        //Map<String, List<TraceNodeDTO>> child = nodeList.stream().filter(node -> StringUtils.isNotBlank(node.getParentSpanId())).collect(Collectors.groupingBy(node -> node.getParentSpanId()));
+        //nodeList.forEach(node -> node.setChildNodeList(child.get(node.getSpanId())));
+        //return nodeList.stream().filter(node -> StringUtils.isBlank(node.getParentSpanId())).collect(Collectors.toList());
     }
     
     public TraceNodeDTO toTraceNodeDTO(Trace trace) {
