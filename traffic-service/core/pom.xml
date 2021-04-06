@@ -59,6 +59,11 @@
             <groupId>io.grpc</groupId>
             <artifactId>grpc-all</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.oc.hawk</groupId>
+            <artifactId>container-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <extensions>

@@ -23,7 +23,7 @@ public class EntryPointTraces {
     
     private final EntryPointConfigRepository entryPointConfigRepository;
     
-    public List<Trace> queryTraceInfoList(Integer page,Integer size,String path,String instanceName) {
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,String path,String instanceName,List<String> visibleInstances) {
         Trace traceParam = Trace.builder()
                 .path(path)
                 .dstWorkload(instanceName)

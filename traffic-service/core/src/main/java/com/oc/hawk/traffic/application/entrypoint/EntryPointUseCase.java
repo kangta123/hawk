@@ -1,6 +1,9 @@
 package com.oc.hawk.traffic.application.entrypoint;
 
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
@@ -20,8 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +42,8 @@ public class EntryPointUseCase {
     private final HttpRequestFactory httpRequestFactory;
     private final EntryPointExcutor entryPointExcutor;
     private final FileFacade fileFacade;
-    
+    private final ProjectFacade projectFacade;
+    private final ContainerFacade containerFacade;
 
     /**
      * 查询可见分组及接口
@@ -133,8 +139,16 @@ public class EntryPointUseCase {
     /**
      * 链路信息查询
      */
-    public List<TraceDetailDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
-    	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName);
+    public List<TraceItemDTO> queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
+        /**
+        List<Long> projectIds = projectFacade.queryVisibleProjectIds();
+        List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
+        List<String> visibleInstances = instanceProjectList.stream().map(obj->{
+            return obj.getInstanceName();
+        }).collect(Collectors.toList());
+        */
+        List<String> visibleInstances = new ArrayList<>();
+    	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName,visibleInstances);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList);
     }
     
@@ -175,7 +189,7 @@ public class EntryPointUseCase {
     /**
      * 获取下载文件
      */
-    public byte[] getDownloadFile() {
-        return fileFacade.getDownloadFile();
+    public byte[] getDownloadFile(String fileName) {
+        return fileFacade.getDownloadFile(fileName);
     }
 }

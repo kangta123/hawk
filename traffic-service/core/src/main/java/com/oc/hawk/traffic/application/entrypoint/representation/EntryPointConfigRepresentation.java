@@ -2,8 +2,13 @@ package com.oc.hawk.traffic.application.entrypoint.representation;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.utils.DateUtils;
+import com.oc.hawk.container.api.dto.InstanceProjectDTO;
+import com.oc.hawk.project.api.dto.ProjectDetailDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceDetailDTO;
+import com.oc.hawk.traffic.entrypoint.api.dto.TraceItemDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceListItemDTO;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.dto.ExecuteResponseDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceNodeDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceResponseDTO;
@@ -37,6 +42,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EntryPointConfigRepresentation {
+    
+    private final ContainerFacade containerFacade;
+    
+    private final ProjectFacade projectFacade;
 
     public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
         UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
@@ -91,7 +100,10 @@ public class EntryPointConfigRepresentation {
         userApiDTO.setApiMethod(config.getHttpResource().getMethod().name());
         userApiDTO.setApiDesc(config.getDesign().getDesc());
         userApiDTO.setApp(config.getHttpResource().getTarget().getApp());
-        userApiDTO.setProjectId(String.valueOf(config.getHttpResource().getTarget().getProjectId()));
+        Long projectId = config.getHttpResource().getTarget().getProjectId();
+        userApiDTO.setProjectId(String.valueOf(projectId));
+        ProjectDetailDTO projectDetailDTO = projectFacade.getProject(projectId);
+        userApiDTO.setProjectName(projectDetailDTO.getName());
         return userApiDTO;
     }
 
@@ -129,10 +141,10 @@ public class EntryPointConfigRepresentation {
         return dto;
     }
     
-    public List<TraceDetailDTO> toTraceDetailList(List<Trace> traceList) {
-        List<TraceDetailDTO> list = new ArrayList<>();
+    public List<TraceItemDTO> toTraceDetailList(List<Trace> traceList) {
+        List<TraceItemDTO> list = new ArrayList<>();
         for(Trace trace : traceList) {
-            TraceDetailDTO dto = toTraceDetailDTO(trace);
+            TraceItemDTO dto = toTraceItemDTO(trace);
             list.add(dto);
         }
         return list;
@@ -206,10 +218,31 @@ public class EntryPointConfigRepresentation {
             String localTime = localDateTime.format(df);
             traceListItemDTO.setRequestTime(localTime);
             traceListItemDTO.setExecuteTime(item.getLatency());
+            traceListItemDTO.setResponseCode(item.getResponseCode());
+            traceListItemDTO.setSpanId(item.getSpanId());
             return traceListItemDTO;
         }).collect(Collectors.toList());
         
-        dto.setTraceListItemDTO(traceListItemList);
+        dto.setItems(traceListItemList);
+        return dto;
+    }
+    
+    public TraceItemDTO toTraceItemDTO(Trace trace) {
+        TraceItemDTO dto = new TraceItemDTO();
+        dto.setId(trace.getId().getId());
+        dto.setPath(trace.getPath());
+        dto.setMethod(trace.getMethod());
+        dto.setDstWorkload(trace.getDstWorkload());
+        dto.setLatency(trace.getLatency());
+        dto.setSpanId(trace.getSpanId());
+        dto.setResponseCode(trace.getResponseCode());
+        Date date = new Date(trace.getTimestamp());
+        LocalDateTime localDateTime = DateUtils.dateToLocalDateTime(date);
+        DateTimeFormatter fomatter = DateTimeFormatter.ofPattern(DateUtils.HOUR_PATTERN);
+        String startTime = fomatter.format(localDateTime);
+        dto.setStartTime(startTime);
+        dto.setEntryPointId(trace.getEntryPointId());
+        dto.setEntryPointName(trace.getEntryPointName());
         return dto;
     }
     

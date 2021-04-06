@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class TraceResponseDTO {
     private Long totalSize;
-    private List<TraceListItemDTO> traceListItemDTO;
+    private List<TraceListItemDTO> items;
 }

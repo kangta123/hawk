@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupEntryPointDTO;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
@@ -21,10 +23,12 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointTarget;
 public class EntryPointRepresentationTest extends TrafficBaseTest {
     
     EntryPointConfigRepresentation entryPointConfigRepresentation;
+    ContainerFacade containerFacade;
+    ProjectFacade projectFacade;
     
     @BeforeEach
     public void setup() {
-        entryPointConfigRepresentation = new EntryPointConfigRepresentation();
+        entryPointConfigRepresentation = new EntryPointConfigRepresentation(containerFacade,projectFacade);
     }
     
     /**
