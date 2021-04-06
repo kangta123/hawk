@@ -92,17 +92,21 @@ hawk:
 
 # 数据库配置
 mysql:
-  initdbScriptsConfigMap: hawk-db
-  auth:
-    rootPassword: "Password"
-    database: "hawk"
-  primary:
-    persistence:
-      enabled: false
-      storageClass: "rook-ceph-block"
-      size: 50Gi
-    service:
-      type: "NodePort"
+    initdbScriptsConfigMap: hawk-db
+    # 数据库存储路径
+    hostPath: "/app/data"
+    auth:
+        rootPassword: "Password"
+        database: "hawk"
+    primary:
+        nodeSelector:
+            node-role.kubernetes.io/master: ""
+        persistence:
+            enabled: false
+            storageClass: "rook-ceph-block"
+            size: 50Gi
+        service:
+            type: "NodePort"
 kafka:
   persistence:
     enabled: false
