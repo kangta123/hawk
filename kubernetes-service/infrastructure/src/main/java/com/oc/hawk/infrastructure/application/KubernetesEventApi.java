@@ -2,8 +2,8 @@ package com.oc.hawk.infrastructure.application;
 
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.Watcher;
+import io.fabric8.kubernetes.client.WatcherException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -46,12 +46,18 @@ public class KubernetesEventApi {
             }
 
             @Override
-            public void onClose(KubernetesClientException e) {
+            public void onClose() {
+
+            }
+
+            @Override
+            public void onClose(WatcherException e) {
                 log.error("Kubernetes Pod Event watcher is down, ", e);
                 if (e.getMessage().contains(OLD_VERSION_ERROR_MESSAGE)) {
                     watch(eventConsumer, labels, null);
                 }
             }
+
         });
 
     }

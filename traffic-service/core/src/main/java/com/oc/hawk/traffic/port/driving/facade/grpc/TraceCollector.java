@@ -3,16 +3,16 @@ package com.oc.hawk.traffic.port.driving.facade.grpc;
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.trace_logging.LoggingServiceGrpc;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointTraceInfoUseCase;
-import com.oc.hawk.traffic.entrypoint.api.command.RequestHeaderCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author kangta123
@@ -22,13 +22,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
 
-	private final EntryPointTraceInfoUseCase entryPointTraceInfoUseCase;
+    private final EntryPointTraceInfoUseCase entryPointTraceInfoUseCase;
 
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
     	List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
     	for (com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry : request.getLogEntriesList()) {
             UploadTraceInfoCommand command = new UploadTraceInfoCommand();
+            log.info(logEntry.getHost() + " - " + logEntry.getPath() + " - " + logEntry.getKind());
             command.setHost(logEntry.getHost());
             command.setPath(logEntry.getPath());
             command.setDestAddr(logEntry.getDestinationAddress());
@@ -58,8 +59,8 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             		}else if(list.get(0).equalsIgnoreCase("x-b3-parentspanid")) {
             			command.setParentSpanId(list.get(1));
             		}else {
-            			requestMap.put((String)list.get(0), (String)list.get(1));
-            		}
+                        requestMap.put(list.get(0), list.get(1));
+                    }
             	}
             }
             command.setRequestHeaders(requestMap);

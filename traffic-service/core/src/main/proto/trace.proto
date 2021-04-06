@@ -27,6 +27,7 @@ message WriteLogRequest {
     string response_headers = 16;
     string request_body = 17;
     string response_body = 18;
+    string kind = 19;
     google.protobuf.Timestamp timestamp = 10;
     google.protobuf.Duration latency = 11;
   }

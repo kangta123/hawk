@@ -11,14 +11,12 @@ import com.oc.hawk.kubernetes.domain.model.KubernetesLabel;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
-import io.fabric8.kubernetes.api.model.apps.DoneableDeployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClientException;
 import io.fabric8.kubernetes.client.KubernetesClientTimeoutException;
 import io.fabric8.kubernetes.client.dsl.NonNamespaceOperation;
 import io.fabric8.kubernetes.client.dsl.PodResource;
 import io.fabric8.kubernetes.client.dsl.RollableScalableResource;
-import io.fabric8.kubernetes.client.dsl.ServiceResource;
 import io.fabric8.kubernetes.client.internal.SerializationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +47,6 @@ public class KubernetesApi {
     private final ExecutorService executorService = new ThreadPoolExecutor(20, 20,
         0, TimeUnit.SECONDS, new LinkedBlockingDeque<>(),
         new ThreadFactoryBuilder().setDaemon(true).setNameFormat("kubernetes-keepAlive-execution-%d").build());
-
-    public ServiceResource<Service, DoneableService> withService(String namespace, String serviceName) {
-
-        return client.services().inNamespace(namespace).withName(serviceName);
-    }
 
     public Service createService(String ns, Service service) {
         yaml(service);
@@ -108,9 +101,9 @@ public class KubernetesApi {
     public boolean isPodReady(String namespace, String name) {
         log.info("waiting for pod {} ready ", name);
 
-        PodResource<Pod, DoneablePod> podDoneablePodPodResource = getPodResourceRepeatable(namespace, name, 10);
+        final PodResource<Pod> podResourceRepeatable = getPodResourceRepeatable(namespace, name, 10);
         try {
-            podDoneablePodPodResource.waitUntilReady(30, TimeUnit.SECONDS);
+            podResourceRepeatable.waitUntilReady(30, TimeUnit.SECONDS);
             return true;
         } catch (KubernetesClientTimeoutException | InterruptedException e) {
             log.error("Cannot watch pod Because its not existed, {}", name, e);
@@ -118,9 +111,9 @@ public class KubernetesApi {
         }
     }
 
-    protected PodResource<Pod, DoneablePod> getPodResourceRepeatable(String namespace, String name, int maxTimes) {
+    protected PodResource<Pod> getPodResourceRepeatable(String namespace, String name, int maxTimes) {
         int i = 0;
-        PodResource<Pod, DoneablePod> podDoneablePodPodResource = null;
+        PodResource<Pod> podDoneablePodPodResource = null;
         while (i++ < maxTimes) {
             log.info("Get pod {} times: {}", name, i);
             podDoneablePodPodResource = client.pods().inNamespace(namespace)
@@ -153,7 +146,7 @@ public class KubernetesApi {
         return client.services().inNamespace(namespace).list().getItems();
     }
 
-    public RollableScalableResource<Deployment, DoneableDeployment> getDeployment(String namespace, String name) {
+    public RollableScalableResource<Deployment> getDeployment(String namespace, String name) {
         return client.apps().deployments().inNamespace(namespace).withName(name);
     }
 
@@ -162,7 +155,7 @@ public class KubernetesApi {
     }
 
     public KubernetesPod getPod(String namespace, String name) {
-        final PodResource<Pod, DoneablePod> podDoneablePodPodResource = withPod(name, namespace, 0);
+        final PodResource<Pod> podDoneablePodPodResource = withPod(name, namespace, 0);
         if (podDoneablePodPodResource != null) {
             return KubernetesPod.createNew(podDoneablePodPodResource.get());
         }
@@ -186,7 +179,7 @@ public class KubernetesApi {
     public void createPod(String namespace, Pod pod) {
         this.yaml(pod);
         String name = pod.getMetadata().getName();
-        final NonNamespaceOperation<Pod, PodList, DoneablePod, PodResource<Pod, DoneablePod>> p = withPod(namespace);
+        final NonNamespaceOperation<Pod, PodList, PodResource<Pod>> p = withPod(namespace);
         if (p.withName(name).get() == null) {
             p.create(pod);
         } else {
@@ -237,7 +230,7 @@ public class KubernetesApi {
     public KubernetesLog readFullLogs(String name, String namespace, int index, Integer timestamp) {
         Stopwatch started0 = Stopwatch.createStarted();
 
-        PodResource<Pod, DoneablePod> pod = withPod(name, namespace, index);
+        PodResource<Pod> pod = withPod(name, namespace, index);
         if (pod == null) {
             log.warn("Read full logs with empty pods. {}.{} [{}]", name, namespace, index);
             return KubernetesLog.empty();
@@ -270,7 +263,7 @@ public class KubernetesApi {
         return list.getItems();
     }
 
-    private PodResource<Pod, DoneablePod> withPod(String name, String namespace, int index) {
+    private PodResource<Pod> withPod(String name, String namespace, int index) {
         List<Pod> items = listPods(namespace, ImmutableMap.of(IServiceLabelConstants.LABEL_VERSION, name));
         if (CollectionUtils.isEmpty(items)) {
             return null;
@@ -296,7 +289,7 @@ public class KubernetesApi {
         return client.apps().deployments().inNamespace(namespace).withLabels(labels).list();
     }
 
-    private NonNamespaceOperation<Pod, PodList, DoneablePod, PodResource<Pod, DoneablePod>> withPod(String namespace) {
+    private NonNamespaceOperation<Pod, PodList, PodResource<Pod>> withPod(String namespace) {
         return client.pods().inNamespace(namespace);
     }
 

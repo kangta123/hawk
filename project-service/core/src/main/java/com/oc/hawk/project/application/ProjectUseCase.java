@@ -114,6 +114,9 @@ public class ProjectUseCase {
         return null;
     }
 
+    /**
+     * 查询用户可见项目
+     */
     public List<Long> getProjectIds() {
         UserDepartment userDepartment = userFacade.currentUserDepartment();
         List<ProjectID> projectIds;

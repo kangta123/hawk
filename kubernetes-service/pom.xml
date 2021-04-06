@@ -17,7 +17,7 @@
         <module>core</module>
     </modules>
     <properties>
-        <kubernetes.client.version>4.9.2</kubernetes.client.version>
+        <kubernetes.client.version>5.2.1</kubernetes.client.version>
     </properties>
     <dependencyManagement>
         <dependencies>
