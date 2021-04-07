@@ -148,7 +148,7 @@ public class EntryPointUseCase {
         }).collect(Collectors.toList());
         
     	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,key,visibleInstances);
-    	return entryPointConfigRepresentation.toTraceDetailList(traceList);
+    	return entryPointConfigRepresentation.toTraceDetailList(traceList,size);
     }
     
     /**

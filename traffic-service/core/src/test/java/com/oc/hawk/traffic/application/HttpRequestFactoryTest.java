@@ -51,7 +51,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         formMap.put("key", str());
         formMap.put("value", str());
         formList.add(formMap);
-        command.setForm(formList);
+        command.setParam(formList);
 
         List<Map<String, String>> headerList = new ArrayList<>();
         Map<String, String> headerMap = new HashMap<String, String>();

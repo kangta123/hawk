@@ -44,7 +44,6 @@ import java.util.stream.Collectors;
 public class EntryPointConfigRepresentation {
     private final ProjectFacade projectFacade;
     
-    private static final Integer PAGE_SIZE = 10;
     private static final Long TIME = 1000000L;
 
     public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
@@ -141,7 +140,7 @@ public class EntryPointConfigRepresentation {
         return dto;
     }
     
-    public TraceItemPageDTO toTraceDetailList(List<Trace> traceList) {
+    public TraceItemPageDTO toTraceDetailList(List<Trace> traceList,Integer size) {
         List<TraceItemDTO> list = new ArrayList<>();
         for(Trace trace : traceList) {
             TraceItemDTO dto = toTraceItemDTO(trace);
@@ -149,9 +148,9 @@ public class EntryPointConfigRepresentation {
         }
         
         TraceItemPageDTO itemPage = new TraceItemPageDTO();
-        if(list.size() > PAGE_SIZE) {
+        if(list.size() > size) {
             itemPage.setHasNext(true);
-            itemPage.setItems(list.subList(0, 10));
+            itemPage.setItems(list.subList(0, size));
         }else{
             itemPage.setHasNext(false);
             itemPage.setItems(list);
