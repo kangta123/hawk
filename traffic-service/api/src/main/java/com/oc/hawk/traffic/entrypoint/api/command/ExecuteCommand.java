@@ -10,9 +10,9 @@ public class ExecuteCommand {
     //form表单参数
     private List<Map<String, String>> param;
     //header头
-    private List<Map<String, String>> header;
+    private List<Map<String, String>> requestHeaders;
     //请求体
-    private String body;
+    private String requestBody;
     //请求路径参数
     private List<Map<String, String>> path;
     //配置接口id

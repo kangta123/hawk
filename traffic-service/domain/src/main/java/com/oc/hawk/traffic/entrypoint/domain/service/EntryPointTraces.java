@@ -30,7 +30,7 @@ public class EntryPointTraces {
                 .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
-            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getPath(),trace.getMethod());
+            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),key,trace.getMethod());
             updateTrace(traceInfo,trace);
         }
         return traceList;

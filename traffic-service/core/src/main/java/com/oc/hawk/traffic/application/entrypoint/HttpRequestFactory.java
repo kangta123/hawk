@@ -19,7 +19,7 @@ public class HttpRequestFactory {
         //表单提交key,value列表
         List<Map<String, String>> formsList = executeCommand.getParam();
         //请求头数据key,value列表
-        List<Map<String, String>> headersList = executeCommand.getHeader();
+        List<Map<String, String>> headersList = executeCommand.getRequestHeaders();
         //请求路径数据key,value列表
         List<Map<String, String>> pathsList = executeCommand.getPath();
 
@@ -52,7 +52,7 @@ public class HttpRequestFactory {
         HttpBody body = null;
         HttpHeader header = new HttpHeader(headerMap);
         if (header.isJsonContentType()) {
-            body = new JsonHttpBody(executeCommand.getBody());
+            body = new JsonHttpBody(executeCommand.getRequestBody());
         } else if (header.isFormContentType()) {
             body = new FormHttpBody(formMap);
         }

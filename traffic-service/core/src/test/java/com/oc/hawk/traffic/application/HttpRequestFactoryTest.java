@@ -42,7 +42,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
 
     private ExecuteCommand getExecuteCommand() {
         ExecuteCommand command = new ExecuteCommand();
-        command.setBody(str());
+        command.setRequestBody(str());
         command.setEntryPointId(along());
         command.setInstanceName(str());
 
@@ -57,7 +57,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         Map<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("key", str());
         headerMap.put("value", str());
-        command.setHeader(headerList);
+        command.setRequestHeaders(headerList);
 
         List<Map<String, String>> pathList = new ArrayList<>();
         Map<String, String> pathMap = new HashMap<String, String>();

@@ -66,7 +66,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
         when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(EntryPointMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
         when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfig());
         
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "abcd",null);
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
         Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
     }
     
