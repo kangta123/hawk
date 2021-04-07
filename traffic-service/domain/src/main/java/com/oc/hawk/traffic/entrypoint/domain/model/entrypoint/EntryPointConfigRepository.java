@@ -38,18 +38,18 @@ public interface EntryPointConfigRepository {
     EntryPointConfig findByPathAndMethod(EntryPointPath path, EntryPointMethod method);
 
     List<EntryPointConfig> findByMethodAndRestfulPath(EntryPointMethod method);
-
-    List<Trace> queryTraceInfoList(Integer page, Integer size, Trace trace, List<String> visibleInstances);
-
+    
+    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances);
+    
     void deleteById(EntryPointConfigID entryPointConfigID);
-
+    
     Trace byTraceId(TraceId traceId);
-
+    
     Trace findBySpanId(Trace traceParam);
-
+    
     List<Trace> findByTraceId(Trace trace);
-
+    
     List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfigID entryPointId);
-
+    
     Long queryApiHistoryCount(EntryPointConfigID entryPointId);
 }

@@ -13,4 +13,5 @@ public class EntryPointPath {
     public EntryPointPath(String path) {
         this.path = path;
     }
+
 }

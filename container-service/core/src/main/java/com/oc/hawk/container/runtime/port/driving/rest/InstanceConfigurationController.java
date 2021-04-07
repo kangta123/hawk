@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/instance")
@@ -58,10 +60,10 @@ public class InstanceConfigurationController {
         instanceConfigUseCase.deleteConfiguration(id);
         return BooleanWrapper.TRUE;
     }
-
+    
     @GetMapping("/names")
-    public List<InstanceProjectDTO> getProjectInstances(@RequestParam List<Long> projectIds) {
+    public List<InstanceProjectDTO> getProjectInstances(@RequestParam("projectIds") List<Long> projectIds){
         return instanceConfigUseCase.listProjectInstances(projectIds);
     }
-
+    
 }

@@ -13,6 +13,7 @@ import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointTracePo;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.hibernate.query.criteria.internal.OrderImpl;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.stereotype.Component;
@@ -22,11 +23,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import javax.persistence.criteria.CriteriaBuilder.In;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -51,7 +50,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     private final EntryPointConfigGroupPoRepository apiConfigGroupPoRepository;
     private final EntryPointGroupManagerPoRepository apiGroupManagerPoRepository;
     private final EntryPointTracePoRepository entryPointTracePoRepository;
-
+    
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -131,12 +130,12 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public List<EntryPointConfigGroup> findGroups() {
         AccountHolder holder = AccountHolderUtils.getAccountHolder();
-
+        
         EntryPointGroupManagerPO managerPo = null;
-        if (Objects.nonNull(holder)) {
+        if(Objects.nonNull(holder)) {
             managerPo = apiGroupManagerPoRepository.findByUserId(holder.getId());
         }
-
+        
         List<EntryPointConfigGroup> allGroupList = findAllGroup();
         if (Objects.isNull(managerPo) || StringUtils.isBlank(managerPo.getGroupids())) {
             return allGroupList;
@@ -159,7 +158,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     public void update(List<EntryPointGroupID> entryPointGroupIdList) {
         AccountHolder accountHolder = AccountHolderUtils.getAccountHolder();
         EntryPointGroupManagerPO managerPo = null;
-        if (Objects.nonNull(accountHolder)) {
+        if(Objects.nonNull(accountHolder)) {
             managerPo = apiGroupManagerPoRepository.findByUserId(accountHolder.getId());
         }
         if (Objects.isNull(managerPo)) {
@@ -215,12 +214,12 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
     @Override
     public void saveTrace(List<Trace> traceList) {
-        List<EntryPointTracePo> poList = new ArrayList<>();
-        for (Trace trace : traceList) {
-            EntryPointTracePo historyPo = EntryPointTracePo.createBy(trace);
-            poList.add(historyPo);
-        }
-        entryPointTracePoRepository.saveAll(poList);
+    	List<EntryPointTracePo> poList = new ArrayList<>();
+    	for(Trace trace : traceList) {
+    		 EntryPointTracePo historyPo = EntryPointTracePo.createBy(trace);
+    		 poList.add(historyPo);
+    	};
+    	entryPointTracePoRepository.saveAll(poList);
     }
 
     @Override
@@ -231,13 +230,13 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
         Predicate conditionPath = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath());
         Predicate conditionPathPrefix = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath() + "/");
-
+        
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
-
+        
         Predicate conditionWhere = criteriaBuilder.and(conditionMethod, orClause);
         criteriaQuery.where(conditionWhere);
-
+        
         List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
         if (Objects.isNull(resultPoList) || resultPoList.isEmpty()) {
             return null;
@@ -252,47 +251,47 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
         Predicate conditionPath = criteriaBuilder.like(fromObj.get("apiPath"), "%{%}%");
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
-
+        
         Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
         criteriaQuery.where(conditionWhere);
-
+        
         List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
         List<EntryPointConfig> entryPointConfigList = resultPoList.stream().map(obj -> obj.toEntryPointConfig()).collect(Collectors.toList());
         return entryPointConfigList;
     }
 
     @Override
-    public List<Trace> queryTraceInfoList(Integer page, Integer size, Trace trace, List<String> visibleInstances) {
-        Integer pageSize = size == null ? 10 : size;
-        Integer pageNum = page == null ? 0 : (page - 1) * pageSize;
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances) {
+        Integer pageSize = size==null ? 10 : size;
+        Integer pageNum = page==null ? 0 : (page-1)*pageSize;
         //多查一条
-        pageSize += 1;
-
+        pageSize+=1;
+        
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<EntryPointTracePo> criteriaQuery = criteriaBuilder.createQuery(EntryPointTracePo.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
-
+        
         Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), trace.getPath());
-        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getPath() + "?%");
+        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getPath()+"?%");
         Predicate conditionInstanceName = criteriaBuilder.equal(fromObj.get("dstWorkload"), trace.getDstWorkload());
-
+        
         Path<String> dstWorkload = fromObj.get("dstWorkload");
         In<String> inClause = criteriaBuilder.in(dstWorkload);
         visibleInstances.stream().forEach(inClause::value);
-
+        
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
-
-        if (StringUtils.isBlank(trace.getPath()) && StringUtils.isBlank(trace.getDstWorkload())) {
+        
+        if(StringUtils.isBlank(trace.getPath()) && StringUtils.isBlank(trace.getDstWorkload())) {
             criteriaQuery.where(inClause);
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-        } else if (StringUtils.isBlank(trace.getDstWorkload())) {
-            criteriaQuery.where(criteriaBuilder.and(orClause, inClause));
+        }else if(StringUtils.isBlank(trace.getDstWorkload())){          
+            criteriaQuery.where(criteriaBuilder.and(orClause,inClause));
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-        } else if (StringUtils.isBlank(trace.getPath())) {
-            criteriaQuery.where(criteriaBuilder.and(conditionInstanceName, inClause));
+        }else if(StringUtils.isBlank(trace.getPath())) {
+            criteriaQuery.where(criteriaBuilder.and(conditionInstanceName,inClause));
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else {
-            Predicate whereClause = criteriaBuilder.and(orClause, conditionInstanceName, inClause);
+            Predicate whereClause = criteriaBuilder.and(orClause,conditionInstanceName,inClause);
             criteriaQuery.where(whereClause);
         }
         List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
@@ -302,7 +301,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         List<Trace> traceList = resultPoList.stream().map(obj -> obj.toTrace()).collect(Collectors.toList());
         return traceList;
     }
-
+    
     @Override
     public void deleteById(EntryPointConfigID entryPointConfigId) {
         apiConfigPoRepository.deleteById(entryPointConfigId.getId());
@@ -339,15 +338,15 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     public List<Trace> queryApiHistoryList(Integer page, Integer size, EntryPointConfigID entryPointId) {
         Integer pageSize = size==null ? 10 : size;
         Integer pageNum = page==null ? 0 : (page-1)*pageSize;
-
+        
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<EntryPointTracePo> criteriaQuery = criteriaBuilder.createQuery(EntryPointTracePo.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
-
+        
         Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
         criteriaQuery.where(conditionEntryPointId);
         criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-
+        
         List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(pageNum)
                 .setMaxResults(pageSize)
@@ -362,7 +361,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
         criteriaQuery.select(criteriaBuilder.count(fromObj));
-
+        
         Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
         criteriaQuery.where(conditionEntryPointId);
         return entityManager.createQuery(criteriaQuery).getSingleResult();

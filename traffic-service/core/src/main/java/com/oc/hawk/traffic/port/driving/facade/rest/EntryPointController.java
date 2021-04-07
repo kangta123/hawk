@@ -9,13 +9,13 @@ import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import org.springframework.core.io.Resource;
 
 @RestController
 @RequestMapping("/entrypoint")
@@ -119,7 +119,7 @@ public class EntryPointController {
     public TraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
         return entryPointUseCase.queryApiHistoryInfo(new TraceId(id));
     }
-
+    
     /**
      * 删除接口
      */
@@ -128,14 +128,14 @@ public class EntryPointController {
         entryPointUseCase.deleteEntryPoint(id);
         return BooleanWrapper.TRUE;
     }
-
+    
     /**
      * 文件下载功能
      */
     @GetMapping("/file")
-    public ResponseEntity<Resource> downloadFile(@RequestParam(required = false) String fileName) {
+    public ResponseEntity<Resource> downloadFile(@RequestParam(required=false) String fileName) {
         byte[] fileBytes = entryPointUseCase.getDownloadFile(fileName);
-        return WebUtils.getDownloadFileHttpResponse(fileBytes, fileName);
+        return WebUtils.getDownloadFileHttpResponse(fileBytes,fileName);
     }
-
+    
 }

@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -128,27 +129,27 @@ public class EntryPointUseCase {
     public ExecuteResponseDTO execute(ExecuteCommand executeCommand) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(executeCommand.getEntryPointId()));
         HttpRequest httpRequest = httpRequestFactory.create(entryPointConfig, executeCommand);
-
+        
         HttpResponse httpResponse = new EntryPointConfigExecutor(entryPointExcutor).execute(httpRequest);
-
+        
         ExecuteResponseDTO excuteResponseDTO = entryPointConfigRepresentation.toExecuteResponseDTO(httpResponse);
         return excuteResponseDTO;
     }
-
+    
     /**
      * 链路信息查询
      */
-    public TraceItemPageDTO queryTraceInfoList(Integer page, Integer size, String path, String instanceName) {
+    public TraceItemPageDTO queryTraceInfoList(Integer page,Integer size,String path,String instanceName){
         List<Long> projectIds = projectFacade.queryVisibleProjectIds();
         List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
-        List<String> visibleInstances = instanceProjectList.stream().map(obj -> {
+        List<String> visibleInstances = instanceProjectList.stream().map(obj->{
             return obj.getInstanceName();
         }).collect(Collectors.toList());
-
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page, size, path, instanceName, visibleInstances);
-        return entryPointConfigRepresentation.toTraceDetailList(traceList);
+        
+    	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,path,instanceName,visibleInstances);
+    	return entryPointConfigRepresentation.toTraceDetailList(traceList);
     }
-
+    
     /**
      * 根据id删除Api
      */
@@ -156,7 +157,7 @@ public class EntryPointUseCase {
     public void deleteEntryPoint(Long id) {
         new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPoint(new EntryPointConfigID(id));
     }
-
+    
     /**
      * 根据链路id查询单个请求历史详情
      */
@@ -164,7 +165,7 @@ public class EntryPointUseCase {
         Trace trace = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryInfo(traceId);
         return entryPointConfigRepresentation.toTraceDetailDTO(trace);
     }
-
+    
     /**
      * 链路节点列表查询
      */
@@ -173,7 +174,7 @@ public class EntryPointUseCase {
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
     }
-
+    
     /**
      * 接口历史链路信息查询
      */
@@ -182,7 +183,7 @@ public class EntryPointUseCase {
         Long countNum = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryCount(new EntryPointConfigID(entryPointId));
         return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
     }
-
+    
     /**
      * 获取下载文件
      */

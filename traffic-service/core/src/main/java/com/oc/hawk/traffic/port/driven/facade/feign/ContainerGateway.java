@@ -12,6 +12,6 @@ import java.util.List;
 public interface ContainerGateway {
 
     @RequestMapping(method = RequestMethod.GET, value = "/instance/names")
-    List<InstanceProjectDTO> getProjectInstances(@RequestParam("projectIds") List<Long> projectIds);
+    List<InstanceProjectDTO> getProjectInstances(@RequestParam("projectIds") String projectIds);
 }
 
