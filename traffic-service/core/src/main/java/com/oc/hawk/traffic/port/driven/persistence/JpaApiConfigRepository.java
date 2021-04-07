@@ -281,13 +281,13 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
         
-        if(StringUtils.isBlank(trace.getPath()) && StringUtils.isBlank(trace.getDstWorkload())) {
+        if(StringUtils.isEmpty(trace.getPath()) && StringUtils.isEmpty(trace.getDstWorkload())) {
             criteriaQuery.where(inClause);
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-        }else if(StringUtils.isBlank(trace.getDstWorkload())){          
+        }else if(StringUtils.isEmpty(trace.getDstWorkload())){          
             criteriaQuery.where(criteriaBuilder.and(orClause,inClause));
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
-        }else if(StringUtils.isBlank(trace.getPath())) {
+        }else if(StringUtils.isEmpty(trace.getPath())) {
             criteriaQuery.where(criteriaBuilder.and(conditionInstanceName,inClause));
             criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else {

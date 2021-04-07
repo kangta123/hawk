@@ -28,9 +28,8 @@ public class TraceController {
     public TraceItemPageDTO queryApiTraceInfoList(
             @RequestParam(required=false) Integer page,
             @RequestParam(required=false) Integer size,
-            @RequestParam(required=false) String path,
-            @RequestParam(required=false) String instanceName){
-        return entryPointUseCase.queryTraceInfoList(page,size,path,instanceName);
+            @RequestParam(required=false) String key){
+        return entryPointUseCase.queryTraceInfoList(page,size,key);
     }
     
     /**

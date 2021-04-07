@@ -17,7 +17,7 @@ public class HttpRequestFactory {
 
     public HttpRequest create(EntryPointConfig entryPointConfig, ExecuteCommand executeCommand) {
         //表单提交key,value列表
-        List<Map<String, String>> formsList = executeCommand.getForm();
+        List<Map<String, String>> formsList = executeCommand.getParam();
         //请求头数据key,value列表
         List<Map<String, String>> headersList = executeCommand.getHeader();
         //请求路径数据key,value列表

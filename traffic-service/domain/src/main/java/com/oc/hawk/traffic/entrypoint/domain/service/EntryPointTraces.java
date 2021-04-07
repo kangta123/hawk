@@ -23,14 +23,14 @@ public class EntryPointTraces {
     
     private final EntryPointConfigRepository entryPointConfigRepository;
     
-    public List<Trace> queryTraceInfoList(Integer page,Integer size,String path,String instanceName,List<String> visibleInstances) {
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,String key,List<String> visibleInstances) {
         Trace traceParam = Trace.builder()
-                .path(path)
-                .dstWorkload(instanceName)
+                .path(key)
+                .dstWorkload(key)
                 .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
-            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),path,trace.getMethod());
+            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getPath(),trace.getMethod());
             updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -63,7 +63,7 @@ public class EntryPointTraces {
     }
     
     public Long matchPath(String path, String method) {
-        if (StringUtils.isBlank(path)) {
+        if (StringUtils.isEmpty(path)) {
             return null;
         }
         int n = path.indexOf("?");

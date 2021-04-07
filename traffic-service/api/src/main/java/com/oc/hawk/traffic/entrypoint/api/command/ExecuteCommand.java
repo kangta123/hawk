@@ -8,7 +8,7 @@ import java.util.Map;
 @Data
 public class ExecuteCommand {
     //form表单参数
-    private List<Map<String, String>> form;
+    private List<Map<String, String>> param;
     //header头
     private List<Map<String, String>> header;
     //请求体
