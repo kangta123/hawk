@@ -72,7 +72,7 @@ public class EntryPointController {
      * 根据api地址模糊查询
      */
     @GetMapping("/path")
-    public List<UserEntryPointDTO> queryApiByPath(@RequestParam(required = false) String key) {
+    public List<UserGroupEntryPointDTO> queryApiByPath(@RequestParam(required = false) String key) {
         return entryPointUseCase.queryApiByResource(key);
     }
 
@@ -87,10 +87,10 @@ public class EntryPointController {
     /**
      * postman内容导入
      */
-    @PostMapping("/group/importance")
-    public BooleanWrapper importGroup(@RequestBody String importJson) {
+    @PostMapping("/group/{id}/importance")
+    public BooleanWrapper importGroup(@PathVariable Long id,@RequestBody String importJson) {
         ImportGroupDTO importGroupDTO = JsonUtils.json2Object(importJson, ImportGroupDTO.class);
-        entryPointUseCase.importGroup(importGroupDTO);
+        entryPointUseCase.importGroup(id,importGroupDTO);
         return BooleanWrapper.TRUE;
     }
 

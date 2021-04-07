@@ -1,7 +1,5 @@
 package com.oc.hawk.traffic.entrypoint.api.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 
 @Data
@@ -14,10 +12,8 @@ public class TraceNodeDTO {
     private String method;
     private String path;
     private String responseCode;
-    private Integer latency;
+    private Long latency;
     private Long entryPointId;
     private String entryPointName;
-    
-    private List<TraceNodeDTO> childNodeList = new ArrayList<>();
     
 }

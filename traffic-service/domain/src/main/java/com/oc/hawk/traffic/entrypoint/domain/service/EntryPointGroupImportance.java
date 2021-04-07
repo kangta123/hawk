@@ -1,7 +1,6 @@
 package com.oc.hawk.traffic.entrypoint.domain.service;
 
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +12,10 @@ public class EntryPointGroupImportance {
 
     private final EntryPointConfigRepository apiConfigRepository;
 
-    public void importPostmanJson(EntryPointConfigGroup entryPointGroup, List<EntryPointConfig> entryPointList) {
-        //保存导入分组
-        EntryPointGroupID apiConfigGroupID = apiConfigRepository.save(entryPointGroup);
+    public void importPostmanJson(EntryPointGroupID entryPointGroupID, List<EntryPointConfig> entryPointList) {
+        //TODO 判断重复地址不导入
         //保存导入api
-        apiConfigRepository.batchSave(apiConfigGroupID, entryPointList);
+        apiConfigRepository.batchSave(entryPointGroupID, entryPointList);
     }
 
 }

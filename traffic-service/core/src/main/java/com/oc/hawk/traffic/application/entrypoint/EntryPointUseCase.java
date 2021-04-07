@@ -96,10 +96,11 @@ public class EntryPointUseCase {
     /**
      * 根据关键字模块查询接口列表
      */
-    public List<UserEntryPointDTO> queryApiByResource(String key) {
-        List<EntryPointConfig> entryPointConfigList = new EntryPointConfigGroups(entryPointConfigRepository).getEntryPointByKey(key);
-        List<UserEntryPointDTO> userApiDTOList = entryPointConfigRepresentation.toUserApiDTOList(entryPointConfigList);
-        return userApiDTOList;
+    public List<UserGroupEntryPointDTO> queryApiByResource(String key) {
+        List<EntryPointConfig> entryPointConfigList = new EntryPointConfigGroups(entryPointConfigRepository).getEntryPointByKey(key);  
+        List<EntryPointConfigGroup> entryPointGroupList = new EntryPointConfigGroups(entryPointConfigRepository).getUserGroupList(entryPointConfigList);
+        List<UserGroupEntryPointDTO> userGroupEntryPointList = entryPointConfigRepresentation.toUserGroupEntryPointDTOList(entryPointConfigList, entryPointGroupList);
+        return userGroupEntryPointList;
     }
 
     /**
@@ -117,10 +118,10 @@ public class EntryPointUseCase {
      * 导入接口
      */
     @Transactional(rollbackFor = Exception.class)
-    public void importGroup(ImportGroupDTO importGroupDTO) {
+    public void importGroup(Long groupId,ImportGroupDTO importGroupDTO) {
+        EntryPointConfigGroup group = entryPointConfigRepository.byId(new EntryPointGroupID(groupId));
         List<EntryPointConfig> entryPointList = entryPointConfigFactory.create(importGroupDTO.getRequests());
-        EntryPointConfigGroup entryPointGroup = apiConfigGroupFactory.create(importGroupDTO.getName());
-        new EntryPointGroupImportance(entryPointConfigRepository).importPostmanJson(entryPointGroup, entryPointList);
+        new EntryPointGroupImportance(entryPointConfigRepository).importPostmanJson(group.getGroupId(), entryPointList);
     }
 
     /**

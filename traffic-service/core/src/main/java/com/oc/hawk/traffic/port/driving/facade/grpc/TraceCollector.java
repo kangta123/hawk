@@ -29,6 +29,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
     private static final String KEY_STATUS = ":status";
     private static final Integer KEY_MAP_SIZE = 8;
     private final EntryPointTraceInfoUseCase entryPointTraceInfoUseCase;
+    private static final Long TIME_MILLIS = 1000L; 
 
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
@@ -54,7 +55,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
         command.setSourceAddr(logEntry.getSourceAddress());
         command.setDstWorkload(logEntry.getDestinationWorkload());
         command.setDstNamespace(logEntry.getDestinationNamespace());
-        command.setTimestamp(logEntry.getTimestamp().getSeconds() * 1000L);
+        command.setTimestamp(logEntry.getTimestamp().getSeconds() * TIME_MILLIS);
         command.setLatency(logEntry.getLatency().getNanos());
         command.setRequestId(logEntry.getRequestId());
         command.setProtocol(logEntry.getProtocol());

@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +45,7 @@ public class EntryPointConfigRepresentation {
     private final ProjectFacade projectFacade;
     
     private static final Integer PAGE_SIZE = 10;
+    private static final Long TIME = 1000000L;
 
     public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
         UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
@@ -204,7 +204,7 @@ public class EntryPointConfigRepresentation {
         traceNodeDTO.setSpanId(trace.getSpanId());
         traceNodeDTO.setParentSpanId(trace.getParentSpanId());
         traceNodeDTO.setInstanceName(trace.getDstWorkload());
-        traceNodeDTO.setLatency(trace.getLatency());
+        traceNodeDTO.setLatency(trace.getLatency()/TIME);
         traceNodeDTO.setMethod(trace.getMethod());
         traceNodeDTO.setPath(trace.getPath());
         traceNodeDTO.setResponseCode(trace.getResponseCode());

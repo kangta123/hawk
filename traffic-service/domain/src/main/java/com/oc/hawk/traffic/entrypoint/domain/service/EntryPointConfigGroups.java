@@ -68,4 +68,10 @@ public class EntryPointConfigGroups {
     public void deleteEntryPoint(EntryPointConfigID entryPointConfigId) {
         apiConfigRepository.deleteById(entryPointConfigId);
     }
+    
+    public List<EntryPointConfigGroup> getUserGroupList(List<EntryPointConfig> entryPointConfigList) {
+        List<Long> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
+        return apiConfigRepository.byIdList(idList);
+    }
+    
 }
