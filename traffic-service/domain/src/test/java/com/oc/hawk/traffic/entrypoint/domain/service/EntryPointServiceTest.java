@@ -22,7 +22,7 @@ public class EntryPointServiceTest extends EntryPointBaseTest {
         List<EntryPointConfigGroup> entryPointGroupConfigList = new ArrayList<>();
         entryPointGroupConfigList.add(getEntryPointConfigGroup());
 
-        List<EntryPointConfig> configList = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibily(entryPointGroupConfigList);
+        List<EntryPointConfig> configList = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibilitiy(entryPointGroupConfigList);
         Assertions.assertThat(configList).isNotEmpty();
     }
 
@@ -31,7 +31,7 @@ public class EntryPointServiceTest extends EntryPointBaseTest {
         when(entryPointConfigRepository.byGroupIdList(List.of())).thenReturn(null);
 
         List<EntryPointConfigGroup> entryPointGroupConfigList = new ArrayList<>();
-        List<EntryPointConfig> configList = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibily(entryPointGroupConfigList);
+        List<EntryPointConfig> configList = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibilitiy(entryPointGroupConfigList);
         Assertions.assertThat(configList).isNull();
     }
 
