@@ -173,6 +173,7 @@ public class InstanceConfigRepresentation {
         return instanceConfigList.stream().map(m -> {
             InstanceProjectDTO dto = new InstanceProjectDTO();
             BaseInstanceConfig config = (BaseInstanceConfig) m.getBaseConfig();
+            dto.setId(config.getId().getId());
             dto.setApp(config.getImage().getApp());
             dto.setInstanceName(config.getName().getName());
             dto.setEnabled(ENABLED);

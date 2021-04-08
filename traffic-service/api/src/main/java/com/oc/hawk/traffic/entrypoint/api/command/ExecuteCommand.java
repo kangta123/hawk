@@ -17,6 +17,6 @@ public class ExecuteCommand {
     private List<Map<String, String>> uriParams;
     //配置接口id
     private Long entryPointId;
-    //实例名
-    private String instanceName;
+    //实例id
+    private String instanceId;
 }

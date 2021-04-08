@@ -45,6 +45,10 @@ public class HttpRequest {
      */
     private final String host;
     /**
+     * 实例Id
+     */
+    private final String instanceId;
+    /**
      * 请求头
      */
     private HttpHeader httpHeader;

@@ -16,7 +16,7 @@ public class EntryPointConfigGroups {
     /**
      * 查询当期可见接口
      */
-    public List<EntryPointConfig> getCurrentEntryPointVisibily(List<EntryPointConfigGroup> entryPointGroupList) {
+    public List<EntryPointConfig> getCurrentEntryPointVisibilitiy(List<EntryPointConfigGroup> entryPointGroupList) {
         //查询可见接口
         List<Long> groupIdList = entryPointGroupList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
         return apiConfigRepository.byGroupIdList(groupIdList);
@@ -27,8 +27,7 @@ public class EntryPointConfigGroups {
      */
     public List<EntryPointConfigGroup> getCurrentGroupList() {
         //查询可见分组
-        List<EntryPointConfigGroup> visibleGroupList = apiConfigRepository.findGroups();
-        return visibleGroupList;
+        return apiConfigRepository.findGroups();
     }
 
     /**

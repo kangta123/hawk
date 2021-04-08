@@ -28,7 +28,6 @@ public class TraceDetailDTO {
     private String responseBody;
     private String responseHeaders;
     private Long startTime;
-    private Timestamp createTime;
     private Long entryPointId;
     private String entryPointName;
     

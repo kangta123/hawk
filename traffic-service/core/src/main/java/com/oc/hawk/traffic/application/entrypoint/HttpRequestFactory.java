@@ -56,7 +56,7 @@ public class HttpRequestFactory {
         } else if (header.isFormContentType()) {
             body = new FormHttpBody(formMap);
         }
-
+        
         return HttpRequest.builder()
             .httpHeader(header)
             .requestMethod(HttpRequestMethod.valueOf(endPointMethodType.name()))
@@ -64,7 +64,7 @@ public class HttpRequestFactory {
             .requestParam(new HttpRequestParam(formMap))
             .httpUriParam(new HttpUriParam(uriMap))
             .requestAddr(entryPointConfig.getHttpResource().getPath().getPath())
-            .instanceName(executeCommand.getInstanceName())
+            .instanceId(executeCommand.getInstanceId())
             .build();
     }
 

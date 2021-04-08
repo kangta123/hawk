@@ -52,7 +52,7 @@ public class EntryPointUseCase {
         List<EntryPointConfigGroup> entryPointGroupList
             = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentGroupList();
         List<EntryPointConfig> entryPointVisibilyList
-            = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibily(entryPointGroupList);
+            = new EntryPointConfigGroups(entryPointConfigRepository).getCurrentEntryPointVisibilitiy(entryPointGroupList);
         return entryPointConfigRepresentation.toUserGroupEntryPointDTOList(entryPointVisibilyList, entryPointGroupList);
     }
 

@@ -15,7 +15,6 @@ public class TraceItemDTO {
     private String spanId;
     private String responseCode;
     private String startTime;
-    private Timestamp createTime;
     private Long entryPointId;
     private String entryPointName;
 
