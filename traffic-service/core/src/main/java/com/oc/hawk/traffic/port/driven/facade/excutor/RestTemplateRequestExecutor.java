@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.port.driven.facade.excutor;
 
 import com.google.common.base.Stopwatch;
+import com.oc.hawk.container.api.dto.InstanceConfigDTO;
+import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.FormHttpBody;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequestMethod;
@@ -27,16 +29,21 @@ import java.util.concurrent.TimeUnit;
 public class RestTemplateRequestExecutor implements EntryPointExcutor {
 
     private final RestTemplate restTemplate;
+    private final ContainerFacade containerFacade;
 
-    public RestTemplateRequestExecutor(RestTemplate restTemplate) {
+    public RestTemplateRequestExecutor(RestTemplate restTemplate,ContainerFacade containerFacade) {
         this.restTemplate = restTemplate;
+        this.containerFacade = containerFacade;
     }
 
     @Override
     public HttpResponse execute(HttpRequest request) {
         HttpHeaders httpHeaders = getHttpHeaders(request.getHttpHeader().getHeaderMap());
         Map<String, Object> uriVariablesMap = request.getHttpUriParam().getHttpUriVariables();
-        String requestUrl = request.getHttpRequestUrl();
+        
+        InstanceConfigDTO instanceConfigDTO = containerFacade.getById(request.getInstanceId());
+        
+        String requestUrl = request.getHttpRequestUrl(instanceConfigDTO.getServiceName(),instanceConfigDTO.getNamespace());
         HttpEntity requestEntity = getHttpEntity(request, httpHeaders);
 
         Stopwatch stopWatch = Stopwatch.createStarted();

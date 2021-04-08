@@ -120,7 +120,7 @@ public class EntryPointUseCase {
     @Transactional(rollbackFor = Exception.class)
     public void importGroup(Long groupId,ImportGroupDTO importGroupDTO) {
         EntryPointConfigGroup group = entryPointConfigRepository.byId(new EntryPointGroupID(groupId));
-        List<EntryPointConfig> entryPointList = entryPointConfigFactory.create(importGroupDTO.getRequests());
+        List<EntryPointConfig> entryPointList = entryPointConfigFactory.create(group,importGroupDTO.getRequests());
         new EntryPointGroupImportance(entryPointConfigRepository).importPostmanJson(group.getGroupId(), entryPointList);
     }
 

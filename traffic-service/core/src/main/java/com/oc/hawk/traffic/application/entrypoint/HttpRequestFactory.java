@@ -64,7 +64,7 @@ public class HttpRequestFactory {
             .requestParam(new HttpRequestParam(formMap))
             .httpUriParam(new HttpUriParam(uriMap))
             .requestAddr(entryPointConfig.getHttpResource().getPath().getPath())
-            .instanceId(executeCommand.getInstanceId())
+            .instanceId(Long.parseLong(executeCommand.getInstanceId()))
             .build();
     }
 

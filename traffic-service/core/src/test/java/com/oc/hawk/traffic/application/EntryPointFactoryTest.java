@@ -5,6 +5,7 @@ import com.oc.hawk.traffic.application.entrypoint.EntryPointConfigFactory;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.ImportGroupDTO.ImportApiDTO;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import org.assertj.core.api.Assertions;
@@ -42,7 +43,8 @@ public class EntryPointFactoryTest extends TrafficBaseTest {
 
     @Test
     void create_importApiList() {
-        List<EntryPointConfig> entryPointConfigList = entryPointConfigFactory.create(List.of(getImportApiDTO()));
+        EntryPointConfigGroup group = EntryPointConfigGroup.builder().groupId(new EntryPointGroupID(1L)).build();
+        List<EntryPointConfig> entryPointConfigList = entryPointConfigFactory.create(group,List.of(getImportApiDTO()));
         Assertions.assertThat(entryPointConfigList).isNotEmpty();
     }
 

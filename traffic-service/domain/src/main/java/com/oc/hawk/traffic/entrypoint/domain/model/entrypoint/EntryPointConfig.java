@@ -25,5 +25,5 @@ public class EntryPointConfig {
      * 配置资源
      */
     private final EntryPointHttpResource httpResource;
-
+    
 }

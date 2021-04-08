@@ -42,10 +42,11 @@ public class EntryPointConfigFactory {
             .build();
     }
 
-    public List<EntryPointConfig> create(List<ImportApiDTO> importApiList) {
+    public List<EntryPointConfig> create(EntryPointConfigGroup group,List<ImportApiDTO> importApiList) {
         List<EntryPointConfig> baseApiConfigList = new ArrayList<EntryPointConfig>();
         for (ImportApiDTO importApiDTO : importApiList) {
             EntryPointConfig apiConfig = EntryPointConfig.builder()
+                .groupId(group.getGroupId())
                 .design(new EntryPointDesign(importApiDTO.getName(), importApiDTO.getDescription()))
                 .httpResource(new EntryPointHttpResource(new EntryPointPath(handleImportApiUrl(importApiDTO.getUrl())), EntryPointMethod.valueOf(importApiDTO.getMethod()), new EntryPointTarget()))
                 .build();

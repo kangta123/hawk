@@ -203,6 +203,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     public void batchSave(EntryPointGroupID entryPointConfigGroupId, List<EntryPointConfig> apiConfigList) {
         try {
             for (EntryPointConfig apiConfig : apiConfigList) {
+                
                 EntryPointConfigPO apiConfigPo = EntryPointConfigPO.createBy(apiConfig);
                 apiConfigPo.setGroupId(entryPointConfigGroupId.getId());
                 apiConfigPoRepository.save(apiConfigPo);

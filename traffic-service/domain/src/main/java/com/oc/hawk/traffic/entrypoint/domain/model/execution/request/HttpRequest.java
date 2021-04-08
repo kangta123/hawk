@@ -33,10 +33,6 @@ public class HttpRequest {
      */
     private final Long timeOut;
     /**
-     * 实例名
-     */
-    private final String instanceName;
-    /**
      * 请求地址
      */
     private final String requestAddr;
@@ -47,7 +43,7 @@ public class HttpRequest {
     /**
      * 实例Id
      */
-    private final String instanceId;
+    private final Long instanceId;
     /**
      * 请求头
      */
@@ -59,11 +55,14 @@ public class HttpRequest {
         }
     }
 
-    public String getHttpRequestUrl() {
+    public String getHttpRequestUrl(String serviceName,String namespaces) {
         return new StringBuilder().append("http://")
-            .append(this.instanceName)
+            .append(serviceName)
+            .append(".")
+            .append(namespaces)
             .append(":8080")
             .append(this.requestAddr)
             .toString();
     }
+    
 }
