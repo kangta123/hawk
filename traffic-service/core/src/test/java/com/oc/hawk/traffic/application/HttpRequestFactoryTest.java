@@ -44,7 +44,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         ExecuteCommand command = new ExecuteCommand();
         command.setRequestBody(str());
         command.setEntryPointId(along());
-        command.setInstanceId(str());
+        command.setInstanceId("1");
 
         List<Map<String, String>> formList = new ArrayList<>();
         Map<String, String> formMap = new HashMap<String, String>();
