@@ -241,7 +241,7 @@ public class EntryPointConfigRepresentation {
         dto.setPath(trace.getPath());
         dto.setMethod(trace.getMethod());
         dto.setDstWorkload(trace.getDstWorkload());
-        dto.setLatency(trace.getLatency());
+        dto.setLatency(trace.getLatency()/TIME);
         dto.setSpanId(trace.getSpanId());
         dto.setResponseCode(trace.getResponseCode());
         Date date = new Date(trace.getTimestamp());

@@ -8,13 +8,13 @@ import java.util.Map;
 @Data
 public class ExecuteCommand {
     //form表单参数
-    private List<Map<String, String>> param;
+    private List<Map<String, String>> requestParams;
     //header头
     private List<Map<String, String>> requestHeaders;
     //请求体
     private String requestBody;
     //请求路径参数
-    private List<Map<String, String>> path;
+    private List<Map<String, String>> uriParams;
     //配置接口id
     private Long entryPointId;
     //实例名

@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.entrypoint.api.dto;
 
 import java.sql.Timestamp;
+import java.util.Map;
+
 import lombok.Data;
 
 @Data
@@ -29,5 +31,8 @@ public class TraceDetailDTO {
     private Timestamp createTime;
     private Long entryPointId;
     private String entryPointName;
+    
+    private Map<String, String> requestParams;
+    private Map<String, String> uriParams;
 	
 }

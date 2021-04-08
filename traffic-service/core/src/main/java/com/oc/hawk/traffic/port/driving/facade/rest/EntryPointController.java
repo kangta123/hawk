@@ -10,10 +10,13 @@ import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
+import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import org.springframework.core.io.Resource;
 
@@ -88,7 +91,8 @@ public class EntryPointController {
      * postman内容导入
      */
     @PostMapping("/group/{id}/importance")
-    public BooleanWrapper importGroup(@PathVariable Long id,@RequestBody String importJson) {
+    public BooleanWrapper importGroup(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws Exception{
+        String importJson = IOUtils.toString(file.getInputStream());
         ImportGroupDTO importGroupDTO = JsonUtils.json2Object(importJson, ImportGroupDTO.class);
         entryPointUseCase.importGroup(id,importGroupDTO);
         return BooleanWrapper.TRUE;

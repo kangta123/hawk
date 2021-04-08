@@ -17,11 +17,11 @@ public class HttpRequestFactory {
 
     public HttpRequest create(EntryPointConfig entryPointConfig, ExecuteCommand executeCommand) {
         //表单提交key,value列表
-        List<Map<String, String>> formsList = executeCommand.getParam();
+        List<Map<String, String>> formsList = executeCommand.getRequestParams();
         //请求头数据key,value列表
         List<Map<String, String>> headersList = executeCommand.getRequestHeaders();
         //请求路径数据key,value列表
-        List<Map<String, String>> pathsList = executeCommand.getPath();
+        List<Map<String, String>> pathsList = executeCommand.getUriParams();
 
         EntryPointMethod endPointMethodType = entryPointConfig.getHttpResource().getMethod();
 

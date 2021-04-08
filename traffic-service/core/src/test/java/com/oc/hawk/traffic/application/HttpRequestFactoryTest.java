@@ -51,7 +51,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         formMap.put("key", str());
         formMap.put("value", str());
         formList.add(formMap);
-        command.setParam(formList);
+        command.setRequestParams(formList);
 
         List<Map<String, String>> headerList = new ArrayList<>();
         Map<String, String> headerMap = new HashMap<String, String>();
@@ -63,7 +63,7 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         Map<String, String> pathMap = new HashMap<String, String>();
         pathMap.put("key", str());
         pathMap.put("value", str());
-        command.setPath(pathList);
+        command.setUriParams(pathList);
         return command;
     }
 

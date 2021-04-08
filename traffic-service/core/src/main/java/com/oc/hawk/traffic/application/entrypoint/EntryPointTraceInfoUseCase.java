@@ -34,8 +34,8 @@ public class EntryPointTraceInfoUseCase {
         List<Trace> traceList = new ArrayList<Trace>();
     	for(UploadTraceInfoCommand command : commandList) {
     		Trace trace = entryPointConfigFactory.createTrace(command);
-    	    Long matchId = new EntryPointTraces(entryPointConfigRepository).matchPath(command.getPath(), command.getMethod());
-    	    trace.updateEntryPointId(matchId);
+    	    //Long matchId = new EntryPointTraces(entryPointConfigRepository).matchPath(command.getPath(), command.getMethod());
+    	    //trace.updateEntryPointId(matchId);
     		traceList.add(trace);
     	}
     	entryPointConfigRepository.saveTrace(traceList);

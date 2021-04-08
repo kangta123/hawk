@@ -283,17 +283,16 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         
         if(StringUtils.isEmpty(trace.getPath()) && StringUtils.isEmpty(trace.getDstWorkload())) {
             criteriaQuery.where(inClause);
-            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else if(StringUtils.isEmpty(trace.getDstWorkload())){          
             criteriaQuery.where(criteriaBuilder.and(orClause,inClause));
-            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else if(StringUtils.isEmpty(trace.getPath())) {
             criteriaQuery.where(criteriaBuilder.and(conditionInstanceName,inClause));
-            criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         }else {
-            Predicate whereClause = criteriaBuilder.and(orClause,conditionInstanceName,inClause);
+            Predicate keyClause = criteriaBuilder.or(orClause,conditionInstanceName);
+            Predicate whereClause = criteriaBuilder.and(keyClause,inClause);
             criteriaQuery.where(whereClause);
         }
+        criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(pageNum)
                 .setMaxResults(pageSize)
