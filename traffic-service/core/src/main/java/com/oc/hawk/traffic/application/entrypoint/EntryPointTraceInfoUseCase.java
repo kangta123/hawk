@@ -6,6 +6,7 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRe
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointTraces;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,10 @@ public class EntryPointTraceInfoUseCase {
     	}
     	entryPointConfigRepository.saveTrace(traceList);
     }
-
+    
+    @Transactional(rollbackFor = Exception.class)
+    public List<TraceHeaderConfig> findTraceHeaderConfig(){
+        return entryPointConfigRepository.findTraceHeaderConfig();
+    }
     
 }

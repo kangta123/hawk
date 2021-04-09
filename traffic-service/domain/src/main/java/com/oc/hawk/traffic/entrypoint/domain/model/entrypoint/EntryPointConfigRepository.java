@@ -1,6 +1,7 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.entrypoint;
 
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
 import java.util.List;
@@ -53,4 +54,5 @@ public interface EntryPointConfigRepository {
     
     Long queryApiHistoryCount(EntryPointConfigID entryPointId);
     
+    List<TraceHeaderConfig> findTraceHeaderConfig();
 }

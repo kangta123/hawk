@@ -139,7 +139,7 @@ public class EntryPointConfigRepresentation {
         dto.setResponseCode(httpResponse.getResponseCode());
         dto.setResponseTime(httpResponse.getResponseTime());
         dto.setResponseBody(httpResponse.getResponseBody().getBody());
-        dto.setResponseHeader(httpResponse.getResponseHeader().getResponeseHeader());
+        dto.setResponseHeaders(httpResponse.getResponseHeader().getResponeseHeader());
         return dto;
     }
     

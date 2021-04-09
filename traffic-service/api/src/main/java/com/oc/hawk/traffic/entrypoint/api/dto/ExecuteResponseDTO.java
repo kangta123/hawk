@@ -11,7 +11,7 @@ public class ExecuteResponseDTO {
 
     private Long responseTime;
 
-    private Map<String, String> responseHeader;
+    private Map<String, String> responseHeaders;
 
     private String responseBody;
 

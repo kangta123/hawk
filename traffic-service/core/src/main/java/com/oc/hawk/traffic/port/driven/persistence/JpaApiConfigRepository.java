@@ -5,11 +5,14 @@ import com.oc.hawk.api.constant.AccountHolder;
 import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
+import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigGroupPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointGroupManagerPO;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointTracePo;
+import com.oc.hawk.traffic.port.driven.persistence.po.TraceHeaderConfigPo;
+
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +53,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     private final EntryPointConfigGroupPoRepository apiConfigGroupPoRepository;
     private final EntryPointGroupManagerPoRepository apiGroupManagerPoRepository;
     private final EntryPointTracePoRepository entryPointTracePoRepository;
+    private final TraceHeaderConfigPoRepository traceHeaderConfigPoRepository;
     
     @PersistenceContext
     private EntityManager entityManager;
@@ -367,4 +371,15 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
+    @Override
+    public List<TraceHeaderConfig> findTraceHeaderConfig() {
+        List<TraceHeaderConfig> configList = new ArrayList<>();
+        Iterator<TraceHeaderConfigPo> configIterator = traceHeaderConfigPoRepository.findAll().iterator();
+        while(configIterator.hasNext()) {
+            TraceHeaderConfig config = configIterator.next().toTraceHeaderConfig();
+            configList.add(config);
+        }
+        return configList;
+    }
+    
 }
