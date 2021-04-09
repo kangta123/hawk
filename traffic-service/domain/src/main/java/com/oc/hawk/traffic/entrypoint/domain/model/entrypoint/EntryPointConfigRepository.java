@@ -52,4 +52,5 @@ public interface EntryPointConfigRepository {
     List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfigID entryPointId);
     
     Long queryApiHistoryCount(EntryPointConfigID entryPointId);
+    
 }

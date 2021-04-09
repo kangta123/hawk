@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -100,9 +101,11 @@ public class EntryPointConfigRepresentation {
         userApiDTO.setApiDesc(config.getDesign().getDesc());
         userApiDTO.setApp(config.getHttpResource().getTarget().getApp());
         Long projectId = config.getHttpResource().getTarget().getProjectId();
-        userApiDTO.setProjectId(String.valueOf(projectId));
-        ProjectDetailDTO projectDetailDTO = projectFacade.getProject(projectId);
-        userApiDTO.setProjectName(projectDetailDTO.getName());
+        if(Objects.nonNull(projectId)) {
+            userApiDTO.setProjectId(String.valueOf(projectId));
+            ProjectDetailDTO projectDetailDTO = projectFacade.getProject(projectId);
+            userApiDTO.setProjectName(projectDetailDTO.getName());
+        }
         return userApiDTO;
     }
 

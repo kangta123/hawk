@@ -19,4 +19,6 @@ public class ExecuteCommand {
     private Long entryPointId;
     //实例id
     private String instanceId;
+    //项目id
+    private Long projectId;
 }

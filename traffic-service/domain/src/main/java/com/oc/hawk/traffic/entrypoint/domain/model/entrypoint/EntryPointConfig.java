@@ -26,4 +26,10 @@ public class EntryPointConfig {
      */
     private final EntryPointHttpResource httpResource;
     
+    private Long projectId;
+    
+    public void updateProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+    
 }

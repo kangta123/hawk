@@ -129,6 +129,11 @@ public class EntryPointUseCase {
      */
     public ExecuteResponseDTO execute(ExecuteCommand executeCommand) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(executeCommand.getEntryPointId()));
+        if(Objects.nonNull(executeCommand.getProjectId())) {
+            entryPointConfig.updateProjectId(executeCommand.getProjectId());
+            entryPointConfigRepository.save(entryPointConfig);
+        }
+        
         HttpRequest httpRequest = httpRequestFactory.create(entryPointConfig, executeCommand);
         
         HttpResponse httpResponse = new EntryPointConfigExecutor(entryPointExcutor).execute(httpRequest);
