@@ -339,7 +339,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public List<Trace> queryApiHistoryList(Integer page, Integer size, EntryPointConfigID entryPointId) {
+    public List<Trace> queryApiHistoryList(Integer page, Integer size, EntryPointConfig entryPointConfig) {
         Integer pageSize = size==null ? 10 : size;
         Integer pageNum = page==null ? 0 : (page-1)*pageSize;
         
@@ -347,8 +347,19 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<EntryPointTracePo> criteriaQuery = criteriaBuilder.createQuery(EntryPointTracePo.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
         
-        Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
-        criteriaQuery.where(conditionEntryPointId);
+        String path = entryPointConfig.getHttpResource().getPath().getPath();
+        String method = entryPointConfig.getHttpResource().getMethod().name();
+        
+        //Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
+        
+        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), path);
+        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path+"?%");
+        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
+        
+        Predicate pathClause = criteriaBuilder.or(conditionPath,conditionPathPrefix);
+        Predicate conditionWhere = criteriaBuilder.and(pathClause,conditionMethod);
+        
+        criteriaQuery.where(conditionWhere);
         criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         
         List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
@@ -360,14 +371,24 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public Long queryApiHistoryCount(EntryPointConfigID entryPointId) {
+    public Long queryApiHistoryCount(EntryPointConfig entryPointConfig) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
         criteriaQuery.select(criteriaBuilder.count(fromObj));
         
-        Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
-        criteriaQuery.where(conditionEntryPointId);
+        //Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
+        
+        String path = entryPointConfig.getHttpResource().getPath().getPath();
+        String method = entryPointConfig.getHttpResource().getMethod().name();
+        
+        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), path);
+        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path+"?%");
+        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
+        
+        Predicate pathClause = criteriaBuilder.or(conditionPath,conditionPathPrefix);
+        Predicate conditionWhere = criteriaBuilder.and(pathClause,conditionMethod);
+        criteriaQuery.where(conditionWhere);
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
