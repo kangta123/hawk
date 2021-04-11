@@ -4,6 +4,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.oc.hawk.ddd.DomainEntity;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestBody;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseBody;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseCode;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseHeader;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,24 +24,23 @@ public class Trace {
 
     private final TraceId id;
     private String host;
-    private String path;
-    private String destAddr;
+    private HttpResource httpResource;
+    
+    private Destination destination;
     private String sourceAddr;
-    private String dstWorkload;
-    private String dstNamespace;
+    
     private Long timestamp;
-    private Integer latency;
+    private Latency latency;
     private String requestId;
     private String protocol;
-    private String method;
-    private Map<String,String> requestHeaders;
-    private Map<String,String> responseHeaders;
-    private String responseBody;
-    private String requestBody;
-    private String spanId;
-    private String parentSpanId;
-    private String traceId;
-    private String responseCode;
+    
+    private HttpRequestHeader requestHeaders;
+    private HttpResponseHeader responseHeaders;
+    private HttpResponseBody responseBody;
+    private HttpRequestBody requestBody;
+    
+    private SpanContext spanContext;
+    private HttpResponseCode responseCode;
     private Long entryPointId;
     private String entryPointName;
     
