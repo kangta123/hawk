@@ -4,10 +4,12 @@ import com.oc.hawk.test.TestHelper;
 import com.oc.hawk.traffic.entrypoint.EntryPointBaseTest;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDesign;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointHttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDescription;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import static org.mockito.Mockito.when;
 import java.util.List;
@@ -59,11 +61,14 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceInfoList_pathAndInstanceNameAlreadyExists() {
-        Trace traceParam = Trace.builder().path("/a/b").dstWorkload("abcd").method(EntryPointMethod.GET.name()).build();
+        Trace traceParam = Trace.builder()
+                .httpResource(new HttpResource(new HttpPath("/a/b"),HttpMethod.GET))
+                .destination(new Destination("abcd", null, null))
+                .build();
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(traceParam));
-        when(entryPointConfigRepository.findByPathAndMethod(any(),eq(EntryPointMethod.GET))).thenReturn(null);
+        when(entryPointConfigRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
         
-        when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(EntryPointMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
+        when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
         when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfig());
         
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
@@ -75,7 +80,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceNodeList_spanIdAlreadyExists() {
-        Trace traceParam = Trace.builder().spanId("1").build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext("1",null,null)).build();
         when(entryPointConfigRepository.findBySpanId(any())).thenReturn(getTrace());
         when(entryPointConfigRepository.findByTraceId(any())).thenReturn(List.of(getTrace()));
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
@@ -88,7 +93,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceNodeList_spanIdIsNull() {
-        Trace traceParam = Trace.builder().spanId(null).build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(null,null,null)).build();
         when(entryPointConfigRepository.findBySpanId(eq(traceParam))).thenReturn(null);
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         
@@ -102,8 +107,8 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     private EntryPointConfig getEntryPointConfig() {
         return EntryPointConfig.builder()
                 .configId(new EntryPointConfigID(1L))
-                .design(new EntryPointDesign("name123",""))
-                .httpResource(new EntryPointHttpResource(new EntryPointPath("/a/b"), EntryPointMethod.GET, null))
+                .description(new EntryPointDescription("name123",""))
+                .httpResource(new HttpResource(new HttpPath("/a/b"), HttpMethod.GET))
                 .build();
     }
 }

@@ -11,6 +11,7 @@ import com.oc.hawk.traffic.entrypoint.domain.facade.FileFacade;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointConfigExecutor;
@@ -176,7 +177,7 @@ public class EntryPointUseCase {
      * 链路节点列表查询
      */
     public List<TraceNodeDTO> queryTraceNodeList(String spanId){
-        Trace traceParam = Trace.builder().spanId(spanId).build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null)).build();
         List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
     }

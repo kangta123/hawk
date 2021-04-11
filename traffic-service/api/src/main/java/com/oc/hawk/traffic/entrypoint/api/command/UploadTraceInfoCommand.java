@@ -15,7 +15,7 @@ public class UploadTraceInfoCommand {
     private String dstWorkload;
     private String dstNamespace;
     private Long timestamp;
-    private Integer latency;
+    private Long latency;
     private String requestId;
     private String protocol;
     private String method;

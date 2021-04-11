@@ -3,8 +3,6 @@ package com.oc.hawk.traffic.application.entrypoint;
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointTraces;

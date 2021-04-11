@@ -4,6 +4,10 @@ import com.oc.hawk.traffic.application.entrypoint.HttpRequestFactory;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +38,9 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
     private EntryPointConfig getEntryPointConfig() {
         return EntryPointConfig.builder()
             .configId(new EntryPointConfigID(along()))
-            .design(new EntryPointDesign(str(), str()))
+            .description(new EntryPointDescription(str(), str()))
             .groupId(new EntryPointGroupID(along()))
-            .httpResource(new EntryPointHttpResource(new EntryPointPath(str()), EntryPointMethod.valueOf("POST"), new EntryPointTarget(str(), along())))
+            .httpResource(new HttpResource(new HttpPath(str()), HttpMethod.valueOf("POST")))
             .build();
     }
 

@@ -11,7 +11,7 @@ public class TraceNodeDTO {
     private String instanceName;
     private String method;
     private String path;
-    private String responseCode;
+    private Integer responseCode;
     private Long latency;
     private Long entryPointId;
     private String entryPointName;

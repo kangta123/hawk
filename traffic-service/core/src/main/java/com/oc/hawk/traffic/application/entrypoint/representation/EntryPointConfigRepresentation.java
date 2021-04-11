@@ -59,7 +59,7 @@ public class EntryPointConfigRepresentation {
             Long id = config.getConfigId().getId();
             userApiDTO.setId(id);
 
-            String name = config.getDesign().getName();
+            String name = config.getDescription().getName();
             userApiDTO.setApiName(name);
 
             userApiDTOList.add(userApiDTO);
@@ -95,12 +95,12 @@ public class EntryPointConfigRepresentation {
         UserEntryPointDTO userApiDTO = new UserEntryPointDTO();
         userApiDTO.setId(config.getConfigId().getId());
         userApiDTO.setGroupId(groupId);
-        userApiDTO.setApiName(config.getDesign().getName());
+        userApiDTO.setApiName(config.getDescription().getName());
         userApiDTO.setApiPath(config.getHttpResource().getPath().getPath());
         userApiDTO.setApiMethod(config.getHttpResource().getMethod().name());
-        userApiDTO.setApiDesc(config.getDesign().getDesc());
-        userApiDTO.setApp(config.getHttpResource().getTarget().getApp());
-        Long projectId = config.getHttpResource().getTarget().getProjectId();
+        userApiDTO.setApiDesc(config.getDescription().getDesc());
+        //userApiDTO.setApp(config.getHttpResource().getTarget().getApp());
+        Long projectId = config.getProjectId();
         if(Objects.nonNull(projectId)) {
             userApiDTO.setProjectId(String.valueOf(projectId));
             ProjectDetailDTO projectDetailDTO = projectFacade.getProject(projectId);
@@ -165,22 +165,22 @@ public class EntryPointConfigRepresentation {
         TraceDetailDTO dto = new TraceDetailDTO();
         dto.setId(trace.getId().getId());
         dto.setHost(trace.getHost());
-        dto.setPath(trace.getPath());
-        dto.setMethod(trace.getMethod());
-        dto.setDestAddr(trace.getDestAddr());
+        dto.setPath(trace.getHttpResource().getPath().getPath());
+        dto.setMethod(trace.getHttpResource().getMethod().name());
+        dto.setDestAddr(trace.getDestination().getDestAddr());
         dto.setRequestId(trace.getRequestId());
         dto.setSourceAddr(trace.getSourceAddr());
-        dto.setDstWorkload(trace.getDstWorkload());
-        dto.setDstNamespace(trace.getDstNamespace());
-        dto.setLatency(trace.getLatency());
+        dto.setDstWorkload(trace.getDestination().getDstWorkload());
+        dto.setDstNamespace(trace.getDestination().getDstNamespace());
+        dto.setLatency(trace.getLatency().getLatency());
         dto.setProtocol(trace.getProtocol());
-        dto.setSpanId(trace.getSpanId());
-        dto.setParentSpanId(trace.getParentSpanId());
-        dto.setTraceId(trace.getTraceId());
-        dto.setRequestBody(trace.getRequestBody());
+        dto.setSpanId(trace.getSpanContext().getSpanId());
+        dto.setParentSpanId(trace.getSpanContext().getParentSpanId());
+        dto.setTraceId(trace.getSpanContext().getTraceId());
+        dto.setRequestBody(trace.getRequestBody().getBody());
         dto.setRequestHeaders(JsonUtils.object2Json(trace.getRequestHeaders()));
-        dto.setResponseCode(trace.getResponseCode());
-        dto.setResponseBody(trace.getRequestBody());
+        dto.setResponseCode(trace.getResponseCode().getCode());
+        dto.setResponseBody(trace.getRequestBody().getBody());
         dto.setResponseHeaders(JsonUtils.object2Json(trace.getResponseHeaders()));
         dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
@@ -202,14 +202,14 @@ public class EntryPointConfigRepresentation {
     
     public TraceNodeDTO toTraceNodeDTO(Trace trace) {
         TraceNodeDTO traceNodeDTO = new TraceNodeDTO();
-        traceNodeDTO.setTraceId(trace.getTraceId());
-        traceNodeDTO.setSpanId(trace.getSpanId());
-        traceNodeDTO.setParentSpanId(trace.getParentSpanId());
-        traceNodeDTO.setInstanceName(trace.getDstWorkload());
-        traceNodeDTO.setLatency(trace.getLatency()/TIME);
-        traceNodeDTO.setMethod(trace.getMethod());
-        traceNodeDTO.setPath(trace.getPath());
-        traceNodeDTO.setResponseCode(trace.getResponseCode());
+        traceNodeDTO.setTraceId(trace.getSpanContext().getTraceId());
+        traceNodeDTO.setSpanId(trace.getSpanContext().getSpanId());
+        traceNodeDTO.setParentSpanId(trace.getSpanContext().getParentSpanId());
+        traceNodeDTO.setInstanceName(trace.getDestination().getDstWorkload());
+        traceNodeDTO.setLatency(trace.getLatency().getTime());
+        traceNodeDTO.setMethod(trace.getHttpResource().getMethod().name());
+        traceNodeDTO.setPath(trace.getHttpResource().getPath().getPath());
+        traceNodeDTO.setResponseCode(trace.getResponseCode().getCode());
         traceNodeDTO.setEntryPointName(trace.getEntryPointName());
         traceNodeDTO.setEntryPointId(trace.getEntryPointId());
         return traceNodeDTO;
@@ -228,9 +228,9 @@ public class EntryPointConfigRepresentation {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String localTime = localDateTime.format(df);
             traceListItemDTO.setRequestTime(localTime);
-            traceListItemDTO.setExecuteTime(item.getLatency());
-            traceListItemDTO.setResponseCode(item.getResponseCode());
-            traceListItemDTO.setSpanId(item.getSpanId());
+            traceListItemDTO.setExecuteTime(item.getLatency().getTime());
+            traceListItemDTO.setResponseCode(item.getResponseCode().getCode());
+            traceListItemDTO.setSpanId(item.getSpanContext().getSpanId());
             return traceListItemDTO;
         }).collect(Collectors.toList());
         
@@ -241,12 +241,12 @@ public class EntryPointConfigRepresentation {
     public TraceItemDTO toTraceItemDTO(Trace trace) {
         TraceItemDTO dto = new TraceItemDTO();
         dto.setId(trace.getId().getId());
-        dto.setPath(trace.getPath());
-        dto.setMethod(trace.getMethod());
-        dto.setDstWorkload(trace.getDstWorkload());
-        dto.setLatency(trace.getLatency()/TIME);
-        dto.setSpanId(trace.getSpanId());
-        dto.setResponseCode(trace.getResponseCode());
+        dto.setPath(trace.getHttpResource().getPath().getPath());
+        dto.setMethod(trace.getHttpResource().getMethod().name());
+        dto.setDstWorkload(trace.getDestination().getDstWorkload());
+        dto.setLatency(trace.getLatency().getTime());
+        dto.setSpanId(trace.getSpanContext().getSpanId());
+        dto.setResponseCode(trace.getResponseCode().getCode());
         Date date = new Date(trace.getTimestamp());
         LocalDateTime localDateTime = DateUtils.dateToLocalDateTime(date);
         DateTimeFormatter fomatter = DateTimeFormatter.ofPattern(DateUtils.HOUR_PATTERN);

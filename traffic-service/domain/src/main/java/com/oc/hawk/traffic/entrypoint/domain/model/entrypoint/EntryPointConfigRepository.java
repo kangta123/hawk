@@ -1,5 +1,7 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.entrypoint;
 
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
@@ -36,9 +38,9 @@ public interface EntryPointConfigRepository {
 
     void saveTrace(List<Trace> history);
 
-    EntryPointConfig findByPathAndMethod(EntryPointPath path, EntryPointMethod method);
+    EntryPointConfig findByPathAndMethod(HttpPath path, HttpMethod method);
 
-    List<EntryPointConfig> findByMethodAndRestfulPath(EntryPointMethod method);
+    List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod method);
     
     List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances);
     

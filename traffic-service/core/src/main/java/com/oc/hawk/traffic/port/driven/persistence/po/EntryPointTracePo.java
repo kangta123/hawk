@@ -3,6 +3,17 @@ package com.oc.hawk.traffic.port.driven.persistence.po;
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.hibernate.BaseEntity;
 import com.oc.hawk.common.utils.DateUtils;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestBody;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseBody;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseCode;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseHeader;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -35,7 +46,7 @@ public class EntryPointTracePo extends BaseEntity {
     private String sourceAddr;
     private String dstWorkload;
     private String dstNamespace;
-    private Integer latency;
+    private Long latency;
     private String protocol;
     private String spanId;
     private String parentSpanId;
@@ -53,25 +64,25 @@ public class EntryPointTracePo extends BaseEntity {
     public static EntryPointTracePo createBy(Trace history) {
         EntryPointTracePo historyPo = new EntryPointTracePo();
         historyPo.setHost(history.getHost());
-        historyPo.setPath(history.getPath());
-        historyPo.setMethod(history.getMethod());
+        historyPo.setPath(history.getHttpResource().getPath().getPath());
+        historyPo.setMethod(history.getHttpResource().getMethod().name());
         historyPo.setRequestId(history.getRequestId());
-        historyPo.setDestAddr(history.getDestAddr());
+        historyPo.setDestAddr(history.getDestination().getDestAddr());
         historyPo.setSourceAddr(history.getSourceAddr());
-        historyPo.setDstNamespace(history.getDstNamespace());
-        historyPo.setDstWorkload(history.getDstWorkload());
-        historyPo.setLatency(history.getLatency());
+        historyPo.setDstNamespace(history.getDestination().getDstNamespace());
+        historyPo.setDstWorkload(history.getDestination().getDstWorkload());
+        historyPo.setLatency(history.getLatency().getLatency());
         historyPo.setProtocol(history.getProtocol());
-        historyPo.setSpanId(history.getSpanId());
-        historyPo.setParentSpanId(history.getParentSpanId());
-        historyPo.setTraceId(history.getTraceId());
+        historyPo.setSpanId(history.getSpanContext().getSpanId());
+        historyPo.setParentSpanId(history.getSpanContext().getParentSpanId());
+        historyPo.setTraceId(history.getSpanContext().getTraceId());
         historyPo.setConfigId(history.getEntryPointId());
-        historyPo.setRequestBody(history.getRequestBody());
+        historyPo.setRequestBody(history.getRequestBody().getBody());
         historyPo.setRequestHeaders(JsonUtils.object2Json(history.getRequestHeaders()));
         historyPo.setRequestId(history.getRequestId());
-        historyPo.setResponseBody(history.getResponseBody());
+        historyPo.setResponseBody(history.getResponseBody().getBody());
         historyPo.setResponseHeaders(JsonUtils.object2Json(history.getResponseHeaders()));
-        historyPo.setResponseCode(history.getResponseCode());
+        historyPo.setResponseCode(String.valueOf(history.getResponseCode().getCode()));
         Date historyDate = new Date(history.getTimestamp());
         historyPo.setStartTime(DateUtils.dateToLocalDateTime(historyDate));
         historyPo.setCreateTime(LocalDateTime.now());
@@ -86,24 +97,19 @@ public class EntryPointTracePo extends BaseEntity {
         return Trace.builder()
                 .id(new TraceId(getId()))
                 .host(host)
-                .path(path)
-                .method(method)
+                .httpResource(new HttpResource(new HttpPath(path),HttpMethod.valueOf(method)))
+                .destination(new Destination(dstWorkload, destAddr, dstNamespace))
                 .requestId(requestId)
-                .destAddr(destAddr)
                 .sourceAddr(sourceAddr)
-                .dstWorkload(dstWorkload)
-                .dstNamespace(dstNamespace)
-                .latency(latency)
+                .latency(new Latency(latency))
                 .protocol(protocol)
-                .spanId(spanId)
-                .parentSpanId(parentSpanId)
-                .traceId(traceId)
+                .spanContext(new SpanContext(spanId,parentSpanId,traceId))
                 .entryPointId(configId)
-                .requestBody(requestBody)
-                .requestHeaders(requestHeadersMap)
-                .responseCode(responseCode)
-                .responseBody(responseBody)
-                .responseHeaders(responseHeadersMap)
+                .requestBody(new HttpRequestBody(responseBody))
+                .requestHeaders(new HttpRequestHeader(requestHeadersMap))
+                .responseCode(new HttpResponseCode(Integer.parseInt(responseCode)))
+                .responseBody(new HttpResponseBody(responseBody))
+                .responseHeaders(new HttpResponseHeader(responseHeadersMap))
                 .timestamp(startTime.toInstant(ZoneOffset.of("+8")).toEpochMilli())
                 .build();
     }

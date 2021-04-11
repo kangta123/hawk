@@ -18,12 +18,11 @@ import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupEntryPointDTO;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDesign;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDescription;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointHttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointTarget;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.port.driven.facade.RemoteProjectFacade;
 import com.oc.hawk.traffic.port.driven.facade.feign.ProjectGateway;
 
@@ -51,12 +50,12 @@ public class EntryPointRepresentationTest extends TrafficBaseTest {
     }
     
     EntryPointConfig getEntryPointConfig() {
-        EntryPointDesign design = new EntryPointDesign(str(),str());
-        EntryPointHttpResource resource = new EntryPointHttpResource(new EntryPointPath(str()),EntryPointMethod.GET,new EntryPointTarget(str(),along()));
+        EntryPointDescription design = new EntryPointDescription(str(),str());
+        HttpResource resource = new HttpResource(new HttpPath(str()),HttpMethod.GET);
         return EntryPointConfig.builder()
                 .configId(new EntryPointConfigID(along()))
                 .groupId(new EntryPointGroupID(1L))
-                .design(design)
+                .description(design)
                 .httpResource(resource)
                 .build();
     }

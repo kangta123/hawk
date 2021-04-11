@@ -11,8 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -25,12 +27,12 @@ public class EntryPointTraces {
     
     public List<Trace> queryTraceInfoList(Integer page,Integer size,String key,List<String> visibleInstances) {
         Trace traceParam = Trace.builder()
-                .path(key)
-                .dstWorkload(key)
+                .httpResource(new HttpResource(new HttpPath(key),null))
+                .destination(new Destination(key,null,null))
                 .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
-            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getPath(),trace.getMethod());
+            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath().getPath(),trace.getHttpResource().getMethod().name());
             updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -43,7 +45,7 @@ public class EntryPointTraces {
         }
         List<Trace> traceList = entryPointConfigRepository.findByTraceId(traceNode);
         for(Trace trace : traceList) {
-           Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getPath(),trace.getMethod());
+           Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath().getPath(),trace.getHttpResource().getMethod().name());
            updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -57,7 +59,7 @@ public class EntryPointTraces {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
         String name = "";
         if(Objects.nonNull(entryPointConfig)) {
-            name = entryPointConfig.getDesign().getName();
+            name = entryPointConfig.getDescription().getName();
         }
         return Trace.builder().entryPointName(name).build();
     }
@@ -78,13 +80,13 @@ public class EntryPointTraces {
         }
         
         //查找path 与 method匹配项
-        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new EntryPointPath(path), EntryPointMethod.valueOf(method));
+        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new HttpPath(path), HttpMethod.valueOf(method));
         if (Objects.nonNull(entryPointConfig)) {
             return entryPointConfig.getConfigId().getId();
         }
         
         //查找method 与 restful匹配项
-        List<EntryPointConfig> configList = entryPointConfigRepository.findByMethodAndRestfulPath(EntryPointMethod.valueOf(method));
+        List<EntryPointConfig> configList = entryPointConfigRepository.findByMethodAndRestfulPath(HttpMethod.valueOf(method));
         for (EntryPointConfig config : configList) {
             String targetPath = config.getHttpResource().getPath().getPath();
             boolean result = checkPath(targetPath,path);

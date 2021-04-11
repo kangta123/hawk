@@ -61,7 +61,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
         command.setDstWorkload(logEntry.getDestinationWorkload());
         command.setDstNamespace(logEntry.getDestinationNamespace());
         command.setTimestamp(logEntry.getTimestamp().getSeconds() * TIME_MILLIS);
-        command.setLatency(logEntry.getLatency().getNanos());
+        command.setLatency(Long.valueOf(logEntry.getLatency().getNanos()));
         command.setRequestId(logEntry.getRequestId());
         command.setProtocol(logEntry.getProtocol());
         command.setMethod(logEntry.getMethod());
