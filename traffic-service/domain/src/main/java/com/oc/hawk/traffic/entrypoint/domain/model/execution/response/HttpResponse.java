@@ -28,10 +28,4 @@ public class HttpResponse {
      */
     private HttpResponseHeader responseHeader;
 
-    public void addResponseHeader(HttpResponseHeader header) {
-        if (this.responseHeader == null) {
-            this.responseHeader = header;
-        }
-    }
-
 }

@@ -17,8 +17,8 @@ public class EntryPointServiceTest extends EntryPointBaseTest {
 
     @Test
     public void testGetCurrentEntryPointVisibily_groupIdListAlreadyExist() {
-        when(entryPointConfigRepository.byGroupIdList(List.of(1L))).thenReturn(List.of(getEntryPointConfig()));
-
+        when(entryPointConfigRepository.byGroupIdList(any())).thenReturn(List.of(getEntryPointConfig()));
+        
         List<EntryPointConfigGroup> entryPointGroupConfigList = new ArrayList<>();
         entryPointGroupConfigList.add(getEntryPointConfigGroup());
 

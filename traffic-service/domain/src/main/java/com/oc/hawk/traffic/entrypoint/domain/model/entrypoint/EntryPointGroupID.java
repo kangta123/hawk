@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EntryPointGroupID {
 
-    Long id;
+    private Long id;
 
     public EntryPointGroupID(Long id) {
         this.id = id;

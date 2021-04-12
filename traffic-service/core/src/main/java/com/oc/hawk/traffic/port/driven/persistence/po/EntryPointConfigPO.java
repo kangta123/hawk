@@ -2,6 +2,10 @@ package com.oc.hawk.traffic.port.driven.persistence.po;
 
 import com.oc.hawk.common.hibernate.BaseEntity;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -29,13 +33,12 @@ public class EntryPointConfigPO extends BaseEntity {
 
     public static EntryPointConfigPO createBy(EntryPointConfig apiConfig) {
         EntryPointConfigPO apiConfigPo = new EntryPointConfigPO();
-        apiConfigPo.setApiName(apiConfig.getDesign().getName());
+        apiConfigPo.setApiName(apiConfig.getDescription().getName());
         apiConfigPo.setApiPath(apiConfig.getHttpResource().getPath().getPath());
         apiConfigPo.setApiMethod(apiConfig.getHttpResource().getMethod().name());
         apiConfigPo.setGroupId(apiConfig.getGroupId().getId());
-        apiConfigPo.setApiDesc(apiConfig.getDesign().getDesc());
-        apiConfigPo.setApp(apiConfig.getHttpResource().getTarget().getApp());
-        apiConfigPo.setProjectId(apiConfig.getHttpResource().getTarget().getProjectId());
+        apiConfigPo.setApiDesc(apiConfig.getDescription().getDesc());
+        apiConfigPo.setProjectId(apiConfig.getProjectId());
         apiConfigPo.setCreateTime(LocalDateTime.now());
         apiConfigPo.setUpdateTime(LocalDateTime.now());
         return apiConfigPo;
@@ -45,8 +48,9 @@ public class EntryPointConfigPO extends BaseEntity {
         return EntryPointConfig.builder()
             .configId(new EntryPointConfigID(getId()))
             .groupId(new EntryPointGroupID(groupId))
-            .design(new EntryPointDesign(apiName, apiDesc))
-            .httpResource(new EntryPointHttpResource(new EntryPointPath(apiPath), EntryPointMethod.valueOf(apiMethod), new EntryPointTarget(app, projectId)))
+            .description(new EntryPointDescription(apiName, apiDesc))
+            .httpResource(new HttpResource(new HttpPath(apiPath), HttpMethod.valueOf(apiMethod)))
+            .projectId(projectId)
             .build();
     }
 

@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @DomainValueObject
 @Getter
 @NoArgsConstructor
-public class EntryPointPath {
-    private String path;
+public class EntryPointDescription {
 
-    public EntryPointPath(String path) {
-        this.path = path;
+    private String name;
+    private String desc;
+
+    public EntryPointDescription(String name, String desc) {
+        this.name = name;
+        this.desc = desc;
     }
-
 }

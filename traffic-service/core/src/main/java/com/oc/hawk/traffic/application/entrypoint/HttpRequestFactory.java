@@ -2,8 +2,9 @@ package com.oc.hawk.traffic.application.entrypoint;
 
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public class HttpRequestFactory {
         //请求路径数据key,value列表
         List<Map<String, String>> pathsList = executeCommand.getUriParams();
 
-        EntryPointMethod endPointMethodType = entryPointConfig.getHttpResource().getMethod();
+        HttpMethod endPointMethodType = entryPointConfig.getHttpResource().getMethod();
 
         //header
         Map<String, String> headerMap = new HashMap<String, String>();

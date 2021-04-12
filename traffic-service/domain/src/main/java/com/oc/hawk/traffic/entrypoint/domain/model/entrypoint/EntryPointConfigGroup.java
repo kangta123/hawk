@@ -16,22 +16,6 @@ public class EntryPointConfigGroup {
     private String groupName;
     private EntryPointGroupVisibility entryPointGroupVisibility;
 
-    public void updateGroupName(String groupName) {
-        if (StringUtils.isNotBlank(groupName)) {
-            this.groupName = groupName;
-        }
-    }
-
-    public void updateGroupId(EntryPointGroupID groupId) {
-        if (Objects.nonNull(groupId)) {
-            this.groupId = groupId;
-        }
-    }
-
-    public void updateEntryPointGroupVisibility(EntryPointGroupVisibility visiblity) {
-        this.entryPointGroupVisibility = visiblity;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof EntryPointConfigGroup)) {

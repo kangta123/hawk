@@ -10,10 +10,5 @@ import lombok.NoArgsConstructor;
 public class EntryPointGroupVisibility {
 
     private boolean visibility = true;
-
-    public static EntryPointGroupVisibility create(boolean visibility) {
-        EntryPointGroupVisibility entryPointGroupVisibility = new EntryPointGroupVisibility();
-        entryPointGroupVisibility.visibility = visibility;
-        return entryPointGroupVisibility;
-    }
+    
 }

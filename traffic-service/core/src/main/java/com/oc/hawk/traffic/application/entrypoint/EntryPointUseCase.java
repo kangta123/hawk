@@ -11,12 +11,13 @@ import com.oc.hawk.traffic.entrypoint.domain.facade.FileFacade;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.HttpRequest;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointConfigExecutor;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointConfigGroups;
 import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointGroupImportance;
-import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointTraces;
+import com.oc.hawk.traffic.entrypoint.domain.service.TrafficTraces;
 import com.oc.hawk.traffic.entrypoint.domain.service.excutor.EntryPointExcutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -152,7 +153,7 @@ public class EntryPointUseCase {
             return obj.getInstanceName();
         }).collect(Collectors.toList());
         
-    	List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(page,size,key,visibleInstances);
+    	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(page,size,key,visibleInstances);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList,size);
     }
     
@@ -167,8 +168,8 @@ public class EntryPointUseCase {
     /**
      * 根据链路id查询单个请求历史详情
      */
-    public TraceDetailDTO queryApiHistoryInfo(TraceId traceId) {
-        Trace trace = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryInfo(traceId);
+    public TraceDetailDTO queryTrafficTraceInfo(TraceId traceId) {
+        Trace trace = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceInfo(traceId);
         return entryPointConfigRepresentation.toTraceDetailDTO(trace);
     }
     
@@ -176,18 +177,18 @@ public class EntryPointUseCase {
      * 链路节点列表查询
      */
     public List<TraceNodeDTO> queryTraceNodeList(String spanId){
-        Trace traceParam = Trace.builder().spanId(spanId).build();
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null)).build();
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
     }
     
     /**
      * 接口历史链路信息查询
      */
-    public TraceResponseDTO queryApiHistoryList(Integer page,Integer size,Long entryPointId) {
+    public TraceResponseDTO queryTrafficTraceList(Integer page,Integer size,Long entryPointId) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryList(page,size,entryPointConfig);
-        Long countNum = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryCount(entryPointConfig);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceList(page,size,entryPointConfig);
+        Long countNum = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceCount(entryPointConfig);
         return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
     }
     

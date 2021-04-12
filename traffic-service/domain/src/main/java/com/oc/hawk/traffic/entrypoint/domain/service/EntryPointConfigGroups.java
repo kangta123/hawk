@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.entrypoint.domain.service;
 
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ public class EntryPointConfigGroups {
      */
     public List<EntryPointConfig> getCurrentEntryPointVisibilitiy(List<EntryPointConfigGroup> entryPointGroupList) {
         //查询可见接口
-        List<Long> groupIdList = entryPointGroupList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
+        List<EntryPointGroupID> groupIdList = entryPointGroupList.stream().map(obj -> obj.getGroupId()).collect(Collectors.toList());
         return apiConfigRepository.byGroupIdList(groupIdList);
     }
 
@@ -52,12 +54,10 @@ public class EntryPointConfigGroups {
     public List<EntryPointConfig> getEntryPointByKey(String key) {
         //用户可见组
         List<EntryPointConfigGroup> groupList = getCurrentGroupList();
-//		List<Long> groupIdList = groupList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
-        EntryPointConfig config = EntryPointConfig.builder().design(new EntryPointDesign(key, key))
-            .httpResource(new EntryPointHttpResource(new EntryPointPath(key), null, null))
+        EntryPointConfig config = EntryPointConfig.builder().description(new EntryPointDescription(key, key))
+            .httpResource(new HttpResource(new HttpPath(key), null))
             .build();
         List<EntryPointConfig> keyList = apiConfigRepository.byKey(config, groupList);
-		//List<EntryPointConfig> resultList = keyList.stream().filter(obj -> groupIdList.contains(obj.getGroupId().getId())).collect(Collectors.toList());
 		return keyList;
 	}
     
@@ -69,7 +69,7 @@ public class EntryPointConfigGroups {
     }
     
     public List<EntryPointConfigGroup> getUserGroupList(List<EntryPointConfig> entryPointConfigList) {
-        List<Long> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
+        List<EntryPointGroupID> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId()).collect(Collectors.toList());
         return apiConfigRepository.byIdList(idList);
     }
     

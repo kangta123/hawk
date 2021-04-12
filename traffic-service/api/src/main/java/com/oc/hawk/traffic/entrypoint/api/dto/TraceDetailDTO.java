@@ -17,14 +17,14 @@ public class TraceDetailDTO {
     private String sourceAddr;
     private String dstWorkload;
     private String dstNamespace;
-    private Integer latency;
+    private Long latency;
     private String protocol;
     private String spanId;
     private String parentSpanId;
     private String traceId;
     private String requestBody;
     private String requestHeaders;
-    private String responseCode;
+    private Integer responseCode;
     private String responseBody;
     private String responseHeaders;
     private Long startTime;

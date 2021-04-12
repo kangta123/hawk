@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EntryPointConfigID {
 
-    Long id;
+    private Long id;
 
     public EntryPointConfigID(Long id) {
         this.id = id;
