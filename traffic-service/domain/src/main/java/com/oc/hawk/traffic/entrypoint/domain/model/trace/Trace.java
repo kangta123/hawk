@@ -44,13 +44,10 @@ public class Trace {
     private Long entryPointId;
     private String entryPointName;
     
-    public void updateEntryPointId(Long entryPointId) {
+    public void updateEntryPointIdAndName(Long entryPointId,String entryPointName) {
         if(Objects.nonNull(entryPointId)) {
             this.entryPointId = entryPointId;
         }
-    }
-    
-    public void updateEntryPointName(String entryPointName) {
         if(Objects.nonNull(entryPointName)) {
             this.entryPointName = entryPointName;
         }

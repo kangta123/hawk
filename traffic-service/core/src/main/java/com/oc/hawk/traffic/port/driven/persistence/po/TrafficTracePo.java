@@ -77,10 +77,10 @@ public class TrafficTracePo extends BaseEntity {
         historyPo.setTraceId(history.getSpanContext().getTraceId());
         historyPo.setConfigId(history.getEntryPointId());
         historyPo.setRequestBody(history.getRequestBody().getBody());
-        historyPo.setRequestHeaders(JsonUtils.object2Json(history.getRequestHeaders()));
+        historyPo.setRequestHeaders(JsonUtils.object2Json(history.getRequestHeaders().getHeaderMap()));
         historyPo.setRequestId(history.getRequestId());
         historyPo.setResponseBody(history.getResponseBody().getBody());
-        historyPo.setResponseHeaders(JsonUtils.object2Json(history.getResponseHeaders()));
+        historyPo.setResponseHeaders(JsonUtils.object2Json(history.getResponseHeaders().getResponeseHeader()));
         historyPo.setResponseCode(String.valueOf(history.getResponseCode().getCode()));
         Date historyDate = new Date(history.getTimestamp());
         historyPo.setStartTime(DateUtils.dateToLocalDateTime(historyDate));

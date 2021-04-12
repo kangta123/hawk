@@ -110,8 +110,7 @@ public class TrafficTraces {
     
     private void updateTrace(Trace traceInfo,Trace trace) {
         if(Objects.nonNull(traceInfo)) {
-            trace.updateEntryPointId(traceInfo.getEntryPointId());
-            trace.updateEntryPointName(traceInfo.getEntryPointName());
+            trace.updateEntryPointIdAndName(traceInfo.getEntryPointId(),traceInfo.getEntryPointName());
         }
     }
     

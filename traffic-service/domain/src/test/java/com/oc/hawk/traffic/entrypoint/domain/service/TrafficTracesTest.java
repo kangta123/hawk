@@ -111,4 +111,32 @@ public class TrafficTracesTest extends EntryPointBaseTest {
                 .httpResource(new HttpResource(new HttpPath("/a/b"), HttpMethod.GET))
                 .build();
     }
+    
+    /**
+     * 测试查询链路信息,路径与实例名都不为空
+     */
+    @Test
+    void testQueryTraceInfoList_pathUriParamExists() {
+        Trace traceParam = Trace.builder()
+                .httpResource(new HttpResource(new HttpPath("/a/1/c"),HttpMethod.GET))
+                .destination(new Destination("abcd", null, null))
+                .build();
+        when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(traceParam));
+        when(entryPointConfigRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
+        
+        when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfigWithUriParams()));
+        when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfigWithUriParams());
+        
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/1/c",null);
+        Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
+    }
+    
+    private EntryPointConfig getEntryPointConfigWithUriParams() {
+        return EntryPointConfig.builder()
+                .configId(new EntryPointConfigID(1L))
+                .description(new EntryPointDescription("name123",""))
+                .httpResource(new HttpResource(new HttpPath("/a/{id}/c"), HttpMethod.GET))
+                .build();
+    }
+    
 }
