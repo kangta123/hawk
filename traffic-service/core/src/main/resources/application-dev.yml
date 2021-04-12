@@ -6,9 +6,9 @@ spring:
         username: root
         password: Password
     redis:
-        host: 192.168.24.207
-        password: HvWd7CdQyt
-        port: 33010
+        host: 192.168.16.34
+        password: Password
+        port: 31604
 eureka:
     instance:
         hostname: localhost
