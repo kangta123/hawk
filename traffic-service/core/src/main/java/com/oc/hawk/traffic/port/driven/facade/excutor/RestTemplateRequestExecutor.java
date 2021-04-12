@@ -28,11 +28,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RestTemplateRequestExecutor implements EntryPointExcutor {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate customRestTemplate;
     private final ContainerFacade containerFacade;
 
-    public RestTemplateRequestExecutor(RestTemplate restTemplate,ContainerFacade containerFacade) {
-        this.restTemplate = restTemplate;
+    public RestTemplateRequestExecutor(RestTemplate customRestTemplate,ContainerFacade containerFacade) {
+        this.customRestTemplate = customRestTemplate;
         this.containerFacade = containerFacade;
     }
 
@@ -48,7 +48,7 @@ public class RestTemplateRequestExecutor implements EntryPointExcutor {
 
         Stopwatch stopWatch = Stopwatch.createStarted();
         HttpMethod httpMethod = getHttpMethod(request.getRequestMethod());
-        ResponseEntity<String> responseObj = restTemplate.exchange(requestUrl, httpMethod, requestEntity, String.class, uriVariablesMap);
+        ResponseEntity<String> responseObj = customRestTemplate.exchange(requestUrl, httpMethod, requestEntity, String.class, uriVariablesMap);
         stopWatch.stop();
         return HttpResponse.builder()
             .responseCode(String.valueOf(responseObj.getStatusCodeValue()))

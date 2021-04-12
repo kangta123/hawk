@@ -22,7 +22,7 @@ public class TrafficApplication {
     }
     
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate customRestTemplate() {
         RestTemplate restTemplate = new RestTemplateProxy();
         restTemplate.setErrorHandler(new NoErrorResultHandler());
         return restTemplate;
