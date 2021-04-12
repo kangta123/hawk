@@ -38,7 +38,6 @@ public class EntryPointConfigPO extends BaseEntity {
         apiConfigPo.setApiMethod(apiConfig.getHttpResource().getMethod().name());
         apiConfigPo.setGroupId(apiConfig.getGroupId().getId());
         apiConfigPo.setApiDesc(apiConfig.getDescription().getDesc());
-        //apiConfigPo.setApp(apiConfig.getHttpResource().getTarget().getApp());
         apiConfigPo.setProjectId(apiConfig.getProjectId());
         apiConfigPo.setCreateTime(LocalDateTime.now());
         apiConfigPo.setUpdateTime(LocalDateTime.now());

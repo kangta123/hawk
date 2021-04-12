@@ -9,8 +9,4 @@ public interface EntryPointGroupManagerPoRepository extends CrudRepository<Entry
 
     EntryPointGroupManagerPO findByUserId(Long userId);
 
-//	@Modifying(clearAutomatically = true)
-//	@Query(value = "update ApiGroupManagerPO r set r.groupids=?1 where r.userId=?2")
-//	int updateGroupids(String groupids,Long userId);
-
 }

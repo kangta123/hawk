@@ -20,13 +20,6 @@ public class TraceHeaderConfigPo extends BaseEntity{
     private String keyName;
     private Integer keyType;
     
-    public static TraceHeaderConfigPo createBy(TraceHeaderConfig traceHeaderConfig) {
-        TraceHeaderConfigPo traceHeaderConfigPo = new TraceHeaderConfigPo();
-        traceHeaderConfigPo.setKeyName(traceHeaderConfig.getKeyName());
-        traceHeaderConfigPo.setKeyType(traceHeaderConfig.getKeyType());
-        return traceHeaderConfigPo;
-    }
-    
     public TraceHeaderConfig toTraceHeaderConfig() {
         return TraceHeaderConfig
                 .builder()

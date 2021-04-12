@@ -54,12 +54,10 @@ public class EntryPointConfigGroups {
     public List<EntryPointConfig> getEntryPointByKey(String key) {
         //用户可见组
         List<EntryPointConfigGroup> groupList = getCurrentGroupList();
-//		List<Long> groupIdList = groupList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
         EntryPointConfig config = EntryPointConfig.builder().description(new EntryPointDescription(key, key))
             .httpResource(new HttpResource(new HttpPath(key), null))
             .build();
         List<EntryPointConfig> keyList = apiConfigRepository.byKey(config, groupList);
-		//List<EntryPointConfig> resultList = keyList.stream().filter(obj -> groupIdList.contains(obj.getGroupId().getId())).collect(Collectors.toList());
 		return keyList;
 	}
     

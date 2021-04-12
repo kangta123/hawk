@@ -13,8 +13,4 @@ public class HttpResponseBody {
         this.body=body;
     }
     
-    public static HttpResponseBody createHttpResponseBody(String body) {
-        return HttpResponseBody.builder().body(body).build();
-    }
-    
 }

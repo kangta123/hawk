@@ -40,9 +40,6 @@ interface ApiConfigPoRepository extends JpaRepositoryImplementation<EntryPointCo
 
     Optional<EntryPointConfigPO> findById(Long id);
 
-    //path前后要加%xxx%
-    List<EntryPointConfigPO> findByApiPathLike(String path);
-
     List<EntryPointConfigPO> findByGroupIdIn(List<Long> groupIdList);
 }
 
@@ -352,8 +349,6 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         String path = entryPointConfig.getHttpResource().getPath().getPath();
         String method = entryPointConfig.getHttpResource().getMethod().name();
         
-        //Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
-        
         Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), path);
         Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path+"?%");
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
@@ -378,8 +373,6 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<EntryPointTracePo> fromObj = criteriaQuery.from(EntryPointTracePo.class);
         criteriaQuery.select(criteriaBuilder.count(fromObj));
-        
-        //Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
         
         String path = entryPointConfig.getHttpResource().getPath().getPath();
         String method = entryPointConfig.getHttpResource().getMethod().name();

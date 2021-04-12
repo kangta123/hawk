@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TraceId {
 
-    public Long id;
+    private Long id;
 
     public TraceId(Long id) {
         this.id = id;

@@ -14,8 +14,4 @@ public class HttpResponseHeader {
         this.responeseHeader = responeseHeader;
     }
     
-    public static HttpResponseHeader createHttpResponseHeader(Map<String, String> responseHeader) {
-        return HttpResponseHeader.builder().responeseHeader(responseHeader).build();
-    }
-    
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ResponseID {
-    long id;
+    private long id;
 
     public ResponseID(long id) {
         this.id = id;

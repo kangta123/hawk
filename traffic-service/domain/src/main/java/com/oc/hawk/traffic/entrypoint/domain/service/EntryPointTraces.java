@@ -32,7 +32,7 @@ public class EntryPointTraces {
                 .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
-            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath().getPath(),trace.getHttpResource().getMethod().name());
+            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
             updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -45,7 +45,7 @@ public class EntryPointTraces {
         }
         List<Trace> traceList = entryPointConfigRepository.findByTraceId(traceNode);
         for(Trace trace : traceList) {
-           Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath().getPath(),trace.getHttpResource().getMethod().name());
+           Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
            updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -55,7 +55,7 @@ public class EntryPointTraces {
         return entryPointConfigRepository.byTraceId(traceId);
     }
     
-    public Trace queryTraceNameAndId(Long entryPointId) {
+    private Trace queryTraceNameAndId(Long entryPointId) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
         String name = "";
         if(Objects.nonNull(entryPointConfig)) {
@@ -64,23 +64,14 @@ public class EntryPointTraces {
         return Trace.builder().entryPointName(name).build();
     }
     
-    public Long matchPath(String path, String method) {
-        if (StringUtils.isEmpty(path)) {
+    private Long matchPath(HttpPath path, String method) {
+        if (StringUtils.isEmpty(path.getPath())) {
             return null;
         }
-        int n = path.indexOf("?");
-        if (n >= 0) {
-            path = path.substring(0, n);
-        }
-        if (path.endsWith("/")) {
-            n = path.lastIndexOf("/");
-            if (n > 0) {
-                path = path.substring(0, n);
-            }
-        }
+        path.handlePath();
         
         //查找path 与 method匹配项
-        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new HttpPath(path), HttpMethod.valueOf(method));
+        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new HttpPath(path.getPath()), HttpMethod.valueOf(method));
         if (Objects.nonNull(entryPointConfig)) {
             return entryPointConfig.getConfigId().getId();
         }
@@ -89,7 +80,7 @@ public class EntryPointTraces {
         List<EntryPointConfig> configList = entryPointConfigRepository.findByMethodAndRestfulPath(HttpMethod.valueOf(method));
         for (EntryPointConfig config : configList) {
             String targetPath = config.getHttpResource().getPath().getPath();
-            boolean result = checkPath(targetPath,path);
+            boolean result = path.matchPath(targetPath);
             if (result) {
                 return config.getConfigId().getId();
             }
@@ -114,7 +105,7 @@ public class EntryPointTraces {
         return resultFlag;
     }
     
-    private Trace queryTraceInfo(Long entryPointId,String path,String method) {
+    private Trace queryTraceInfo(Long entryPointId,HttpPath path,String method) {
         if(Objects.isNull(entryPointId)) {
             Long matchId = matchPath(path, method);
             if(Objects.nonNull(matchId)) {

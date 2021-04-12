@@ -48,13 +48,7 @@ public class HttpRequest {
      * 请求头
      */
     private HttpHeader httpHeader;
-
-    public void addHttpHeader(HttpHeader httpHeader) {
-        if (Objects.isNull(this.httpHeader)) {
-            this.httpHeader = httpHeader;
-        }
-    }
-
+    
     public String getHttpRequestUrl(String serviceName,String namespaces) {
         return new StringBuilder().append("http://")
             .append(serviceName)

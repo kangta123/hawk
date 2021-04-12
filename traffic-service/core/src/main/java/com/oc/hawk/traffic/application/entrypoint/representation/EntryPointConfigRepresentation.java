@@ -43,30 +43,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EntryPointConfigRepresentation {
+    
     private final ProjectFacade projectFacade;
     
-    private static final Long TIME = 1000000L;
-
-    public UserGroupEntryPointDTO toUserGroupEntryPointDTO(EntryPointConfigGroup group, List<EntryPointConfig> apiList) {
-        UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
-        userGroupApiDTO.setGroupId(group.getGroupId().getId());
-        userGroupApiDTO.setGroupName(group.getGroupName());
-
-        List<UserEntryPointDTO> userApiDTOList = new ArrayList<UserEntryPointDTO>();
-        for (EntryPointConfig config : apiList) {
-            UserEntryPointDTO userApiDTO = new UserEntryPointDTO();
-
-            Long id = config.getConfigId().getId();
-            userApiDTO.setId(id);
-
-            String name = config.getDescription().getName();
-            userApiDTO.setApiName(name);
-
-            userApiDTOList.add(userApiDTO);
-        }
-        userGroupApiDTO.setApiList(userApiDTOList);
-        return userGroupApiDTO;
-    }
 
     public List<UserGroupDTO> toUserGroupDTO(List<EntryPointConfigGroup> allGroupList, List<EntryPointConfigGroup> groupList) {
         List<UserGroupDTO> userGroupDTOList = new ArrayList<UserGroupDTO>();
@@ -99,7 +78,6 @@ public class EntryPointConfigRepresentation {
         userApiDTO.setApiPath(config.getHttpResource().getPath().getPath());
         userApiDTO.setApiMethod(config.getHttpResource().getMethod().name());
         userApiDTO.setApiDesc(config.getDescription().getDesc());
-        //userApiDTO.setApp(config.getHttpResource().getTarget().getApp());
         Long projectId = config.getProjectId();
         if(Objects.nonNull(projectId)) {
             userApiDTO.setProjectId(String.valueOf(projectId));
@@ -127,11 +105,6 @@ public class EntryPointConfigRepresentation {
             userGroupApiDTOList.add(userGroupApiDTO);
         });
         return userGroupApiDTOList;
-    }
-
-    public List<UserEntryPointDTO> toUserApiDTOList(List<EntryPointConfig> entryPointConfigList) {
-        List<UserEntryPointDTO> userApiDTOList = entryPointConfigList.stream().map(obj -> toUserEntryPointDTO(obj, obj.getGroupId().getId())).collect(Collectors.toList());
-        return userApiDTOList;
     }
 
     public ExecuteResponseDTO toExecuteResponseDTO(HttpResponse httpResponse) {
@@ -195,12 +168,9 @@ public class EntryPointConfigRepresentation {
             nodeList.add(dto);
         }
         return nodeList;
-        //Map<String, List<TraceNodeDTO>> child = nodeList.stream().filter(node -> StringUtils.isNotBlank(node.getParentSpanId())).collect(Collectors.groupingBy(node -> node.getParentSpanId()));
-        //nodeList.forEach(node -> node.setChildNodeList(child.get(node.getSpanId())));
-        //return nodeList.stream().filter(node -> StringUtils.isBlank(node.getParentSpanId())).collect(Collectors.toList());
     }
     
-    public TraceNodeDTO toTraceNodeDTO(Trace trace) {
+    private TraceNodeDTO toTraceNodeDTO(Trace trace) {
         TraceNodeDTO traceNodeDTO = new TraceNodeDTO();
         traceNodeDTO.setTraceId(trace.getSpanContext().getTraceId());
         traceNodeDTO.setSpanId(trace.getSpanContext().getSpanId());
@@ -238,7 +208,7 @@ public class EntryPointConfigRepresentation {
         return dto;
     }
     
-    public TraceItemDTO toTraceItemDTO(Trace trace) {
+    private TraceItemDTO toTraceItemDTO(Trace trace) {
         TraceItemDTO dto = new TraceItemDTO();
         dto.setId(trace.getId().getId());
         dto.setPath(trace.getHttpResource().getPath().getPath());
