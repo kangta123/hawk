@@ -110,18 +110,18 @@ public class EntryPointController {
      * 根据接口id,查询历史请求列表
      */
     @GetMapping("/history/page")
-    public TraceResponseDTO queryApiHistoryList(@RequestParam(required=false) Integer page,
+    public TraceResponseDTO queryTrafficTraceList(@RequestParam(required=false) Integer page,
             @RequestParam(required=false) Integer size,
             @RequestParam(required=false) Long entryPointId) {
-        return entryPointUseCase.queryApiHistoryList(page,size,entryPointId);
+        return entryPointUseCase.queryTrafficTraceList(page,size,entryPointId);
     }
 
     /**
      * 根据历史请求id,查询单个历史请求信息
      */
     @GetMapping("/history/{id}")
-    public TraceDetailDTO queryApiHistoryInfo(@PathVariable Long id) {
-        return entryPointUseCase.queryApiHistoryInfo(new TraceId(id));
+    public TraceDetailDTO queryTrafficTraceInfo(@PathVariable Long id) {
+        return entryPointUseCase.queryTrafficTraceInfo(new TraceId(id));
     }
     
     /**

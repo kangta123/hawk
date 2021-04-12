@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Table(name = "traffic_trace")
 @Entity
 @DynamicUpdate
-public class EntryPointTracePo extends BaseEntity {
+public class TrafficTracePo extends BaseEntity {
 	
     private String host;
     private String path;
@@ -60,9 +60,8 @@ public class EntryPointTracePo extends BaseEntity {
     private LocalDateTime startTime;
     private LocalDateTime createTime;
     
-
-    public static EntryPointTracePo createBy(Trace history) {
-        EntryPointTracePo historyPo = new EntryPointTracePo();
+    public static TrafficTracePo createBy(Trace history) {
+        TrafficTracePo historyPo = new TrafficTracePo();
         historyPo.setHost(history.getHost());
         historyPo.setPath(history.getHttpResource().getPath().getPath());
         historyPo.setMethod(history.getHttpResource().getMethod().name());

@@ -21,7 +21,7 @@ import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class EntryPointTraces {
+public class TrafficTraces {
     
     private final EntryPointConfigRepository entryPointConfigRepository;
     
@@ -51,7 +51,7 @@ public class EntryPointTraces {
         return traceList;
     }
     
-    public Trace queryApiHistoryInfo(TraceId traceId) {
+    public Trace queryTrafficTraceInfo(TraceId traceId) {
         return entryPointConfigRepository.byTraceId(traceId);
     }
     
@@ -88,21 +88,12 @@ public class EntryPointTraces {
         return null;
     }
     
-    public List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfig entryPointConfig){
-        return entryPointConfigRepository.queryApiHistoryList(page,size,entryPointConfig);
+    public List<Trace> queryTrafficTraceList(Integer page,Integer size,EntryPointConfig entryPointConfig){
+        return entryPointConfigRepository.queryTrafficTraceList(page,size,entryPointConfig);
     }
     
-    public Long queryApiHistoryCount(EntryPointConfig entryPointConfig) {
-        return entryPointConfigRepository.queryApiHistoryCount(entryPointConfig);
-    }
-    
-    private boolean checkPath(String targetPath,String path) {
-        String tempPath = targetPath.replaceAll("\\/", "\\\\/");
-        String replacePath = tempPath.replaceAll("\\{[a-zA-Z\\d]+\\}", "[a-zA-Z\\\\d]+");
-        Pattern p = Pattern.compile(replacePath, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(path);
-        boolean resultFlag = m.find();
-        return resultFlag;
+    public Long queryTrafficTraceCount(EntryPointConfig entryPointConfig) {
+        return entryPointConfigRepository.queryTrafficTraceCount(entryPointConfig);
     }
     
     private Trace queryTraceInfo(Long entryPointId,HttpPath path,String method) {

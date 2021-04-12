@@ -19,7 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
-public class EntryPointTracesTest extends EntryPointBaseTest {
+public class TrafficTracesTest extends EntryPointBaseTest {
     
     @BeforeEach
     public void setup() {
@@ -32,7 +32,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_pathIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -42,7 +42,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_instanceNameIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -52,7 +52,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_pathAndInstanceNameIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), null,null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), null,null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -71,7 +71,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
         when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
         when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfig());
         
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
         Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
     }
     
@@ -83,7 +83,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
         Trace traceParam = Trace.builder().spanContext(new SpanContext("1",null,null)).build();
         when(entryPointConfigRepository.findBySpanId(any())).thenReturn(getTrace());
         when(entryPointConfigRepository.findByTraceId(any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         
         Assertions.assertThat(traceList).isNotEmpty();
     }
@@ -95,7 +95,7 @@ public class EntryPointTracesTest extends EntryPointBaseTest {
     void testQueryTraceNodeList_spanIdIsNull() {
         Trace traceParam = Trace.builder().spanContext(new SpanContext(null,null,null)).build();
         when(entryPointConfigRepository.findBySpanId(eq(traceParam))).thenReturn(null);
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
         
         Assertions.assertThat(traceList).isEmpty();
     }

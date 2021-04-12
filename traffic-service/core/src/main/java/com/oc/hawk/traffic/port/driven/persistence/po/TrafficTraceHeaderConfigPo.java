@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "traffic_trace_header_config")
 @Entity
 @DynamicUpdate
-public class TraceHeaderConfigPo extends BaseEntity{
+public class TrafficTraceHeaderConfigPo extends BaseEntity{
     
     private String keyName;
     private Integer keyType;

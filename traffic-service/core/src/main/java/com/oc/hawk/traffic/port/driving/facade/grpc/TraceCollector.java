@@ -2,7 +2,7 @@ package com.oc.hawk.traffic.port.driving.facade.grpc;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.trace_logging.LoggingServiceGrpc;
-import com.oc.hawk.traffic.application.entrypoint.EntryPointTraceInfoUseCase;
+import com.oc.hawk.traffic.application.entrypoint.TrafficTraceInfoUseCase;
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
 
@@ -31,14 +31,14 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
     private static final String KEY_PARENT_SPAN_ID = "x-b3-parentspanid";
     private static final String KEY_STATUS = ":status";
     private static final Integer KEY_MAP_SIZE = 8;
-    private final EntryPointTraceInfoUseCase entryPointTraceInfoUseCase;
+    private final TrafficTraceInfoUseCase trafficTraceInfoUseCase;
     private static final Long TIME_MILLIS = 1000L; 
 
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
         List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
         
-        List<TraceHeaderConfig> headerConfigList = entryPointTraceInfoUseCase.findTraceHeaderConfig();
+        List<TraceHeaderConfig> headerConfigList = trafficTraceInfoUseCase.findTraceHeaderConfig();
         for (com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry : request.getLogEntriesList()) {
             log.info("receive log: {} , {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
             UploadTraceInfoCommand command = getTraceInfoCommand(logEntry);
@@ -46,7 +46,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
             buildResponseHeader(logEntry, command, headerConfigList);
             commandList.add(command);
         }
-        entryPointTraceInfoUseCase.createTrace(commandList);
+        trafficTraceInfoUseCase.createTrace(commandList);
         log.info("complete");
         responseObserver.onNext(com.oc.hawk.trace_logging.Trace.WriteLogResponse.getDefaultInstance());
         responseObserver.onCompleted();

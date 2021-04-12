@@ -5,7 +5,7 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceHeaderConfig;
-import com.oc.hawk.traffic.entrypoint.domain.service.EntryPointTraces;
+import com.oc.hawk.traffic.entrypoint.domain.service.TrafficTraces;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EntryPointTraceInfoUseCase {
+public class TrafficTraceInfoUseCase {
 	
     private final EntryPointConfigFactory entryPointConfigFactory;
     private final EntryPointConfigRepository entryPointConfigRepository;

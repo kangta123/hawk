@@ -14,8 +14,6 @@ public interface EntryPointConfigRepository {
 
     EntryPointConfig byId(EntryPointConfigID id);
 
-    List<EntryPointConfig> byGroupId(Long id);
-
     EntryPointGroupID save(EntryPointConfigGroup group);
 
     List<EntryPointConfig> byKey(EntryPointConfig config, List<EntryPointConfigGroup> groupList);
@@ -28,11 +26,9 @@ public interface EntryPointConfigRepository {
 
     void update(List<EntryPointGroupID> entryPointGroupIdList);
 
-    List<EntryPointConfigGroup> byIdList(List<Long> groupIdList);
+    List<EntryPointConfigGroup> byIdList(List<EntryPointGroupID> groupIdList);
 
-    List<EntryPointConfig> byGroupIdList(List<Long> groupIdList);
-
-    void updateList(Long userId, List<EntryPointConfigGroup> groupList);
+    List<EntryPointConfig> byGroupIdList(List<EntryPointGroupID> groupIdList);
 
     void batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
 
@@ -52,9 +48,9 @@ public interface EntryPointConfigRepository {
     
     List<Trace> findByTraceId(Trace trace);
     
-    List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfig entryPointConfig);
+    List<Trace> queryTrafficTraceList(Integer page,Integer size,EntryPointConfig entryPointConfig);
     
-    Long queryApiHistoryCount(EntryPointConfig entryPointConfig);
+    Long queryTrafficTraceCount(EntryPointConfig entryPointConfig);
     
     List<TraceHeaderConfig> findTraceHeaderConfig();
 }

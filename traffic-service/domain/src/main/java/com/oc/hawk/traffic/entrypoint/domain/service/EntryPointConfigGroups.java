@@ -20,7 +20,7 @@ public class EntryPointConfigGroups {
      */
     public List<EntryPointConfig> getCurrentEntryPointVisibilitiy(List<EntryPointConfigGroup> entryPointGroupList) {
         //查询可见接口
-        List<Long> groupIdList = entryPointGroupList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
+        List<EntryPointGroupID> groupIdList = entryPointGroupList.stream().map(obj -> obj.getGroupId()).collect(Collectors.toList());
         return apiConfigRepository.byGroupIdList(groupIdList);
     }
 
@@ -69,7 +69,7 @@ public class EntryPointConfigGroups {
     }
     
     public List<EntryPointConfigGroup> getUserGroupList(List<EntryPointConfig> entryPointConfigList) {
-        List<Long> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId().getId()).collect(Collectors.toList());
+        List<EntryPointGroupID> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId()).collect(Collectors.toList());
         return apiConfigRepository.byIdList(idList);
     }
     
