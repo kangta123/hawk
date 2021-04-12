@@ -95,12 +95,12 @@ public class EntryPointTraces {
         return null;
     }
     
-    public List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfigID entryPointId){
-        return entryPointConfigRepository.queryApiHistoryList(page,size,entryPointId);
+    public List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfig entryPointConfig){
+        return entryPointConfigRepository.queryApiHistoryList(page,size,entryPointConfig);
     }
     
-    public Long queryApiHistoryCount(EntryPointConfigID entryPointId) {
-        return entryPointConfigRepository.queryApiHistoryCount(entryPointId);
+    public Long queryApiHistoryCount(EntryPointConfig entryPointConfig) {
+        return entryPointConfigRepository.queryApiHistoryCount(entryPointConfig);
     }
     
     private boolean checkPath(String targetPath,String path) {

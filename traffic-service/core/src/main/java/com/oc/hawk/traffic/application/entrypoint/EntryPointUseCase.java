@@ -185,8 +185,9 @@ public class EntryPointUseCase {
      * 接口历史链路信息查询
      */
     public TraceResponseDTO queryApiHistoryList(Integer page,Integer size,Long entryPointId) {
-        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryList(page,size,new EntryPointConfigID(entryPointId));
-        Long countNum = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryCount(new EntryPointConfigID(entryPointId));
+        EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
+        List<Trace> traceList = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryList(page,size,entryPointConfig);
+        Long countNum = new EntryPointTraces(entryPointConfigRepository).queryApiHistoryCount(entryPointConfig);
         return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
     }
     

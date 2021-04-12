@@ -50,9 +50,9 @@ public interface EntryPointConfigRepository {
     
     List<Trace> findByTraceId(Trace trace);
     
-    List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfigID entryPointId);
+    List<Trace> queryApiHistoryList(Integer page,Integer size,EntryPointConfig entryPointConfig);
     
-    Long queryApiHistoryCount(EntryPointConfigID entryPointId);
+    Long queryApiHistoryCount(EntryPointConfig entryPointConfig);
     
     List<TraceHeaderConfig> findTraceHeaderConfig();
 }
