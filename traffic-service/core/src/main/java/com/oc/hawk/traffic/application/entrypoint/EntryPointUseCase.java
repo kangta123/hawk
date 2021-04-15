@@ -75,7 +75,9 @@ public class EntryPointUseCase {
     public void createApi(CreateEntryPointCommand command) {
         log.info("create api with name:{},path:{},method:{}", command.getName(), command.getPath(), command.getMethod());
         EntryPointConfig apiConfig = entryPointConfigFactory.create(command);
-        entryPointConfigRepository.save(apiConfig);
+        EntryPointConfigID entryPointConfigId = entryPointConfigRepository.save(apiConfig);
+        apiConfig.updateConfigId(entryPointConfigId);
+        entryPointResourceRepository.addConfig(apiConfig);
     }
 
     /**
@@ -164,7 +166,12 @@ public class EntryPointUseCase {
      */
     @Transactional(rollbackFor = Exception.class)
     public void deleteEntryPoint(Long id) {
+        EntryPointConfig config = entryPointConfigRepository.byId(new EntryPointConfigID(id));
+        if(Objects.isNull(config)) {
+           return ;
+        }
         new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPoint(new EntryPointConfigID(id));
+        entryPointResourceRepository.deleteConfig(config);
     }
     
     /**
@@ -202,7 +209,7 @@ public class EntryPointUseCase {
     }
     
     /**
-     * 
+     * 启动加载接口配置信息
      */
     public void loadEntryPointConfigData() {
         log.info("load entrypoint config data.");

@@ -171,4 +171,25 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
                 .toString();
     }
     
+    @Override
+    public void addConfig(EntryPointConfig config) {
+        //add LIST
+        String pathKey = getPathKey(config.getHttpResource().getPath().getPath(),config.getHttpResource().getMethod().name());
+        String listKey = ENTRYPOINT_PATH_LIST + config.getHttpResource().getMethod().name().toLowerCase();
+        redisTemplate.opsForList().leftPush(listKey, pathKey);
+        //add HASH
+        Map<String,String> hashMap = getHash(config.getConfigId().getId(),config.getHttpResource().getPath().getPath(),config.getDescription().getName());
+        redisTemplate.opsForHash().putAll(pathKey, hashMap);
+    }
+
+    @Override
+    public void deleteConfig(EntryPointConfig config) {
+        //delete HASH
+        String pathKey = getPathKey(config.getHttpResource().getPath().getPath(),config.getHttpResource().getMethod().name());
+        redisTemplate.delete(pathKey);
+        //delete LIST key
+        String listKey = ENTRYPOINT_PATH_LIST + config.getHttpResource().getMethod().name().toLowerCase();
+        redisTemplate.opsForList().remove(listKey, 0, pathKey);
+    }
+    
 }
