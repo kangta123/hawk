@@ -155,7 +155,7 @@ public class EntryPointUseCase {
             return obj.getInstanceName();
         }).collect(Collectors.toList());
         
-    	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(page,size,key,visibleInstances);
+    	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(page,size,key,visibleInstances);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList,size);
     }
     
@@ -171,7 +171,7 @@ public class EntryPointUseCase {
      * 根据链路id查询单个请求历史详情
      */
     public TraceDetailDTO queryTrafficTraceInfo(TraceId traceId) {
-        Trace trace = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceInfo(traceId);
+        Trace trace = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTrafficTraceInfo(traceId);
         return entryPointConfigRepresentation.toTraceDetailDTO(trace);
     }
     
@@ -180,7 +180,7 @@ public class EntryPointUseCase {
      */
     public List<TraceNodeDTO> queryTraceNodeList(String spanId){
         Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null)).build();
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
         return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
     }
     
@@ -189,8 +189,8 @@ public class EntryPointUseCase {
      */
     public TraceResponseDTO queryTrafficTraceList(Integer page,Integer size,Long entryPointId) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceList(page,size,entryPointConfig);
-        Long countNum = new TrafficTraces(entryPointConfigRepository).queryTrafficTraceCount(entryPointConfig);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTrafficTraceList(page,size,entryPointConfig);
+        Long countNum = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTrafficTraceCount(entryPointConfig);
         return entryPointConfigRepresentation.toTraceResponseDTO(traceList,countNum);
     }
     
@@ -207,6 +207,7 @@ public class EntryPointUseCase {
     public void loadEntryPointConfigData() {
         log.info("load entrypoint config data.");
         List<EntryPointConfig> entryPointConfigList = new EntryPointConfigGroups(entryPointConfigRepository).getEntryPointConfigList();
+        entryPointResourceRepository.deleteAllEntryPointResource(entryPointConfigList);
         entryPointResourceRepository.loadEntryPointResource(entryPointConfigList);
     }
 }

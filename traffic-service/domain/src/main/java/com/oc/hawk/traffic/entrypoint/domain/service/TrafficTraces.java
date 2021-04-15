@@ -3,14 +3,11 @@ package com.oc.hawk.traffic.entrypoint.domain.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointResourceRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
@@ -24,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class TrafficTraces {
     
     private final EntryPointConfigRepository entryPointConfigRepository;
+    private final EntryPointResourceRepository entryPointResourceRepository;
     
     public List<Trace> queryTraceInfoList(Integer page,Integer size,String key,List<String> visibleInstances) {
         Trace traceParam = Trace.builder()
@@ -64,20 +62,20 @@ public class TrafficTraces {
         return Trace.builder().entryPointName(name).build();
     }
     
-    private Long matchPath(HttpPath path, String method) {
+    private EntryPointConfig matchPath(HttpPath path, String method) {
         if (StringUtils.isEmpty(path.getPath())) {
             return null;
         }
         path.handlePath();
         
         //查找path 与 method匹配项
-        EntryPointConfig entryPointConfig = entryPointConfigRepository.findByPathAndMethod(new HttpPath(path.getPath()), HttpMethod.valueOf(method));
-        if (Objects.nonNull(entryPointConfig)) {
-            return entryPointConfig.getConfigId().getId();
+        EntryPointConfig entryPointConfig = entryPointResourceRepository.findByPathAndMethod(new HttpPath(path.getPath()), HttpMethod.valueOf(method));
+        if (Objects.nonNull(entryPointConfigId)) {
+            return entryPointConfigId.getId();
         }
         
         //查找method 与 restful匹配项
-        List<EntryPointConfig> configList = entryPointConfigRepository.findByMethodAndRestfulPath(HttpMethod.valueOf(method));
+        List<EntryPointConfig> configList = entryPointResourceRepository.findByMethodAndRestfulPath(HttpMethod.valueOf(method));
         for (EntryPointConfig config : configList) {
             String targetPath = config.getHttpResource().getPath().getPath();
             boolean result = path.matchPath(targetPath);

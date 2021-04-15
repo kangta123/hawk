@@ -33,9 +33,9 @@ public interface EntryPointConfigRepository {
 
     void saveTrace(List<Trace> history);
 
-    EntryPointConfig findByPathAndMethod(HttpPath path, HttpMethod method);
+    //EntryPointConfig findByPathAndMethod(HttpPath path, HttpMethod method);
 
-    List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod method);
+    //List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod method);
     
     List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances);
     

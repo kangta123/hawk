@@ -205,44 +205,44 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     	};
     	trafficTracePoRepository.saveAll(poList);
     }
+    
+//    @Override
+//    public EntryPointConfig findByPathAndMethod(HttpPath path, HttpMethod method) {
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<EntryPointConfigPO> criteriaQuery = criteriaBuilder.createQuery(EntryPointConfigPO.class);
+//        Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
+//
+//        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath());
+//        Predicate conditionPathPrefix = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath() + "/");
+//        
+//        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
+//        Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
+//        
+//        Predicate conditionWhere = criteriaBuilder.and(conditionMethod, orClause);
+//        criteriaQuery.where(conditionWhere);
+//        
+//        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
+//        if (Objects.isNull(resultPoList) || resultPoList.isEmpty()) {
+//            return null;
+//        }
+//        return resultPoList.get(0).toEntryPointConfig();
+//    }
 
-    @Override
-    public EntryPointConfig findByPathAndMethod(HttpPath path, HttpMethod method) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<EntryPointConfigPO> criteriaQuery = criteriaBuilder.createQuery(EntryPointConfigPO.class);
-        Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
-
-        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath());
-        Predicate conditionPathPrefix = criteriaBuilder.equal(fromObj.get("apiPath"), path.getPath() + "/");
-        
-        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
-        Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
-        
-        Predicate conditionWhere = criteriaBuilder.and(conditionMethod, orClause);
-        criteriaQuery.where(conditionWhere);
-        
-        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
-        if (Objects.isNull(resultPoList) || resultPoList.isEmpty()) {
-            return null;
-        }
-        return resultPoList.get(0).toEntryPointConfig();
-    }
-
-    @Override
-    public List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod method) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<EntryPointConfigPO> criteriaQuery = criteriaBuilder.createQuery(EntryPointConfigPO.class);
-        Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
-        Predicate conditionPath = criteriaBuilder.like(fromObj.get("apiPath"), "%{%}%");
-        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
-        
-        Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
-        criteriaQuery.where(conditionWhere);
-        
-        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
-        List<EntryPointConfig> entryPointConfigList = resultPoList.stream().map(obj -> obj.toEntryPointConfig()).collect(Collectors.toList());
-        return entryPointConfigList;
-    }
+//    @Override
+//    public List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod method) {
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<EntryPointConfigPO> criteriaQuery = criteriaBuilder.createQuery(EntryPointConfigPO.class);
+//        Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
+//        Predicate conditionPath = criteriaBuilder.like(fromObj.get("apiPath"), "%{%}%");
+//        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), method.name());
+//        
+//        Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
+//        criteriaQuery.where(conditionWhere);
+//        
+//        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
+//        List<EntryPointConfig> entryPointConfigList = resultPoList.stream().map(obj -> obj.toEntryPointConfig()).collect(Collectors.toList());
+//        return entryPointConfigList;
+//    }
 
     @Override
     public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances) {

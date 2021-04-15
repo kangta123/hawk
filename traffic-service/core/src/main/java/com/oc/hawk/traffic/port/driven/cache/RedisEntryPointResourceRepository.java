@@ -4,13 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDescription;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointResourceRepository;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,71 +38,137 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
     public void loadEntryPointResource(List<EntryPointConfig> configList) {
         //GET LIST
         List<EntryPointConfig> configListGet = configList.stream().filter(obj -> StringUtils.equals(HTTP_METHOD_GET, obj.getHttpResource().getMethod().name())).collect(Collectors.toList());
-        loadGetList(configListGet);
+        loadIntoList(configListGet,HTTP_METHOD_GET.toLowerCase());
         //POST LIST
         List<EntryPointConfig> configListPost = configList.stream().filter(obj -> StringUtils.equals(HTTP_METHOD_POST, obj.getHttpResource().getMethod().name())).collect(Collectors.toList());
-        loadPostList(configListPost);
+        loadIntoList(configListPost,HTTP_METHOD_POST.toLowerCase());
         //PUT LIST
         List<EntryPointConfig> configListPut = configList.stream().filter(obj -> StringUtils.equals(HTTP_METHOD_PUT, obj.getHttpResource().getMethod().name())).collect(Collectors.toList());
-        loadPutList(configListPut);
+        loadIntoList(configListPut,HTTP_METHOD_PUT.toLowerCase());
         //DELETE LIST
         List<EntryPointConfig> configListDelete = configList.stream().filter(obj -> StringUtils.equals(HTTP_METHOD_DELETE, obj.getHttpResource().getMethod().name())).collect(Collectors.toList());
-        loadDeleteList(configListDelete);
+        loadIntoList(configListDelete,HTTP_METHOD_DELETE.toLowerCase());
         //HASH
         loadEntryPointConfig(configList);
-        
-        
     }
     
-    private void loadGetList(List<EntryPointConfig> configListGet) {
-        List<String> pathGetList = configListGet.stream().map(obj -> obj.getHttpResource().getPath().getPath()).collect(Collectors.toList());
-        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(HTTP_METHOD_GET.toLowerCase()).append("_");
-        List<String> pathKeyGetList = pathGetList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
-        String listKeyGet = ENTRYPOINT_PATH_LIST + HTTP_METHOD_GET.toLowerCase();
-        redisTemplate.opsForList().leftPushAll(listKeyGet, pathKeyGetList);
-        redisTemplate.delete(listKeyGet);
-        Long num = redisTemplate.opsForList().size(listKeyGet);
-    }
-    
-    private void loadPostList(List<EntryPointConfig> configListPost) {
-        List<String> pathPostList = configListPost.stream().map(obj -> obj.getHttpResource().getPath().getPath()).collect(Collectors.toList());
-        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(HTTP_METHOD_POST.toLowerCase()).append("_");
-        List<String> pathKeyPostList = pathPostList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
-        String listKeyPost = ENTRYPOINT_PATH_LIST + HTTP_METHOD_POST.toLowerCase();
-        redisTemplate.opsForList().leftPushAll(listKeyPost, pathKeyPostList);
-    }
-    
-    private void loadPutList(List<EntryPointConfig> configListPut) {
-        List<String> pathPutList = configListPut.stream().map(obj -> obj.getHttpResource().getPath().getPath()).collect(Collectors.toList());
-        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(HTTP_METHOD_PUT.toLowerCase()).append("_");
-        List<String> pathKeyPutList = pathPutList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
-        String listKeyPut = ENTRYPOINT_PATH_LIST + HTTP_METHOD_PUT.toLowerCase();
-        redisTemplate.opsForList().leftPushAll(listKeyPut, pathKeyPutList);
-    }
-    
-    private void loadDeleteList(List<EntryPointConfig> configListDelete) {
-        List<String> pathDeleteList = configListDelete.stream().map(obj -> obj.getHttpResource().getPath().getPath()).collect(Collectors.toList());
-        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(HTTP_METHOD_PUT.toLowerCase()).append("_");
-        List<String> pathKeyDeleteList = pathDeleteList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
-        String listKeyDelete = ENTRYPOINT_PATH_LIST + HTTP_METHOD_DELETE.toLowerCase();
-        redisTemplate.opsForList().leftPushAll(listKeyDelete, pathKeyDeleteList);
+    private void loadIntoList(List<EntryPointConfig> configMethodList,String method) {
+        List<String> pathList = configMethodList.stream().map(obj -> obj.getHttpResource().getPath().getPath()).collect(Collectors.toList());
+        if(Objects.isNull(pathList) || pathList.isEmpty()) {
+            return ;
+        }
+        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(method).append("_");
+        List<String> pathKeyList = pathList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
+        String listKey = ENTRYPOINT_PATH_LIST + method;
+        redisTemplate.opsForList().leftPushAll(listKey, pathKeyList);
     }
     
     private void loadEntryPointConfig(List<EntryPointConfig> configList) {
         configList.forEach(item -> {
             String path = item.getHttpResource().getPath().getPath();
+            String method = item.getHttpResource().getMethod().name().toLowerCase();
             String key = new StringBuilder()
                     .append(ENTRYPOINT_PATH_KEY)
-                    .append(HTTP_METHOD_PUT.toLowerCase())
+                    .append(method)
                     .append("_")
                     .append(path)
                     .toString();
-            Map<String,Object> hashMap = new HashMap<String,Object>();
-            hashMap.put("id", item.getConfigId().getId());
-            hashMap.put("path", path);
-            hashMap.put("name", item.getDescription().getName());
+            Map<String,String> hashMap = getHash(item.getConfigId().getId(),path,item.getDescription().getName());
             redisTemplate.opsForHash().putAll(key, hashMap);
         });
+    }
+    
+    @Override
+    public void deleteAllEntryPointResource(List<EntryPointConfig> configList) {
+        //delete GET List
+        redisTemplate.delete(ENTRYPOINT_PATH_LIST+HTTP_METHOD_GET.toLowerCase());
+        //delete POST List
+        redisTemplate.delete(ENTRYPOINT_PATH_LIST+HTTP_METHOD_POST.toLowerCase());
+        //delete PUT List
+        redisTemplate.delete(ENTRYPOINT_PATH_LIST+HTTP_METHOD_PUT.toLowerCase());
+        //delete DELETE List
+        redisTemplate.delete(ENTRYPOINT_PATH_LIST+HTTP_METHOD_DELETE.toLowerCase());
+        //delete HASH
+        List<String> keyList = new ArrayList<>();
+        configList.forEach(item -> {
+            String path = item.getHttpResource().getPath().getPath();
+            String method = item.getHttpResource().getMethod().name().toLowerCase();
+            String key = new StringBuilder()
+                    .append(ENTRYPOINT_PATH_KEY)
+                    .append(method)
+                    .append("_")
+                    .append(path)
+                    .toString();
+            keyList.add(key);
+        });
+        
+        redisTemplate.delete(keyList);
+    }
+    
+    private Map<String,String> getHash(Long id,String path,String name) {
+        Map<String,String> hashMap = new HashMap<>(3);
+        hashMap.put("id", String.valueOf(id));
+        hashMap.put("path", path);
+        hashMap.put("name", name);
+        return hashMap;
+    }
+
+    @Override
+    public EntryPointConfig findByPathAndMethod(HttpPath httpPath, HttpMethod httpMethod) {
+        String pathKey = getPathKey(httpPath.getPath(),httpMethod.name());
+        
+        List<String> pathList = getPathList(httpMethod);
+        List<String> filterPathList = pathList.stream().filter(item -> StringUtils.equals(item, pathKey)).collect(Collectors.toList());
+        if(Objects.isNull(filterPathList) || filterPathList.isEmpty()) {
+            return null;
+        }
+        Map<String,String> entryMap = getEntryMap(pathKey);
+        String entryPointId = (String)entryMap.get("id");
+        if(StringUtils.isEmpty(entryPointId)) {
+            return null;
+        }
+        return EntryPointConfig.builder()
+                .configId(new EntryPointConfigID(Long.parseLong(entryPointId)))
+                .description(new EntryPointDescription(entryMap.get("name"),null))
+                .build();
+    }
+    
+    @Override
+    public List<EntryPointConfig> findByMethodAndRestfulPath(HttpMethod httpMethod) {
+        List<String> pathList = getPathList(httpMethod);
+        List<String> filterPathList = pathList.stream().filter(item -> item.contains("{") && item.contains("}")).collect(Collectors.toList());
+        List<EntryPointConfig> configList = filterPathList.stream().map(item -> {
+            String pathKey = getPathKey(item, httpMethod.name());
+            Map<String,String> entryMap = getEntryMap(pathKey);
+            Long configId = Long.parseLong(entryMap.get("id"));
+            return EntryPointConfig
+                    .builder()
+                    .configId(new EntryPointConfigID(configId))
+                    .description(new EntryPointDescription(entryMap.get("name"), null))
+                    .httpResource(new HttpResource(new HttpPath(item),httpMethod))
+                    .build();
+        }).collect(Collectors.toList());
+        return configList;
+    }
+    
+    private List<String> getPathList(HttpMethod httpMethod){
+        String method = httpMethod.name().toLowerCase();
+        String listKey = ENTRYPOINT_PATH_LIST + method;
+        return redisTemplate.opsForList().range(listKey, 0, -1);
+    }
+    
+    private Map<String,String> getEntryMap(String pathKey) {
+        Map<Object,Object> entryMap = redisTemplate.opsForHash().entries(pathKey);
+        return entryMap.entrySet().stream().collect(Collectors.toMap(e -> (String)e.getKey() , e -> (String)e.getValue()));
+    }
+    
+    private String getPathKey(String path,String method) {
+        return new StringBuilder()
+                .append(ENTRYPOINT_PATH_KEY)
+                .append(method)
+                .append("_")
+                .append(path)
+                .toString();
     }
     
 }
