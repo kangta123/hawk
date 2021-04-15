@@ -30,7 +30,7 @@ public class TrafficTraces {
                 .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
         for(Trace trace : traceList) {
-            Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
+            Trace traceInfo = queryTraceInfo(trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
             updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -43,7 +43,7 @@ public class TrafficTraces {
         }
         List<Trace> traceList = entryPointConfigRepository.findByTraceId(traceNode);
         for(Trace trace : traceList) {
-           Trace traceInfo = queryTraceInfo(trace.getEntryPointId(),trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
+           Trace traceInfo = queryTraceInfo(trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
            updateTrace(traceInfo,trace);
         }
         return traceList;
@@ -53,14 +53,14 @@ public class TrafficTraces {
         return entryPointConfigRepository.byTraceId(traceId);
     }
     
-    private Trace queryTraceNameAndId(Long entryPointId) {
-        EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
-        String name = "";
-        if(Objects.nonNull(entryPointConfig)) {
-            name = entryPointConfig.getDescription().getName();
-        }
-        return Trace.builder().entryPointName(name).build();
-    }
+//    private Trace queryTraceNameAndId(Long entryPointId) {
+//        EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
+//        String name = "";
+//        if(Objects.nonNull(entryPointConfig)) {
+//            name = entryPointConfig.getDescription().getName();
+//        }
+//        return Trace.builder().entryPointName(name).build();
+//    }
     
     private EntryPointConfig matchPath(HttpPath path, String method) {
         if (StringUtils.isEmpty(path.getPath())) {
@@ -70,8 +70,8 @@ public class TrafficTraces {
         
         //查找path 与 method匹配项
         EntryPointConfig entryPointConfig = entryPointResourceRepository.findByPathAndMethod(new HttpPath(path.getPath()), HttpMethod.valueOf(method));
-        if (Objects.nonNull(entryPointConfigId)) {
-            return entryPointConfigId.getId();
+        if (Objects.nonNull(entryPointConfig)) {
+            return entryPointConfig;
         }
         
         //查找method 与 restful匹配项
@@ -80,7 +80,7 @@ public class TrafficTraces {
             String targetPath = config.getHttpResource().getPath().getPath();
             boolean result = path.matchPath(targetPath);
             if (result) {
-                return config.getConfigId().getId();
+                return config;
             }
         }
         return null;
@@ -94,14 +94,13 @@ public class TrafficTraces {
         return entryPointConfigRepository.queryTrafficTraceCount(entryPointConfig);
     }
     
-    private Trace queryTraceInfo(Long entryPointId,HttpPath path,String method) {
-        if(Objects.isNull(entryPointId)) {
-            Long matchId = matchPath(path, method);
-            if(Objects.nonNull(matchId)) {
-                return queryTraceNameAndId(matchId);
-            }
-        }else{
-            return queryTraceNameAndId(entryPointId);
+    private Trace queryTraceInfo(HttpPath path,String method) {
+        EntryPointConfig entryPointConfig = matchPath(path, method);
+        if(Objects.nonNull(entryPointConfig)) {
+            return Trace.builder()
+                    .entryPointId(entryPointConfig.getConfigId().getId())
+                    .entryPointName(entryPointConfig.getDescription().getName())
+                    .build();
         }
         return null;
     }

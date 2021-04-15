@@ -32,7 +32,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_pathIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(integer(), integer(), str(),null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -42,7 +42,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_instanceNameIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), str(),null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(integer(), integer(), str(),null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -52,7 +52,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
     @Test
     void testQueryTraceInfoList_pathAndInstanceNameIsNull() {
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), null,null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(integer(), integer(), null,null);
         Assertions.assertThat(traceList).isNotEmpty();
     }
     
@@ -66,12 +66,11 @@ public class TrafficTracesTest extends EntryPointBaseTest {
                 .destination(new Destination("abcd", null, null))
                 .build();
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(traceParam));
-        when(entryPointConfigRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
+        when(entryPointResourceRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
         
-        when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
-        when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfig());
+        when(entryPointResourceRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfig()));
         
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(integer(), integer(), "/a/b",null);
         Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
     }
     
@@ -83,7 +82,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
         Trace traceParam = Trace.builder().spanContext(new SpanContext("1",null,null)).build();
         when(entryPointConfigRepository.findBySpanId(any())).thenReturn(getTrace());
         when(entryPointConfigRepository.findByTraceId(any())).thenReturn(List.of(getTrace()));
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
         
         Assertions.assertThat(traceList).isNotEmpty();
     }
@@ -95,7 +94,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
     void testQueryTraceNodeList_spanIdIsNull() {
         Trace traceParam = Trace.builder().spanContext(new SpanContext(null,null,null)).build();
         when(entryPointConfigRepository.findBySpanId(eq(traceParam))).thenReturn(null);
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceNodeList(traceParam);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
         
         Assertions.assertThat(traceList).isEmpty();
     }
@@ -122,12 +121,11 @@ public class TrafficTracesTest extends EntryPointBaseTest {
                 .destination(new Destination("abcd", null, null))
                 .build();
         when(entryPointConfigRepository.queryTraceInfoList(any(),any(),any(),any())).thenReturn(List.of(traceParam));
-        when(entryPointConfigRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
+        when(entryPointResourceRepository.findByPathAndMethod(any(),eq(HttpMethod.GET))).thenReturn(null);
         
-        when(entryPointConfigRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfigWithUriParams()));
-        when(entryPointConfigRepository.byId(new EntryPointConfigID(any()))).thenReturn(getEntryPointConfigWithUriParams());
+        when(entryPointResourceRepository.findByMethodAndRestfulPath(eq(HttpMethod.GET))).thenReturn(List.of(getEntryPointConfigWithUriParams()));
         
-        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository).queryTraceInfoList(integer(), integer(), "/a/1/c",null);
+        List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(integer(), integer(), "/a/1/c",null);
         Assertions.assertThat(traceList.get(0).getEntryPointName()).isNotBlank();
     }
     
