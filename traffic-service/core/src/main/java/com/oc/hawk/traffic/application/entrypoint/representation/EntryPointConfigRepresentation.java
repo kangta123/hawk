@@ -94,7 +94,7 @@ public class EntryPointConfigRepresentation {
             Long id = obj.getGroupId().getId();
             List<UserEntryPointDTO> userApiDTOList = new ArrayList<>();
             entryPointList.forEach(item -> {
-                if(item.getGroupId().getId()==id) {
+                if(item.getGroupId().getId().equals(id)) {
                     userApiDTOList.add(toUserEntryPointDTO(item, item.getGroupId().getId()));
                     userGroupApiDTO.setApiList(userApiDTOList);
                 }
@@ -145,7 +145,7 @@ public class EntryPointConfigRepresentation {
         dto.setSourceAddr(trace.getSourceAddr());
         dto.setDstWorkload(trace.getDestination().getDstWorkload());
         dto.setDstNamespace(trace.getDestination().getDstNamespace());
-        dto.setLatency(trace.getLatency().getLatency());
+        dto.setLatency(trace.getLatency().getTime());
         dto.setProtocol(trace.getProtocol());
         dto.setSpanId(trace.getSpanContext().getSpanId());
         dto.setParentSpanId(trace.getSpanContext().getParentSpanId());
@@ -192,12 +192,7 @@ public class EntryPointConfigRepresentation {
         List<TraceListItemDTO> traceListItemList = traceList.stream().map(item -> {
             TraceListItemDTO traceListItemDTO = new TraceListItemDTO();
             traceListItemDTO.setId(item.getId().getId());
-            
-            Date date = new Date(item.getTimestamp());
-            LocalDateTime localDateTime = DateUtils.dateToLocalDateTime(date);
-            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String localTime = localDateTime.format(df);
-            traceListItemDTO.setRequestTime(localTime);
+            traceListItemDTO.setRequestTime(item.getTimestamp());
             traceListItemDTO.setExecuteTime(item.getLatency().getTime());
             traceListItemDTO.setResponseCode(item.getResponseCode().getCode());
             traceListItemDTO.setSpanId(item.getSpanContext().getSpanId());
@@ -217,11 +212,7 @@ public class EntryPointConfigRepresentation {
         dto.setLatency(trace.getLatency().getTime());
         dto.setSpanId(trace.getSpanContext().getSpanId());
         dto.setResponseCode(trace.getResponseCode().getCode());
-        Date date = new Date(trace.getTimestamp());
-        LocalDateTime localDateTime = DateUtils.dateToLocalDateTime(date);
-        DateTimeFormatter fomatter = DateTimeFormatter.ofPattern(DateUtils.HOUR_PATTERN);
-        String startTime = fomatter.format(localDateTime);
-        dto.setStartTime(startTime);
+        dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
         dto.setEntryPointName(trace.getEntryPointName());
         return dto;

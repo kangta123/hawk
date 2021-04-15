@@ -14,7 +14,7 @@ public class TraceItemDTO {
     private Long latency;
     private String spanId;
     private Integer responseCode;
-    private String startTime;
+    private Long startTime;
     private Long entryPointId;
     private String entryPointName;
 

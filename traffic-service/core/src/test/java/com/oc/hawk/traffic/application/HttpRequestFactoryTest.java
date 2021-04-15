@@ -51,20 +51,20 @@ public class HttpRequestFactoryTest extends TrafficBaseTest {
         command.setInstanceId("1");
 
         List<Map<String, String>> formList = new ArrayList<>();
-        Map<String, String> formMap = new HashMap<String, String>();
+        Map<String, String> formMap = new HashMap<>();
         formMap.put("key", str());
         formMap.put("value", str());
         formList.add(formMap);
         command.setRequestParams(formList);
 
         List<Map<String, String>> headerList = new ArrayList<>();
-        Map<String, String> headerMap = new HashMap<String, String>();
+        Map<String, String> headerMap = new HashMap<>();
         headerMap.put("key", str());
         headerMap.put("value", str());
         command.setRequestHeaders(headerList);
 
         List<Map<String, String>> pathList = new ArrayList<>();
-        Map<String, String> pathMap = new HashMap<String, String>();
+        Map<String, String> pathMap = new HashMap<>();
         pathMap.put("key", str());
         pathMap.put("value", str());
         command.setUriParams(pathList);

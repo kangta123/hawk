@@ -23,7 +23,7 @@ public class TrafficTraceInfoUseCase {
     
     @Transactional(rollbackFor = Exception.class)
     public void createTrace(List<UploadTraceInfoCommand> commandList) {
-        List<Trace> traceList = new ArrayList<Trace>();
+        List<Trace> traceList = new ArrayList<>();
     	for(UploadTraceInfoCommand command : commandList) {
     		Trace trace = entryPointConfigFactory.createTrace(command);
     		traceList.add(trace);

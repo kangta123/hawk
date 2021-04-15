@@ -19,7 +19,7 @@ public class HttpUriParam {
     }
 
     public Map<String, Object> getHttpUriVariables() {
-        Map<String, Object> uriVariablesMap = new HashMap<String, Object>();
+        Map<String, Object> uriVariablesMap = new HashMap<>();
         this.params.forEach((key, value) -> {
             uriVariablesMap.put(key, value);
         });

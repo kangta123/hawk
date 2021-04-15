@@ -21,14 +21,14 @@ public class TrafficTraceHeaderFilterConfig {
         if(StringUtils.isNotEmpty(this.requestKey)) {
             return Stream.of(this.requestKey.split(",")).collect(Collectors.toList());
         }
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
     
     public List<String> getResponseFilterKey(){
         if(StringUtils.isNotEmpty(this.responseKey)) {
             return Stream.of(this.responseKey.split(",")).collect(Collectors.toList());
         }
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
     
 }

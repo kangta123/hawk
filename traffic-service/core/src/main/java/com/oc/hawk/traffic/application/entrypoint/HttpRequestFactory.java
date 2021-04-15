@@ -23,33 +23,16 @@ public class HttpRequestFactory {
         List<Map<String, String>> headersList = executeCommand.getRequestHeaders();
         //请求路径数据key,value列表
         List<Map<String, String>> pathsList = executeCommand.getUriParams();
-
+        
         HttpMethod endPointMethodType = entryPointConfig.getHttpResource().getMethod();
-
+        
         //header
-        Map<String, String> headerMap = new HashMap<String, String>();
-        for (Map<String, String> header : headersList) {
-            String key = header.get("key");
-            String value = header.get("value");
-            headerMap.put(key, value);
-        }
-
+        Map<String, String> headerMap = getMap(headersList);
         //params
-        Map<String, String> formMap = new HashMap<String, String>();
-        for (Map<String, String> form : formsList) {
-            String key = form.get("key");
-            String value = form.get("value");
-            formMap.put(key, value);
-        }
-
+        Map<String, String> formMap = getMap(formsList);
         //uri
-        Map<String, String> uriMap = new HashMap<String, String>();
-        for (Map<String, String> uriParam : pathsList) {
-            String key = uriParam.get("key");
-            String value = uriParam.get("value");
-            uriMap.put(key, value);
-        }
-
+        Map<String, String> uriMap = getMap(pathsList);
+        
         HttpBody body = null;
         HttpHeader header = new HttpHeader(headerMap);
         if (header.isJsonContentType()) {
@@ -67,6 +50,16 @@ public class HttpRequestFactory {
             .requestAddr(entryPointConfig.getHttpResource().getPath().getPath())
             .instanceId(Long.parseLong(executeCommand.getInstanceId()))
             .build();
+    }
+    
+    private Map<String, String> getMap(List<Map<String, String>> list){
+        Map<String, String> resultMap = new HashMap<>();
+        for (Map<String, String> map : list) {
+            String key = map.get("key");
+            String value = map.get("value");
+            resultMap.put(key, value);
+        }
+        return resultMap;
     }
 
 
