@@ -68,9 +68,21 @@ public class EntryPointConfigGroups {
         apiConfigRepository.deleteById(entryPointConfigId);
     }
     
+    /**
+     * 查询api对应全部分组列表
+     */
     public List<EntryPointConfigGroup> getUserGroupList(List<EntryPointConfig> entryPointConfigList) {
         List<EntryPointGroupID> idList = entryPointConfigList.stream().map(obj -> obj.getGroupId()).collect(Collectors.toList());
         return apiConfigRepository.byIdList(idList);
     }
+    
+    /**
+     * 
+     */
+    public List<EntryPointConfig> getEntryPointConfigList(){
+        
+        return apiConfigRepository.findAllEntryPointConfig();
+    }
+    
     
 }

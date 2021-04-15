@@ -51,4 +51,6 @@ public interface EntryPointConfigRepository {
     
     Long queryTrafficTraceCount(EntryPointConfig entryPointConfig);
     
+    List<EntryPointConfig> findAllEntryPointConfig();
+    
 }

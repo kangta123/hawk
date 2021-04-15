@@ -5,6 +5,7 @@ import com.oc.hawk.common.spring.config.WebConfiguration;
 import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
 import com.oc.hawk.traffic.port.driven.facade.excutor.NoErrorResultHandler;
 import com.oc.hawk.traffic.port.driven.facade.excutor.RestTemplateProxy;
+import com.oc.hawk.traffic.port.driving.event.ApplicationStartupListener;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +22,9 @@ import org.springframework.web.client.RestTemplate;
 public class TrafficApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TrafficApplication.class, args);
+        SpringApplication springApplication = new SpringApplication(TrafficApplication.class);
+        springApplication.addListeners(new ApplicationStartupListener());
+        springApplication.run(args);
     }
     
     @Bean

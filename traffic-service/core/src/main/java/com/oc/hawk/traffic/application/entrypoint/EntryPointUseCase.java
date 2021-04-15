@@ -45,6 +45,8 @@ public class EntryPointUseCase {
     private final FileFacade fileFacade;
     private final ProjectFacade projectFacade;
     private final ContainerFacade containerFacade;
+    
+    private final EntryPointResourceRepository entryPointResourceRepository;
 
     /**
      * 查询可见分组及接口
@@ -197,5 +199,14 @@ public class EntryPointUseCase {
      */
     public byte[] getDownloadFile(String fileName) {
         return fileFacade.getDownloadFile(fileName);
+    }
+    
+    /**
+     * 
+     */
+    public void loadEntryPointConfigData() {
+        log.info("load entrypoint config data.");
+        List<EntryPointConfig> entryPointConfigList = new EntryPointConfigGroups(entryPointConfigRepository).getEntryPointConfigList();
+        entryPointResourceRepository.loadEntryPointResource(entryPointConfigList);
     }
 }

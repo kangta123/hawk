@@ -29,6 +29,7 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Repository
@@ -364,6 +365,13 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Predicate conditionWhere = criteriaBuilder.and(pathClause,conditionMethod);
         criteriaQuery.where(conditionWhere);
         return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    @Override
+    public List<EntryPointConfig> findAllEntryPointConfig() {
+        return apiConfigPoRepository.findAll()
+                .stream().map(obj -> obj.toEntryPointConfig())
+                .collect(Collectors.toList());
     }
     
 }
