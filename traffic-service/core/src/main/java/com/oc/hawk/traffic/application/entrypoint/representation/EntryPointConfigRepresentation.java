@@ -151,10 +151,10 @@ public class EntryPointConfigRepresentation {
         dto.setParentSpanId(trace.getSpanContext().getParentSpanId());
         dto.setTraceId(trace.getSpanContext().getTraceId());
         dto.setRequestBody(trace.getRequestBody().getBody());
-        dto.setRequestHeaders(JsonUtils.object2Json(trace.getRequestHeaders()));
+        dto.setRequestHeaders(JsonUtils.object2Json(trace.getRequestHeaders().getHeaderMap()));
         dto.setResponseCode(trace.getResponseCode().getCode());
         dto.setResponseBody(trace.getRequestBody().getBody());
-        dto.setResponseHeaders(JsonUtils.object2Json(trace.getResponseHeaders()));
+        dto.setResponseHeaders(JsonUtils.object2Json(trace.getResponseHeaders().getResponeseHeader()));
         dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
         dto.setEntryPointName(trace.getEntryPointName());
