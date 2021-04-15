@@ -44,6 +44,8 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
         loadDeleteList(configListDelete);
         //HASH
         loadEntryPointConfig(configList);
+        
+        
     }
     
     private void loadGetList(List<EntryPointConfig> configListGet) {
@@ -52,6 +54,8 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
         List<String> pathKeyGetList = pathGetList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
         String listKeyGet = ENTRYPOINT_PATH_LIST + HTTP_METHOD_GET.toLowerCase();
         redisTemplate.opsForList().leftPushAll(listKeyGet, pathKeyGetList);
+        redisTemplate.delete(listKeyGet);
+        Long num = redisTemplate.opsForList().size(listKeyGet);
     }
     
     private void loadPostList(List<EntryPointConfig> configListPost) {
