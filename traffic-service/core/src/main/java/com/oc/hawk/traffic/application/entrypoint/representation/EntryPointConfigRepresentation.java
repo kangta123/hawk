@@ -192,8 +192,8 @@ public class EntryPointConfigRepresentation {
         List<TraceListItemDTO> traceListItemList = traceList.stream().map(item -> {
             TraceListItemDTO traceListItemDTO = new TraceListItemDTO();
             traceListItemDTO.setId(item.getId().getId());
-            traceListItemDTO.setRequestTime(item.getTimestamp());
-            traceListItemDTO.setExecuteTime(item.getLatency().getTime());
+            traceListItemDTO.setStartTime(item.getTimestamp());
+            traceListItemDTO.setLatency(item.getLatency().getTime());
             traceListItemDTO.setResponseCode(item.getResponseCode().getCode());
             traceListItemDTO.setSpanId(item.getSpanContext().getSpanId());
             return traceListItemDTO;
