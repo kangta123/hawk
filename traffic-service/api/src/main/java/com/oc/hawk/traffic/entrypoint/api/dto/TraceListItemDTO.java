@@ -6,8 +6,8 @@ import lombok.Data;
 public class TraceListItemDTO {
 
     private Long id;
-    private Long requestTime;
-    private Long executeTime;
+    private Long startTime;
+    private Long latency;
     private String spanId;
     private Integer responseCode;
 
