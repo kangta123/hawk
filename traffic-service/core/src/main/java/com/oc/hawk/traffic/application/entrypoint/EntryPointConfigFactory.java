@@ -49,7 +49,7 @@ public class EntryPointConfigFactory {
     }
 
     public List<EntryPointConfig> create(EntryPointConfigGroup group,List<ImportApiDTO> importApiList) {
-        List<EntryPointConfig> baseApiConfigList = new ArrayList<EntryPointConfig>();
+        List<EntryPointConfig> baseApiConfigList = new ArrayList<>();
         for (ImportApiDTO importApiDTO : importApiList) {
             EntryPointConfig apiConfig = EntryPointConfig.builder()
                 .groupId(group.getGroupId())
