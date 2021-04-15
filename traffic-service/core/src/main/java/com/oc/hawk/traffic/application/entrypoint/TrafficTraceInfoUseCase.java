@@ -19,7 +19,6 @@ public class TrafficTraceInfoUseCase {
 	
     private final EntryPointConfigFactory entryPointConfigFactory;
     private final EntryPointConfigRepository entryPointConfigRepository;
-    private final TrafficTraceHeaderFilterConfig trafficTraceHeaderFilterConfig;
     
     @Transactional(rollbackFor = Exception.class)
     public void createTrace(List<UploadTraceInfoCommand> commandList) {
@@ -30,13 +29,4 @@ public class TrafficTraceInfoUseCase {
     	}
     	entryPointConfigRepository.saveTrace(traceList);
     }
-    
-    public List<String> getTraceRequestHeaderConfig(){
-        return trafficTraceHeaderFilterConfig.getRequestFilterKey();
-    }
-    
-    public List<String> getTraceResponseHeaderConfig(){
-        return trafficTraceHeaderFilterConfig.getResponseFilterKey();
-    }
-    
 }

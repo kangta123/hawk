@@ -3,6 +3,7 @@ package com.oc.hawk.traffic.application.entrypoint;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.ImportGroupDTO.ImportApiDTO;
+import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
@@ -17,19 +18,16 @@ import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class EntryPointConfigFactory {
-
-    private final EntryPointConfigRepository entryPointConfigRepository;
+    
+    private final TrafficTraceHeaderFilterConfig trafficTraceHeaderFilterConfig;
+    
 
     public EntryPointConfig create(CreateEntryPointCommand command) {
         EntryPointGroupID groupId = new EntryPointGroupID(command.getGroupId());
@@ -76,6 +74,18 @@ public class EntryPointConfigFactory {
     }
     
     public Trace createTrace(UploadTraceInfoCommand command) {
+        Map<String,String> reqeustHeaders = command.getRequestHeaders();
+        List<String> requestFilterKeyList = getTraceRequestHeaderConfig();
+        Map<String, String> requestHeaderMap = reqeustHeaders.entrySet().stream()
+                .filter(map -> !requestFilterKeyList.contains(map.getKey()))
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        
+        Map<String,String> responseHeaders = command.getResponseHeaders();
+        List<String> responseFilterKeyList = getTraceResponseHeaderConfig();
+        Map<String, String> responseHeaderMap = responseHeaders.entrySet().stream()
+                .filter(map -> !responseFilterKeyList.contains(map.getKey()))
+                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        
         return Trace.builder()
     			.host(command.getHost())
     			.httpResource(new HttpResource(new HttpPath(command.getPath()),HttpMethod.valueOf(command.getMethod())))
@@ -86,13 +96,20 @@ public class EntryPointConfigFactory {
     			.requestId(command.getRequestId())
     			.protocol(command.getProtocol())
     			.requestBody(new HttpRequestBody(command.getRequestBody()))
-    			.requestHeaders(new HttpRequestHeader(command.getRequestHeaders()))
+    			.requestHeaders(new HttpRequestHeader(requestHeaderMap))
     			.responseBody(new HttpResponseBody(command.getResponseBody()))
-    			.responseHeaders(new HttpResponseHeader(command.getResponseHeaders()))
+    			.responseHeaders(new HttpResponseHeader(responseHeaderMap))
     			.responseCode(new HttpResponseCode(Integer.parseInt(command.getResponseCode())))
     			.spanContext(new SpanContext(command.getSpanId(),command.getParentSpanId(),command.getTraceId()))
     			.build();
     }
 
+    private List<String> getTraceRequestHeaderConfig(){
+        return trafficTraceHeaderFilterConfig.getRequestFilterKey();
+    }
+    
+    private List<String> getTraceResponseHeaderConfig(){
+        return trafficTraceHeaderFilterConfig.getResponseFilterKey();
+    }
     
 }
