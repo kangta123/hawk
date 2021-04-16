@@ -126,7 +126,7 @@ public class EntryPointUseCase {
     public void importGroup(Long groupId,ImportGroupDTO importGroupDTO) {
         EntryPointConfigGroup group = entryPointConfigRepository.byId(new EntryPointGroupID(groupId));
         List<EntryPointConfig> entryPointList = entryPointConfigFactory.create(group,importGroupDTO.getRequests());
-        new EntryPointGroupImportance(entryPointConfigRepository).importPostmanJson(group.getGroupId(), entryPointList);
+        new EntryPointGroupImportance(entryPointConfigRepository,entryPointResourceRepository).importPostmanJson(group.getGroupId(), entryPointList);
     }
 
     /**
