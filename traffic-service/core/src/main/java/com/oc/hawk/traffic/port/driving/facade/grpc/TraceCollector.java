@@ -67,8 +67,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
     
     private void buildRequestHeader(com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry, UploadTraceInfoCommand command) {
         Object[] reqHeaderList = JsonUtils.json2Object(logEntry.getRequestHeaders(), Object[].class);
-        List<String> requestKeyList = trafficTraceInfoUseCase.getTraceRequestHeaderConfig();
-        command.setRequestHeaders(buildHeader(reqHeaderList, requestKeyList, (key, value) -> {
+        command.setRequestHeaders(buildHeader(reqHeaderList, (key, value) -> {
             switch (key) {
                 case KEY_SPAN_ID:
                     command.setSpanId(value);
@@ -88,8 +87,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
 
     private void buildResponseHeader(com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry, UploadTraceInfoCommand command) {
         Object[] respHeaderList = JsonUtils.json2Object(logEntry.getResponseHeaders(), Object[].class);
-        List<String> responseKeyList = trafficTraceInfoUseCase.getTraceResponseHeaderConfig();
-        command.setResponseHeaders(buildHeader(respHeaderList, responseKeyList, (key, value) -> {
+        command.setResponseHeaders(buildHeader(respHeaderList, (key, value) -> {
             if (key.startsWith(":")) {
                 if (key.equalsIgnoreCase(KEY_STATUS)) {
                     command.setResponseCode(value);
@@ -100,14 +98,11 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
         }));
     }
 
-    private Map<String, String> buildHeader(Object[] headerList, List<String> configList, BiFunction<String, String, Boolean> consumer) {
+    private Map<String, String> buildHeader(Object[] headerList, BiFunction<String, String, Boolean> consumer) {
         Map<String, String> headerMap = new HashMap<String, String>(KEY_MAP_SIZE);
         for (Object obj : headerList) {
             List<String> list = (List<String>) obj;
             String key = list.get(0);
-            if(configList.contains(key)) {
-                continue;
-            }
             String value = list.get(1);
             if (consumer.apply(key, value)) {
                 headerMap.put(key, value);

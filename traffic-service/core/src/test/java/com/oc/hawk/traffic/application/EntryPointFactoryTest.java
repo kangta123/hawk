@@ -4,6 +4,7 @@ import com.oc.hawk.test.TestHelper;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointConfigFactory;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.ImportGroupDTO.ImportApiDTO;
+import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
@@ -18,11 +19,10 @@ import java.util.List;
 public class EntryPointFactoryTest extends TrafficBaseTest {
 
     EntryPointConfigFactory entryPointConfigFactory;
-    EntryPointConfigRepository entryPointConfigRepository;
-
+    TrafficTraceHeaderFilterConfig trafficTraceHeaderFilterConfig;
     @BeforeEach
     public void setup() {
-        entryPointConfigFactory = new EntryPointConfigFactory(entryPointConfigRepository);
+        entryPointConfigFactory = new EntryPointConfigFactory(trafficTraceHeaderFilterConfig);
     }
 
     @Test
