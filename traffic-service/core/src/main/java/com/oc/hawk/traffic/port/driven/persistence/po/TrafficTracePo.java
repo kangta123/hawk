@@ -51,7 +51,6 @@ public class TrafficTracePo extends BaseEntity {
     private String spanId;
     private String parentSpanId;
     private String traceId;
-    //private Long configId;
     private String requestBody;
     private String requestHeaders;
     private String responseCode;
@@ -75,7 +74,6 @@ public class TrafficTracePo extends BaseEntity {
         historyPo.setSpanId(history.getSpanContext().getSpanId());
         historyPo.setParentSpanId(history.getSpanContext().getParentSpanId());
         historyPo.setTraceId(history.getSpanContext().getTraceId());
-        //historyPo.setConfigId(history.getEntryPointId());
         historyPo.setRequestBody(history.getRequestBody().getBody());
         historyPo.setRequestHeaders(JsonUtils.object2Json(history.getRequestHeaders().getHeaderMap()));
         historyPo.setRequestId(history.getRequestId());

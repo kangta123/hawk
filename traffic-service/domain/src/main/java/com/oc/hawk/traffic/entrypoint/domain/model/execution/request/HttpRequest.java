@@ -1,6 +1,8 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.execution.request;
 
 import com.oc.hawk.ddd.DomainEntity;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -47,7 +49,7 @@ public class HttpRequest {
     /**
      * 请求头
      */
-    private HttpHeader httpHeader;
+    private HttpRequestHeader httpHeader;
     
     public String getHttpRequestUrl(String serviceName,String namespaces) {
         return new StringBuilder().append("http://")

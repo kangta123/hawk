@@ -53,15 +53,6 @@ public class TrafficTraces {
         return entryPointConfigRepository.byTraceId(traceId);
     }
     
-//    private Trace queryTraceNameAndId(Long entryPointId) {
-//        EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(new EntryPointConfigID(entryPointId));
-//        String name = "";
-//        if(Objects.nonNull(entryPointConfig)) {
-//            name = entryPointConfig.getDescription().getName();
-//        }
-//        return Trace.builder().entryPointName(name).build();
-//    }
-    
     private EntryPointConfig matchPath(HttpPath path, String method) {
         if (StringUtils.isEmpty(path.getPath())) {
             return null;

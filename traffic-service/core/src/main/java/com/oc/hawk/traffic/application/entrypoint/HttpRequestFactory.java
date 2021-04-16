@@ -4,6 +4,7 @@ import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.request.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class HttpRequestFactory {
         Map<String, String> uriMap = getMap(pathsList);
         
         HttpBody body = null;
-        HttpHeader header = new HttpHeader(headerMap);
+        HttpRequestHeader header = new HttpRequestHeader(headerMap);
         if (header.isJsonContentType()) {
             body = new JsonHttpBody(executeCommand.getRequestBody());
         } else if (header.isFormContentType()) {
