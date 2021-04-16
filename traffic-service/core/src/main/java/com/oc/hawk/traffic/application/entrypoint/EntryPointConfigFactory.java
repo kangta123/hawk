@@ -78,9 +78,9 @@ public class EntryPointConfigFactory {
     }
     
     public Trace createTrace(UploadTraceInfoCommand command) {
-        Map<String,String> reqeustHeaders = command.getRequestHeaders();
+        Map<String,String> requestHeaders = command.getRequestHeaders();
         List<String> requestFilterKeyList = getTraceRequestHeaderConfig();
-        Map<String, String> requestHeaderMap = reqeustHeaders.entrySet().stream()
+        Map<String, String> requestHeaderMap = requestHeaders.entrySet().stream()
                 .filter(map -> !requestFilterKeyList.contains(map.getKey()))
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
         
