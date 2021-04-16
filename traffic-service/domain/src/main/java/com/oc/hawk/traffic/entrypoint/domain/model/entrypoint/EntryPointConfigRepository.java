@@ -29,7 +29,7 @@ public interface EntryPointConfigRepository {
 
     List<EntryPointConfig> byGroupIdList(List<EntryPointGroupID> groupIdList);
 
-    void batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
+    List<EntryPointConfig> batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
 
     void saveTrace(List<Trace> history);
 

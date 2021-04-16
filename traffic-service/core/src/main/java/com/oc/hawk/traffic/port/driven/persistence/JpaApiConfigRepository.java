@@ -183,17 +183,20 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
     
     @Override
-    public void batchSave(EntryPointGroupID entryPointConfigGroupId, List<EntryPointConfig> apiConfigList) {
+    public List<EntryPointConfig> batchSave(EntryPointGroupID entryPointConfigGroupId, List<EntryPointConfig> apiConfigList) {
         try {
+            List<EntryPointConfig> resultList = new ArrayList<>();
             for (EntryPointConfig apiConfig : apiConfigList) {
-                
                 EntryPointConfigPO apiConfigPo = EntryPointConfigPO.createBy(apiConfig);
                 apiConfigPo.setGroupId(entryPointConfigGroupId.getId());
                 apiConfigPoRepository.save(apiConfigPo);
+                resultList.add(apiConfigPo.toEntryPointConfig());
             }
+            return resultList;
         } catch (Exception e) {
             log.error("batchSaveException:{}", e.getMessage(), e);
         }
+        return null;
     }
 
     @Override
