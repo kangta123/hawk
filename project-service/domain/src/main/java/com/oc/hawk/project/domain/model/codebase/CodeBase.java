@@ -5,7 +5,6 @@ import com.oc.hawk.project.domain.model.codebase.git.CodeBaseUrl;
 
 
 public abstract class CodeBase {
-    protected CodeBaseID codeBaseId;
     protected CodeBaseUrl url;
     protected CodeBaseAuthenticator authenticator;
 

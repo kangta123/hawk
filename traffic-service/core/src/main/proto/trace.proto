@@ -20,14 +20,17 @@ message WriteLogRequest {
 
     string referer = 8;
     string request_id = 9;
-    uint32 response_code = 12;
     string protocol = 13;
     string method = 14;
     string request_headers = 15;
     string response_headers = 16;
     string request_body = 17;
     string response_body = 18;
-    string kind = 19;
+
+    int64 response_size = 20;
+    int64 request_size = 21;
+
+
     google.protobuf.Timestamp timestamp = 10;
     google.protobuf.Duration latency = 11;
   }
@@ -36,3 +39,4 @@ message WriteLogRequest {
 }
 
 message WriteLogResponse {}
+

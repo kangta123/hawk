@@ -3,31 +3,18 @@ package com.oc.hawk.traffic.port.driven.persistence.po;
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.hibernate.BaseEntity;
 import com.oc.hawk.common.utils.DateUtils;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseCode;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
