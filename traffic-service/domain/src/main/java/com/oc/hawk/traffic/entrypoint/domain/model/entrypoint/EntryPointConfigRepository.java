@@ -1,7 +1,6 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.entrypoint;
 
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 
@@ -48,5 +47,7 @@ public interface EntryPointConfigRepository {
     Long queryTrafficTraceCount(EntryPointConfig entryPointConfig);
     
     List<EntryPointConfig> findAllEntryPointConfig();
+    
+    List<EntryPointConfig> findByHttpResource(HttpResource httpResource);
     
 }
