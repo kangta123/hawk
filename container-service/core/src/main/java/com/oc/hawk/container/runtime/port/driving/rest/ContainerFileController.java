@@ -1,5 +1,6 @@
 package com.oc.hawk.container.runtime.port.driving.rest;
 
+import com.oc.hawk.common.utils.WebUtils;
 import com.oc.hawk.container.api.dto.InstanceConfigDTO;
 import com.oc.hawk.container.runtime.application.instance.InstanceConfigUseCase;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +42,22 @@ public class ContainerFileController {
     }
 
     @GetMapping
-    public String getContainerPreStartHookShell(@RequestParam String serviceName,
-                                                @RequestParam(required = false, defaultValue = "default") String namespace) {
+    public ResponseEntity<Resource> getContainerPreStartHookShell(@RequestParam String serviceName,
+                                                                  @RequestParam(required = false, defaultValue = "default") String namespace) {
 
         log.info("acquire container pre start hook shell with {} in {}", serviceName, namespace);
         if (StringUtils.isEmpty(serviceName)) {
-            return "";
+            return ResponseEntity.of(Optional.empty());
         }
         InstanceConfigDTO config = configurationManager.getConfiguration(namespace, serviceName);
 
         if (config != null) {
             String script = config.getPreStart();
-            return script;
+            if (script != null) {
+                return WebUtils.getDownloadFileHttpResponse(script.getBytes(), "script.sh");
+            }
         }
-        return "";
+        return ResponseEntity.of(Optional.empty());
     }
 
     private ResponseEntity<Resource> textToFile(String text) {
@@ -62,9 +65,9 @@ public class ContainerFileController {
             Resource resource = new ByteArrayResource(text.getBytes());
 
             return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"config-file\"")
-                .body(resource);
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"config-file\"")
+                    .body(resource);
         }
         return ResponseEntity.of(Optional.empty());
     }

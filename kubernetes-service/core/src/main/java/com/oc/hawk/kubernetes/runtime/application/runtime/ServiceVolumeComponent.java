@@ -67,6 +67,7 @@ public class ServiceVolumeComponent {
     private Volume createVolume(ServiceVolumeSpec spec) {
         Volume sVolume = new Volume();
         sVolume.setName(spec.getVolumeName());
+
         switch (spec.getType()) {
             case pvc:
                 PersistentVolumeClaimVolumeSource persistentVolumeClaim = new PersistentVolumeClaimVolumeSource();
@@ -78,7 +79,7 @@ public class ServiceVolumeComponent {
                 sVolume.setEmptyDir(new EmptyDirVolumeSource());
                 break;
             case host:
-                sVolume.setHostPath(new HostPathVolumeSource(getPath(spec.getMountPath(), 0), "File"));
+                sVolume.setHostPath(new HostPathVolumeSource(getPath(spec.getMountPath(), 0), String.valueOf(spec.getVolumeFileType())));
                 break;
             default:
                 break;

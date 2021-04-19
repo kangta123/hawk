@@ -9,6 +9,7 @@ import com.oc.hawk.container.domain.model.runtime.info.PerformanceLevel;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeCatalog;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeHealthCheck;
 import com.oc.hawk.container.domain.model.runtime.info.RuntimeImage;
+import com.oc.hawk.kubernetes.runtime.application.runtime.spec.container.VolumeFileType;
 import com.oc.hawk.kubernetes.runtime.application.runtime.spec.container.VolumeType;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -40,10 +41,10 @@ public class BuildRuntimeSpecFactory {
         PerformanceLevel level;
         switch (catalog) {
             case BUILD:
-                level = PerformanceLevel.getWithDefaultPerformanceLevel(spec.getPerformance());
+                level = PerformanceLevel.getWithDefaultPerformanceLevel(null);
                 break;
             case BUSINESS:
-                level = PerformanceLevel.getWithDefaultPerformanceLevel(null);
+                level = PerformanceLevel.getWithDefaultPerformanceLevel(spec.getPerformance());
                 if (configurationSpec != null) {
                     healthCheck = new RuntimeHealthCheck(spec.getHealthCheckPath(), spec.getHealthCheckEnabled(), configurationSpec.getInnerPort(), healthCheckProperties);
                 }
@@ -53,21 +54,21 @@ public class BuildRuntimeSpecFactory {
         }
 
         return RuntimeConfigSpec.builder()
-            .env(spec.getEnv())
-            .appImage(new RuntimeImage(spec.getAppImage()))
-            .image(new RuntimeImage(spec.getDataImage()))
-            .projectId(spec.getProjectId())
-            .catalog(catalog)
-            .preStart(spec.getPreStart())
-            .labels(spec.getLabels())
-            .performanceLevel(level)
-            .name(spec.getName())
-            .namespace(spec.getNamespace())
-            .networkConfigSpec(configurationSpec)
-            .volumes(getVolumes(spec))
-            .healthCheck(healthCheck)
-            .serviceName(spec.getEntryPoint() == null ? "" : spec.getEntryPoint().getServiceName())
-            .build();
+                .env(spec.getEnv())
+                .appImage(new RuntimeImage(spec.getAppImage()))
+                .image(new RuntimeImage(spec.getDataImage()))
+                .projectId(spec.getProjectId())
+                .catalog(catalog)
+                .preStart(spec.getPreStart())
+                .labels(spec.getLabels())
+                .performanceLevel(level)
+                .name(spec.getName())
+                .namespace(spec.getNamespace())
+                .networkConfigSpec(configurationSpec)
+                .volumes(getVolumes(spec))
+                .healthCheck(healthCheck)
+                .serviceName(spec.getEntryPoint() == null ? "" : spec.getEntryPoint().getServiceName())
+                .build();
     }
 
     private List<ServiceVolumeSpec> getVolumes(CreateRuntimeInfoSpecCommand spec) {
@@ -76,8 +77,8 @@ public class BuildRuntimeSpecFactory {
         List<CreateInstanceVolumeSpecCommand> volumes = spec.getVolume();
         if (volumes != null) {
             volumeSpecs = volumes.stream().map(v ->
-                new ServiceVolumeSpec(v.getMountPath(), v.getVolumeName(), v.isHost() ? VolumeType.host : VolumeType.pvc, v.getSubPath()))
-                .collect(Collectors.toList());
+                    new ServiceVolumeSpec(v.getMountPath(), v.getVolumeName(), v.isHost() ? VolumeType.host : VolumeType.pvc, v.getSubPath(), VolumeFileType.withDefault(v.getType())))
+                    .collect(Collectors.toList());
         }
         CreateInstanceVolumeSpecCommand appVolume = spec.getAppVolume();
         if (appVolume != null) {
@@ -92,10 +93,10 @@ public class BuildRuntimeSpecFactory {
             return null;
         }
         return NetworkConfigSpec.builder()
-            .extraPorts(entryPoint.getExtraPorts())
-            .serviceName(entryPoint.getServiceName())
-            .innerPort(entryPoint.getInnerPort())
-            .mesh(spec.getMesh())
-            .build();
+                .extraPorts(entryPoint.getExtraPorts())
+                .serviceName(entryPoint.getServiceName())
+                .innerPort(entryPoint.getInnerPort())
+                .mesh(spec.getMesh())
+                .build();
     }
 }

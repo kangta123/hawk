@@ -40,7 +40,7 @@ data:
               dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_tomcat:{{ .Values.hawk.deps.version }}
               podInteractionVolume: /tmp/app:/usr/local/apache-tomcat-8.5.46/webapps/ROOT
             build:
-              npm:
+              maven:
                 image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:{{ .Values.hawk.deps.version }}
                 volume:
                   sub: maven

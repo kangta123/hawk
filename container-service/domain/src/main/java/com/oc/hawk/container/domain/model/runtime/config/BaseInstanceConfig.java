@@ -65,11 +65,11 @@ public class BaseInstanceConfig implements InstanceConfig {
 
     public void createInstanceHost(String hosts, String preStart, InstanceRemoteAccess instanceRemoteAccess, Map<String, String> env) {
         this.host = InstanceHost.builder()
-            .preStart(preStart)
-            .env(env)
-            .hosts(hosts)
-            .remoteAccess(instanceRemoteAccess)
-            .build();
+                .preStart(preStart)
+                .env(env)
+                .hosts(hosts)
+                .remoteAccess(instanceRemoteAccess)
+                .build();
         if (instanceRemoteAccess != null) {
             exposePort(SystemServicePort.SSH_PORT);
         }
@@ -118,6 +118,9 @@ public class BaseInstanceConfig implements InstanceConfig {
     }
 
     public void addVolume(InstanceVolume instanceVolume) {
+        if (instanceVolume == null) {
+            return;
+        }
         Set<InstanceVolume> volumes = this.getVolumes();
         if (volumes == null) {
             volumes = Sets.newHashSet();

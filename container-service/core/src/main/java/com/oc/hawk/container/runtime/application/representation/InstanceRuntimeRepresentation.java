@@ -11,7 +11,10 @@ import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildEnv;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectBuildLabel;
 import com.oc.hawk.container.domain.model.runtime.build.ProjectType;
 import com.oc.hawk.container.domain.model.runtime.config.*;
-import com.oc.hawk.container.domain.model.runtime.config.volume.*;
+import com.oc.hawk.container.domain.model.runtime.config.volume.AppInstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.config.volume.HostedInstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
+import com.oc.hawk.container.domain.model.runtime.config.volume.SharedInstanceVolume;
 import com.oc.hawk.project.api.dto.ProjectBuildReadyDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,16 +68,22 @@ public class InstanceRuntimeRepresentation {
     private void configVolume(CreateRuntimeInfoSpecCommand spec, Collection<InstanceVolume> volumes) {
         for (InstanceVolume volume : volumes) {
             final List<CreateInstanceVolumeSpecCommand> createInstanceVolumeSpecCommands = spec.getVolume();
-            if (volume instanceof NormalInstanceVolume) {
-                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), false));
-            } else if (volume instanceof AppInstanceVolume) {
+            if (volume instanceof AppInstanceVolume) {
                 spec.setAppVolume(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), true));
-            } else if (volume instanceof SharedInstanceVolume) {
-                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), false, ((SharedInstanceVolume) volume).getSubPath()));
-            } else if (volume instanceof HostedInstanceVolume) {
-                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), true));
+            } else {
+                boolean host = false;
+                String subPath = null;
+                if (volume instanceof HostedInstanceVolume) {
+                    host = true;
+                }
+
+                if (volume instanceof SharedInstanceVolume) {
+                    subPath = ((SharedInstanceVolume) volume).getSubPath();
+                }
+
+                createInstanceVolumeSpecCommands.add(new CreateInstanceVolumeSpecCommand(volume.getMountPath(), volume.getVolumeName(), host, subPath, volume.getType()));
+                spec.setVolume(createInstanceVolumeSpecCommands);
             }
-            spec.setVolume(createInstanceVolumeSpecCommands);
         }
 
     }

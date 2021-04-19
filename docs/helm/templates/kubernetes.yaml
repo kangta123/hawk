@@ -21,7 +21,7 @@ data:
         token: {{ .Values.hawk.kubernetes.token }}
         {{- if .Values.docker.enabled }}
         dockerConfigJson: {{ .Values.docker.dockerConfig }}
-        dockerRegcredName: {{ .Values.docker.secretName }}
+        dockerSecretName: {{ .Values.docker.secretName }}
         {{- end }}
 
 

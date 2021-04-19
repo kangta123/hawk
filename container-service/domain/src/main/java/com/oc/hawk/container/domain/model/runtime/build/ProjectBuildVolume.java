@@ -1,9 +1,8 @@
 package com.oc.hawk.container.domain.model.runtime.build;
 
-import com.oc.hawk.container.domain.config.ContainerRuntimeConfig;
 import com.oc.hawk.container.domain.model.runtime.config.volume.HostedInstanceVolume;
 import com.oc.hawk.container.domain.model.runtime.config.volume.InstanceVolume;
-import com.oc.hawk.container.domain.model.runtime.config.volume.NormalInstanceVolume;
+import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,18 +11,16 @@ import java.util.stream.Collectors;
 /**
  * @author kangta123
  */
+@AllArgsConstructor
 public enum ProjectBuildVolume {
-    dockerExec("docker-volume", "/usr/bin/docker:/usr/bin/docker"),
-    dockerSock("docker-sock-volume", "/var/run/docker.sock:/var/run/docker.sock");
+    dockerExec("docker-volume", "/usr/bin/docker:/usr/bin/docker", null),
+    dockerSock("docker-sock-volume", "/var/run/docker.sock:/var/run/docker.sock", "Socket");
     private final String name;
     private final String path;
+    private final String type;
 
-    ProjectBuildVolume(String name, String path) {
-        this.name = name;
-        this.path = path;
-    }
 
     public static List<InstanceVolume> defaultVolumes() {
-        return Arrays.stream(ProjectBuildVolume.values()).map(v -> new HostedInstanceVolume(v.name, v.path)).collect(Collectors.toList());
+        return Arrays.stream(ProjectBuildVolume.values()).map(v -> new HostedInstanceVolume(v.name, v.path, v.type)).collect(Collectors.toList());
     }
 }

@@ -6,6 +6,9 @@ data:
         url: jdbc:mysql://hawk-mysql-headless:3306/{{ .Values.mysql.auth.database }}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
         username: root
         password: {{ .Values.mysql.auth.rootPassword }}
+      redis:
+        host: hawk-redis-headless
+        password: {{ .Values.redis.password }}
     eureka:
       client:
         serviceUrl:
@@ -15,4 +18,3 @@ data:
 kind: ConfigMap
 metadata:
   name: hawk-traffic-config
-

@@ -7,7 +7,7 @@ public class TokenCodeBaseAuthenticator implements CodeBaseAuthenticator {
     private final String token;
     private final String username;
 
-    public TokenCodeBaseAuthenticator(String token, String username) {
+    public TokenCodeBaseAuthenticator(String username, String token) {
         this.token = token;
         this.username = username;
     }

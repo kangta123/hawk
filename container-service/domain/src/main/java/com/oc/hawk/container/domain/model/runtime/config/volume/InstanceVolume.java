@@ -11,6 +11,13 @@ import lombok.NoArgsConstructor;
 public abstract class InstanceVolume {
     private String mountPath;
     private String volumeName;
+    private String type;
+
+    public InstanceVolume(String volumeName, String mountPath, String type) {
+        this.volumeName = volumeName;
+        this.mountPath = mountPath;
+        this.type = type;
+    }
 
     public InstanceVolume(String volumeName, String mountPath) {
         this.volumeName = volumeName;

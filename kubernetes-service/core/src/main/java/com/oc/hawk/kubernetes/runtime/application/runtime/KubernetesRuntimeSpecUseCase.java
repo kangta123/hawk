@@ -13,7 +13,6 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -49,28 +48,25 @@ public class KubernetesRuntimeSpecUseCase {
 
         PodSpec podSpec = runtimeComponent.createPod().create();
 
-        final String secret = new SecretConfigSpec(accessConfiguration, kubernetesApi).createDockerRegSecret(configuration.getNamespace());
-
-        Deployment deployment = new DeploymentBuilder()
-            .withNewMetadata()
-            .withName(name)
-            .endMetadata()
-            .withNewSpec()
-            .withReplicas(1)
-            .withNewTemplate()
-            .withNewMetadata()
-            .addToLabels(runtimeComponent.getLabels())
-            .addToAnnotations(runtimeComponent.getAnnotations())
-            .endMetadata()
-            .editOrNewSpecLike(podSpec)
-            .addNewImagePullSecret(secret)
-            .endSpec()
-            .endTemplate()
-            .withNewSelector()
-            .addToMatchLabels(IServiceLabelConstants.LABEL_VERSION, name)
-            .endSelector()
-            .endSpec()
-            .build();
+        final DeploymentBuilder deploymentBuilder = new DeploymentBuilder()
+                .withNewMetadata()
+                .withName(name)
+                .endMetadata()
+                .withNewSpec()
+                .withReplicas(1)
+                .withNewTemplate()
+                .withNewMetadata()
+                .addToLabels(runtimeComponent.getLabels())
+                .addToAnnotations(runtimeComponent.getAnnotations())
+                .endMetadata()
+                .editOrNewSpecLike(podSpec)
+                .endSpec()
+                .endTemplate()
+                .withNewSelector()
+                .addToMatchLabels(IServiceLabelConstants.LABEL_VERSION, name)
+                .endSelector()
+                .endSpec();
+        Deployment deployment = deploymentBuilder.build();
 
         kubernetesApi.createDeployment(configuration.getNamespace(), deployment);
     }
