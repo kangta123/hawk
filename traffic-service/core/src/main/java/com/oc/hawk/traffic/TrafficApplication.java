@@ -23,8 +23,8 @@ public class TrafficApplication {
 
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(TrafficApplication.class);
-        springApplication.addListeners(new ApplicationStartupListener());
         springApplication.run(args);
+        springApplication.addListeners(new ApplicationStartupListener());
     }
     
     @Bean
