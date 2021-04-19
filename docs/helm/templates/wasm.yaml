@@ -1,0 +1,59 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: hawk-filter
+  namespace: {{ .Values.hawk.appns }}
+spec:
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: ANY
+      listener:
+        filterChain:
+          filter:
+            name: envoy.filters.network.http_connection_manager
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        config_discovery:
+          config_source:
+            ads: {}
+            initial_fetch_timeout: 5s
+          type_urls:
+          - type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+        name: hawk-filter-config
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  namespace: {{ .Values.hawk.appns }}
+  name: hawk-filter-config
+spec:
+  configPatches:
+  - applyTo: EXTENSION_CONFIG
+    match:
+      context: ANY
+    patch:
+      operation: ADD
+      value:
+        name: hawk-filter-config
+        typed_config:
+          '@type': type.googleapis.com/udpa.type.v1.TypedStruct
+          type_url: type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+          value:
+            config:
+              configuration:
+                '@type': type.googleapis.com/google.protobuf.StringValue
+                value: |
+                  {
+                    "logging_service": "hawk-traffic.hawk:6565",
+                    "filters": ["/eureka/apps", "/actuator/health", "/api/container/file"]
+                  }
+              vm_config:
+                code:
+                  remote:
+                    http_uri:
+                      uri: http://hawk-traffic.hawk:8080/entrypoint/file?fileName=agent.wasm
+                runtime: envoy.wasm.runtime.v8
+

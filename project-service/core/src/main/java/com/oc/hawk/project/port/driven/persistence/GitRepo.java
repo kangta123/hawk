@@ -26,30 +26,32 @@ import java.util.List;
 @Slf4j
 public class GitRepo {
     private static final String TAG_REF = "refs/tags";
-    private final String HEAD_REF = "HEAD";
+    private static final String HEAD_REF = "HEAD";
     private final String url;
     private final String username;
     private final String key;
     private final File localDir;
 
-    private final String DEFAULT_BRANCH = "master";
-
-
     public GitRepo(String url, CodeBaseIdentity identity, String localDir) {
         Assert.notNull(localDir, "dir cannot be null");
+
         this.url = url;
         if (identity != null) {
             this.username = identity.getUsername();
             this.key = identity.getKey();
+            log.info("get gitRepo for {}, with auth {}@{}", url, identity.getUsername(), identity.getKey());
         } else {
             this.username = "";
             this.key = "";
-
+            log.info("get gitRepo for {}, with empty auth ", url);
         }
+
         Path path = Paths.get(localDir);
         this.localDir = path.toFile();
         if (!this.localDir.exists()) {
-            this.localDir.mkdirs();
+            if (!this.localDir.mkdirs()) {
+                throw new RuntimeException("Cannot create dir " + localDir);
+            }
         }
     }
 
@@ -57,8 +59,8 @@ public class GitRepo {
         Collection<Ref> refs = null;
         try {
             refs = getGit().lsRemote()
-                .setCredentialsProvider(getUsernamePasswordCredentialsProvider())
-                .call();
+                    .setCredentialsProvider(getUsernameCredentialsProvider())
+                    .call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
@@ -118,7 +120,7 @@ public class GitRepo {
     public void sync() {
         if (localDir.exists()) {
             final String[] list = localDir.list();
-            if (list.length == 0) {
+            if (list == null || list.length == 0) {
                 cloneRepo();
             } else {
                 pull();
@@ -139,11 +141,11 @@ public class GitRepo {
         }
         try {
             CloneCommand cloneCommand = Git.cloneRepository()
-                .setURI(url)
-                .setCloneAllBranches(true)
-                .setCredentialsProvider(getUsernamePasswordCredentialsProvider())
-                .setDirectory(localDir)
-                .setProgressMonitor(new GitProgressMonitor());
+                    .setURI(url)
+                    .setCloneAllBranches(true)
+                    .setCredentialsProvider(getUsernameCredentialsProvider())
+                    .setDirectory(localDir)
+                    .setProgressMonitor(new GitProgressMonitor());
 
             cloneCommand.call();
         } catch (Exception e) {
@@ -152,7 +154,7 @@ public class GitRepo {
         }
     }
 
-    private UsernamePasswordCredentialsProvider getUsernamePasswordCredentialsProvider() {
+    private UsernamePasswordCredentialsProvider getUsernameCredentialsProvider() {
         if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(key)) {
             return new UsernamePasswordCredentialsProvider(username, key);
         }
@@ -162,7 +164,7 @@ public class GitRepo {
     private void pull() {
         try {
             Git git = getGit();
-            git.pull().setRemoteBranchName(DEFAULT_BRANCH).setCredentialsProvider(getUsernamePasswordCredentialsProvider()).call();
+            git.pull().setCredentialsProvider(getUsernameCredentialsProvider()).call();
         } catch (Exception e) {
             log.error("git repo pull error", e);
             throw new AppBusinessException("Git仓库更新失败");

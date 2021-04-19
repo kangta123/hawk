@@ -1,5 +1,3 @@
-{{ $logvolume := index .Values.persistent.volume 0 }}
-
 {{- range .Values.hawk.modules }}
 ---
 apiVersion: apps/v1
@@ -52,9 +50,6 @@ spec:
           name: app-volume
         - mountPath: /app/bin/config
           name: config
-        - mountPath: /app/logs
-          name: hawk-log
-          subPath: {{ .name }}
       {{- range .pvc }}
         - mountPath: {{ .path }}
           name: {{ .name }}
@@ -75,7 +70,6 @@ spec:
       volumes:
       - emptyDir: {}
         name: app-volume
-      {{- include "hawk.persistent.volume.required" $logvolume | indent 6 }}
       {{- range .pvc }}
       {{- include "hawk.pvc.volume" . | indent 6}}
       {{- end }}
@@ -97,6 +91,12 @@ spec:
     port: 8080
     protocol: TCP
     targetPort: 8080
+  {{- range .exposePort }}
+  - name: {{.name}}
+    port: {{.port}}
+    protocol: TCP
+    targetPort: {{.port}}
+  {{- end}}
   selector:
     app: {{ .name }}
 

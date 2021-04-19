@@ -1,35 +1,38 @@
+# docker 仓库配置
 docker:
   enabled: false
   secretName: ""
   dockerConfig: ""
 
+
 persistent:
   # 是否需要支持存储卷，建议至少使用nfs
   enabled: true
   volume:
-    # 为应用保存日志
-    - name: hawk-log
-      enabled: false
-      storageClass: rook-cephfs
-      size: 20Gi
-      namespace: default
-    # hawk构建项目时的本地仓库，支持npm，maven，gradle
-    - name: lib-repo
-      enabled: true
-      # nfs地址
-      nfs: 192.168.16.34
-      # nfs export path
-      path: /app/nfs/repo
-      # 需要的存储空间
-      size: 30Gi
-      namespace: build
+  # 为应用保存日志
+  - name: hawk-log
+    enabled: true
+    storageClass: rook-cephfs
+    size: 50Gi
+    namespace: default
+  # hawk构建项目时的本地仓库，支持npm，maven，gradle
+  - name: lib-repo
+    enabled: true
+    #如果存储为nfs，则需要填写 nfs地址
+    #nfs: 192.168.16.34
+    #如果存储为nfs，则需要填写 nfs导出路径
+    #path: /app/nfs/repo
+    storageClass: rook-cephfs
+    # 需要的存储空间
+    size: 50Gi
+    namespace: build
 # 部署hawk app配置
 hawk:
-  # hawk 构建应用image前缀，用于表示仓库
+  # hawk 构建应用image前缀，用于表示仓库地址
   appImagePrefix: registry.cn-qingdao.aliyuncs.com/kangta123
   appns: default
   # hawk app 运行版本
-  version: v4.2.3
+  version: v2.0-alpha-3
   # hawk app 健康检查地址
   readiness: /actuator/health/readiness
   # 访问hawk应用域名，配合ingress 需要支持dns泛解析
@@ -38,7 +41,7 @@ hawk:
   performance: NORMAL
   deps:
     # hawk app 依赖服务版本 @ https://github.com/kangta123/hawk-deps.git
-    version: v4.5.5
+    version: v2.0
   build:
     # 构建服务所在命名空间
     namespace: build
@@ -63,50 +66,49 @@ hawk:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gateway
   - name: hawk-traffic
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_traffic-core
+    #额外被service暴露端口
+    exposePort:
+    - name: grpc
+      port: 6565
   kubernetes:
-    # k8s api server地址
-    apiServer: https://10.211.55.6:6443
-    # 访问api server认证token
+    # k8s api server地址, 使用install脚本自动填充
+    apiServer: ""
+    # 访问api server认证token, 使用install脚本自动填充
     token: ""
   kafka:
     url: hawk-kafka:9092
-    zookeeper:
-      persistence:
-        enabled: false
   app:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot11
   eureka:
     image: registry.cn-beijing.aliyuncs.com/9fbank/onecard-arch_discovery
     version: "1210000"
-  # git 默认账户密码，项目注册时未填写git账户信息，会尝试使用此账户拉取代码
-  git:
-    username: hanyaoxiang
-    password: HDs52qjs
   # hawk ui
   ui:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
     # ui 版本
-    version: v4.2
+    version: v2.0-alpha-1
     # ui将api转发到网关模块hawk gateway, gateway地址
     gateway: hawk-gateway:8080
 
 # 数据库配置
 mysql:
-    initdbScriptsConfigMap: hawk-db
-    # 数据库存储路径
-    hostPath: "/app/data"
-    auth:
-        rootPassword: "Password"
-        database: "hawk"
-    primary:
-        nodeSelector:
-            node-role.kubernetes.io/master: ""
-        persistence:
-            enabled: false
-            storageClass: "rook-ceph-block"
-            size: 50Gi
-        service:
-            type: "NodePort"
+  initdbScriptsConfigMap: hawk-db
+  auth:
+    rootPassword: "Password"
+    database: "hawk"
+  primary:
+    persistence:
+      # enabled=false则使用master节点的本地存储保存数据(hostPath)
+      enabled: false
+      # 使用hostPath，需要确保path路径存在
+      hostPath: "/app/db"
+      #storageClass: "rook-ceph-block"
+      #size: 50Gi
+    nodeSelector:
+      node-role.kubernetes.io/master: ""
+    service:
+      type: "NodePort"
+
 kafka:
   persistence:
     enabled: false
@@ -129,13 +131,13 @@ prometheus:
   alertmanager:
     enabled: false
   server:
-    retention: "7d"
+    retention: "14d"
     persistentVolume:
-      enabled: false
-      storageClass: rook-ceph-block
+      enabled: true
+      storageClass: rook-cephfs
       size: 100Gi
   pushgateway:
-     enabled: false
+    enabled: false
 
 ingress-nginx:
   controller:
@@ -145,7 +147,7 @@ ingress-nginx:
       nodePorts:
         http: 80
     image:
-      repository:  registry.cn-qingdao.aliyuncs.com/kangta123/k8s/ingress-nginx/controller
+      repository: registry.cn-qingdao.aliyuncs.com/kangta123/k8s/ingress-nginx/controller
       digest: ""
     admissionWebhooks:
       patch:
