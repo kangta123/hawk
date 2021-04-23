@@ -6,6 +6,7 @@ import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import com.oc.hawk.traffic.port.driven.persistence.po.EntryPointConfigGroupPO;
@@ -81,7 +82,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public List<EntryPointConfig> byKey(EntryPointConfig config, List<EntryPointConfigGroup> groupList) {
         if (Objects.isNull(groupList) || groupList.isEmpty()) {
-            return new ArrayList<EntryPointConfig>();
+            return new ArrayList<>();
         }
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -337,6 +338,25 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         return apiConfigPoRepository.findAll()
                 .stream().map(obj -> obj.toEntryPointConfig())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EntryPointConfig> findByHttpResource(HttpResource httpResource) {
+        if(Objects.isNull(httpResource) || StringUtils.isEmpty(httpResource.getMethod().name()) || StringUtils.isEmpty(httpResource.getPath().getPath())) {
+            return null;
+        }
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<EntryPointConfigPO> criteriaQuery = criteriaBuilder.createQuery(EntryPointConfigPO.class);
+        Root<EntryPointConfigPO> fromObj = criteriaQuery.from(EntryPointConfigPO.class);
+        
+        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("apiMethod"), httpResource.getMethod().name());
+        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("apiPath"), httpResource.getPath().getPath());
+        Predicate conditionWhere = criteriaBuilder.and(conditionMethod, conditionPath);
+        
+        criteriaQuery.where(conditionWhere);
+        List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
+        List<EntryPointConfig> apiList = resultPoList.stream().map(po -> po.toEntryPointConfig()).collect(Collectors.toList());
+        return apiList;
     }
     
 }
