@@ -23,12 +23,12 @@ public class TrafficTraces {
     private final EntryPointConfigRepository entryPointConfigRepository;
     private final EntryPointResourceRepository entryPointResourceRepository;
     
-    public List<Trace> queryTraceInfoList(Integer page,Integer size,String key,List<String> visibleInstances) {
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,String key) {
         Trace traceParam = Trace.builder()
                 .httpResource(new HttpResource(new HttpPath(key),null))
                 .destination(new Destination(key,null,null))
                 .build();
-        List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam,visibleInstances);
+        List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page,size,traceParam);
         for(Trace trace : traceList) {
             Trace traceInfo = queryTraceInfo(trace.getHttpResource().getPath(),trace.getHttpResource().getMethod().name());
             updateTrace(traceInfo,trace);

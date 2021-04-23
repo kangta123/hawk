@@ -151,13 +151,8 @@ public class EntryPointUseCase {
      * 链路信息查询
      */
     public TraceItemPageDTO queryTraceInfoList(Integer page,Integer size,String key){
-        List<Long> projectIds = projectFacade.queryVisibleProjectIds();
-        List<InstanceProjectDTO> instanceProjectList = containerFacade.getProjectInstances(projectIds);
-        List<String> visibleInstances = instanceProjectList.stream().map(obj->{
-            return obj.getInstanceName();
-        }).collect(Collectors.toList());
         
-    	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(page,size,key,visibleInstances);
+    	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(page,size,key);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList,size);
     }
     

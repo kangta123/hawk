@@ -115,7 +115,7 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
 
     @Override
     public EntryPointConfig findByPathAndMethod(HttpPath httpPath, HttpMethod httpMethod) {
-        String pathKey = getPathKey(httpPath.getPath(),httpMethod.name());
+        String pathKey = getPathKey(httpPath.getPath(),httpMethod.name().toLowerCase());
         
         List<String> pathList = getPathList(httpMethod);
         List<String> filterPathList = pathList.stream().filter(item -> StringUtils.equals(item, pathKey)).collect(Collectors.toList());

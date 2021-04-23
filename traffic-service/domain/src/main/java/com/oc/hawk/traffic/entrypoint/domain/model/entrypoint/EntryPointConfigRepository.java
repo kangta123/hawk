@@ -32,7 +32,7 @@ public interface EntryPointConfigRepository {
 
     void saveTrace(List<Trace> history);
     
-    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances);
+    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace);
     
     void deleteById(EntryPointConfigID entryPointConfigID);
     

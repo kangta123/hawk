@@ -211,7 +211,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace,List<String> visibleInstances) {
+    public List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace) {
         Integer pageSize = size==null ? 10 : size;
         Integer pageNum = page==null ? 0 : (page-1)*pageSize;
         //多查一条
@@ -225,22 +225,17 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getHttpResource().getPath().getPath()+"?%");
         Predicate conditionInstanceName = criteriaBuilder.equal(fromObj.get("dstWorkload"), trace.getDestination().getDstWorkload());
         
-        Path<String> dstWorkload = fromObj.get("dstWorkload");
-        In<String> inClause = criteriaBuilder.in(dstWorkload);
-        visibleInstances.stream().forEach(inClause::value);
-        
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
         
         if(StringUtils.isEmpty(trace.getHttpResource().getPath().getPath()) && StringUtils.isEmpty(trace.getDestination().getDstWorkload())) {
-            criteriaQuery.where(inClause);
+            //查询全部
         }else if(StringUtils.isEmpty(trace.getDestination().getDstWorkload())){          
-            criteriaQuery.where(criteriaBuilder.and(orClause,inClause));
+            criteriaQuery.where(orClause);
         }else if(StringUtils.isEmpty(trace.getHttpResource().getPath().getPath())) {
-            criteriaQuery.where(criteriaBuilder.and(conditionInstanceName,inClause));
+            criteriaQuery.where(conditionInstanceName);
         }else {
             Predicate keyClause = criteriaBuilder.or(orClause,conditionInstanceName);
-            Predicate whereClause = criteriaBuilder.and(keyClause,inClause);
-            criteriaQuery.where(whereClause);
+            criteriaQuery.where(keyClause);
         }
         criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
         List<TrafficTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
