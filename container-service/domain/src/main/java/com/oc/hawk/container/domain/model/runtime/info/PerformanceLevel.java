@@ -24,7 +24,7 @@ public enum PerformanceLevel {
 
     public static PerformanceLevel getWithDefaultPerformanceLevel(String performance) {
         if (StringUtils.isEmpty(performance)) {
-            return NORMAL;
+            return MEDIUM;
         } else {
             return PerformanceLevel.valueOf(performance);
         }

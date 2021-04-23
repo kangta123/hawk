@@ -8,6 +8,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
         List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
         
         for (com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry : request.getLogEntriesList()) {
-            log.info("receive log: {} , {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
+            log.info("received trace log : {} , {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
             UploadTraceInfoCommand command = getTraceInfoCommand(logEntry);
             buildRequestHeader(logEntry, command);
             buildResponseHeader(logEntry, command);

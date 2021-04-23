@@ -2,23 +2,19 @@ package com.oc.hawk.traffic.port.driving.facade.rest;
 
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.common.spring.mvc.BooleanWrapper;
-import com.oc.hawk.common.utils.WebUtils;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
-
 import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import org.springframework.core.io.Resource;
 
 @RestController
 @RequestMapping("/entrypoint")
@@ -133,13 +129,6 @@ public class EntryPointController {
         return BooleanWrapper.TRUE;
     }
     
-    /**
-     * 文件下载功能
-     */
-    @GetMapping("/file")
-    public ResponseEntity<Resource> downloadFile(@RequestParam(required=false) String fileName) {
-        byte[] fileBytes = entryPointUseCase.getDownloadFile(fileName);
-        return WebUtils.getDownloadFileHttpResponse(fileBytes,fileName);
-    }
+
     
 }

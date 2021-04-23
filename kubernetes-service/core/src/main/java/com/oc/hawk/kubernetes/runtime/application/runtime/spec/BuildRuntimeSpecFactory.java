@@ -41,10 +41,10 @@ public class BuildRuntimeSpecFactory {
         PerformanceLevel level;
         switch (catalog) {
             case BUILD:
-                level = PerformanceLevel.getWithDefaultPerformanceLevel(spec.getPerformance());
+                level = PerformanceLevel.getWithDefaultPerformanceLevel(null);
                 break;
             case BUSINESS:
-                level = PerformanceLevel.getWithDefaultPerformanceLevel(null);
+                level = PerformanceLevel.getWithDefaultPerformanceLevel(spec.getPerformance());
                 if (configurationSpec != null) {
                     healthCheck = new RuntimeHealthCheck(spec.getHealthCheckPath(), spec.getHealthCheckEnabled(), configurationSpec.getInnerPort(), healthCheckProperties);
                 }

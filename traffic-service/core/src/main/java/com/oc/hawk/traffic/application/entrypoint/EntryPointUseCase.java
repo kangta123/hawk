@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -199,7 +198,8 @@ public class EntryPointUseCase {
     /**
      * 获取下载文件
      */
-    public byte[] getDownloadFile(String fileName) {
+    public byte[] getFile(String fileName) {
+        log.info("download file {}", fileName);
         return fileFacade.getDownloadFile(fileName);
     }
     

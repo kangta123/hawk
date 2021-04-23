@@ -4,6 +4,9 @@ metadata:
   name: ingress-nginx
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/client-max-body-size: 50M
+    nginx.ingress.kubernetes.io/proxy-body-size: 50M
+    nginx.org/websocket-services: platform, hawk
 spec:
   rules:
   - host: "{{.Values.hawk.host}}"
