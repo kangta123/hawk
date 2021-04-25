@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import com.oc.hawk.common.spring.ApplicationContextHolder;
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
+import com.oc.hawk.traffic.application.entrypoint.TrafficTraceInfoUseCase;
 
 @Slf4j
 @Component

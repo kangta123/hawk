@@ -14,11 +14,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @Import(value = {WebConfiguration.class, BaseConfiguration.class})
 @Slf4j
+@EnableScheduling
 public class TrafficApplication {
 
     public static void main(String[] args) {

@@ -55,6 +55,8 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     
     @PersistenceContext
     private EntityManager entityManager;
+    
+    private static final Integer DAYS = 14;
 
     @Override
     public EntryPointConfigID save(EntryPointConfig config) {
@@ -256,7 +258,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Optional<TrafficTracePo> trafficTracePo = trafficTracePoRepository.findById(traceId.getId());
         if (Objects.isNull(trafficTracePo) || trafficTracePo.isEmpty()) {
             return null;
-        }
+        } 
         return trafficTracePo.get().toTrace();
     }
 
@@ -352,6 +354,14 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         List<EntryPointConfigPO> resultPoList = entityManager.createQuery(criteriaQuery).getResultList();
         List<EntryPointConfig> apiList = resultPoList.stream().map(po -> po.toEntryPointConfig()).collect(Collectors.toList());
         return apiList;
+    }
+
+    @Override
+    public void deleteAll() {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startTime = today.minusDays(DAYS);
+        List<TrafficTracePo> trafficTracePoList = trafficTracePoRepository.findByStartTimeLessThan(startTime);
+        trafficTracePoRepository.deleteAll(trafficTracePoList);
     }
     
 }

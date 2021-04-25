@@ -29,4 +29,9 @@ public class TrafficTraceInfoUseCase {
     	}
     	entryPointConfigRepository.saveTrace(traceList);
     }
+    
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteTrace() {
+        entryPointConfigRepository.deleteAll();
+    }
 }

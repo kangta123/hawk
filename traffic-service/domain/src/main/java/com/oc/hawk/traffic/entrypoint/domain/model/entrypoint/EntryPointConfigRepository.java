@@ -50,4 +50,6 @@ public interface EntryPointConfigRepository {
     
     List<EntryPointConfig> findByHttpResource(HttpResource httpResource);
     
+    void deleteAll();
+    
 }
