@@ -224,7 +224,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         Root<TrafficTracePo> fromObj = criteriaQuery.from(TrafficTracePo.class);
         
         Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), trace.getHttpResource().getPath().getPath());
-        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getHttpResource().getPath().getPath()+"?%");
+        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), trace.getHttpResource().getPath().getPath()+"%");
         Predicate conditionInstanceName = criteriaBuilder.equal(fromObj.get("dstWorkload"), trace.getDestination().getDstWorkload());
         
         Predicate orClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
