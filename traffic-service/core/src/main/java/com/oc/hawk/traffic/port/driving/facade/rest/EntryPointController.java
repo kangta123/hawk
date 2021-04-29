@@ -79,7 +79,7 @@ public class EntryPointController {
      * 根据id查询api详情信息
      */
     @GetMapping("/info/{id}")
-    public UserEntryPointDTO queryApiInfo(@PathVariable Long id) {
+    public EntryPointDTO queryApiInfo(@PathVariable Long id) {
         return entryPointUseCase.queryApiInfo(id);
     }
 

@@ -1,6 +1,6 @@
 #!/bin/bash
-IMAGE_PREFIX=registry.cn-qingdao.aliyuncs.com/kangta123/hawk/
-DATA_BASE_IMAGE=hawk_init_springboot:v4.0
+IMAGE_PREFIX=registry.cn-qingdao.aliyuncs.com/kangta123/
+DATA_BASE_IMAGE=hawk_init_springboot:v2.0-alpha-15
 BASE_IMAGE=${IMAGE_PREFIX}${DATA_BASE_IMAGE}
 TAG=${1:-"latest"}
 folder=${2}
@@ -26,7 +26,7 @@ build_docker() {
   echo "FROM ${BASE_IMAGE}" >${tmp}
 
   docker  build \
-    --build-arg JAR_FILE=${JAR_FILE} \
+    --build-arg OUTPUT=${JAR_FILE} \
     -t ${IMAGE_NAME}:${TAG} . -f - <${tmp}
 
   docker push ${IMAGE_NAME}:${TAG}
