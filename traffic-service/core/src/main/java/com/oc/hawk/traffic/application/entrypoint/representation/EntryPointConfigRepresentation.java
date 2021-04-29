@@ -182,6 +182,8 @@ public class EntryPointConfigRepresentation {
         traceNodeDTO.setResponseCode(trace.getResponseCode().getCode());
         traceNodeDTO.setEntryPointName(trace.getEntryPointName());
         traceNodeDTO.setEntryPointId(trace.getEntryPointId());
+        traceNodeDTO.setDstWorkload(trace.getDestination().getDstWorkload());
+        traceNodeDTO.setStartTime(trace.getTimestamp());
         return traceNodeDTO;
     }
     

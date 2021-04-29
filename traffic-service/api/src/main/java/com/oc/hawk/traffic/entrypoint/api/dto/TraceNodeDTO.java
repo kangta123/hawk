@@ -15,5 +15,6 @@ public class TraceNodeDTO {
     private Long latency;
     private Long entryPointId;
     private String entryPointName;
-    
+    private String dstWorkload;
+    private Long startTime;
 }
