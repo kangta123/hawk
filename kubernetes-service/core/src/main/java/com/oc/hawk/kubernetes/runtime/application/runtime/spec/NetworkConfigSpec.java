@@ -19,7 +19,7 @@ public class NetworkConfigSpec {
     /**
      * Just support TCP value , optional values ["SCTP", "TCP", "UDP"]
      */
-    private final String HTTP_PROTOCOL = "TCP";
+    private final String HTTP_PROTOCOL = "HTTP";
     private final String TCP_PROTOCOL = "TCP";
 
     private final Integer innerPort;
@@ -52,7 +52,7 @@ public class NetworkConfigSpec {
 
         // https://preliminary.istio.io/zh/docs/ops/deployment/requirements/
         if (!nonNullExtraPorts.containsKey(ENV_DEFAULT_SERVER_PORT)) {
-            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, 0, ENV_DEFAULT_SERVER_PORT, HTTP_PROTOCOL, targetPort));
+            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, 0, ENV_DEFAULT_SERVER_PORT, TCP_PROTOCOL, targetPort));
         }
         return ports.toArray(new ServicePort[0]);
     }

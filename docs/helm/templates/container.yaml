@@ -27,37 +27,37 @@ data:
         config:
           nginx:
             runtime:
-              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_nginx:{{ .Values.hawk.deps.version }}
-              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_npm:{{ .Values.hawk.deps.version }}
+              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_nginx:{{ .Values.hawk.deps.version }}
+              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_npm:{{ .Values.hawk.deps.version }}
               podInteractionVolume: /tmp/app:/usr/local/openresty/nginx/html
             build:
               npm:
-                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_npm_build:{{ .Values.hawk.deps.version }}
+                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_npm_build:{{ .Values.hawk.deps.version }}
                 sub: npm
           tomcat:
             runtime:
-              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_tomcat8:{{ .Values.hawk.deps.version }}
-              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_tomcat:{{ .Values.hawk.deps.version }}
+              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_tomcat8:{{ .Values.hawk.deps.version }}
+              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_tomcat:{{ .Values.hawk.deps.version }}
               podInteractionVolume: /tmp/app:/usr/local/apache-tomcat-8.5.46/webapps/ROOT
             build:
               maven:
-                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:{{ .Values.hawk.deps.version }}
+                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_maven_build:{{ .Values.hawk.deps.version }}
                 volume:
                   sub: maven
                   mountPath: /root/.m2/
           springboot:
             runtime:
-              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot8:{{ .Values.hawk.deps.version }}
-              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_springboot:{{ .Values.hawk.deps.version }}
+              appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_springboot8:{{ .Values.hawk.deps.version }}
+              dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_springboot:{{ .Values.hawk.deps.version }}
               podInteractionVolume: /tmp/app:/app/jar
             build:
               maven:
-                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:{{ .Values.hawk.deps.version }}
+                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_maven_build:{{ .Values.hawk.deps.version }}
                 volume:
                   sub: maven
                   mountPath: /root/.m2/
               gradle:
-                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gradle_build:{{ .Values.hawk.deps.version }}
+                image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_gradle_build:{{ .Values.hawk.deps.version }}
                 volume:
                   sub: gradle
                   mountPath: /gradle

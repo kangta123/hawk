@@ -4,22 +4,18 @@ import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.ImportGroupDTO.ImportApiDTO;
 import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseCode;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDescription;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -73,8 +69,7 @@ public class EntryPointConfigFactory {
     }
 
     public List<EntryPointGroupID> createGroupInvisibility(List<Long> groupIdList) {
-        List<EntryPointGroupID> idList = groupIdList.stream().map(obj -> new EntryPointGroupID(obj)).collect(Collectors.toList());
-        return idList;
+        return groupIdList.stream().map(EntryPointGroupID::new).collect(Collectors.toList());
     }
     
     public Trace createTrace(UploadTraceInfoCommand command) {
@@ -82,13 +77,13 @@ public class EntryPointConfigFactory {
         List<String> requestFilterKeyList = getTraceRequestHeaderConfig();
         Map<String, String> requestHeaderMap = requestHeaders.entrySet().stream()
                 .filter(map -> !requestFilterKeyList.contains(map.getKey()))
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         
         Map<String,String> responseHeaders = command.getResponseHeaders();
         List<String> responseFilterKeyList = getTraceResponseHeaderConfig();
         Map<String, String> responseHeaderMap = responseHeaders.entrySet().stream()
                 .filter(map -> !responseFilterKeyList.contains(map.getKey()))
-                .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         
         return Trace.builder()
     			.host(command.getHost())

@@ -11,18 +11,18 @@ persistent:
   volume:
   # 为应用保存日志
   - name: hawk-log
-    enabled: true
-    storageClass: rook-cephfs
+    enabled: false
+    #storageClass: rook-cephfs
     size: 50Gi
     namespace: default
   # hawk构建项目时的本地仓库，支持npm，maven，gradle
   - name: lib-repo
     enabled: true
     #如果存储为nfs，则需要填写 nfs地址
-    #nfs: 192.168.16.34
+    nfs: 192.168.16.34
     #如果存储为nfs，则需要填写 nfs导出路径
-    #path: /app/nfs/repo
-    storageClass: rook-cephfs
+    path: /app/nfs/repo
+    # storageClass: rook-cephfs
     # 需要的存储空间
     size: 50Gi
     namespace: build
@@ -32,7 +32,7 @@ hawk:
   appImagePrefix: registry.cn-qingdao.aliyuncs.com/kangta123
   appns: default
   # hawk app 运行版本
-  version: v2.0-alpha-3
+  version: v2.0-alpha-15
   # hawk app 健康检查地址
   readiness: /actuator/health/readiness
   # 访问hawk应用域名，配合ingress 需要支持dns泛解析
@@ -41,31 +41,31 @@ hawk:
   performance: NORMAL
   deps:
     # hawk app 依赖服务版本 @ https://github.com/kangta123/hawk-deps.git
-    version: v2.0
+    version: v2.0-alpha-25
   build:
     # 构建服务所在命名空间
     namespace: build
   # 每一个module 可以单独指定version
   modules:
   - name: hawk-base
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_base-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_base-core
   - name: hawk-message
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_message-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_message-core
   - name: hawk-project
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_project-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_project-core
   - name: hawk-container
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_container-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_container-core
   - name: hawk-kubernetes
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_kubernetes-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_kubernetes-core
   - name: hawk-kubernetes-keepalive
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_kubernetes-keepalive
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_kubernetes-keepalive
   - name: hawk-monitor
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_monitor-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_monitor-core
   - name: hawk-gateway
     readiness: /actuator/health
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gateway
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_gateway
   - name: hawk-traffic
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_traffic-core
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_traffic-core
     #额外被service暴露端口
     exposePort:
     - name: grpc
@@ -78,15 +78,15 @@ hawk:
   kafka:
     url: hawk-kafka:9092
   app:
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot11
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_springboot11
   eureka:
     image: registry.cn-beijing.aliyuncs.com/9fbank/onecard-arch_discovery
     version: "1210000"
   # hawk ui
   ui:
-    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk-ui
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk-ui
     # ui 版本
-    version: v2.0-alpha-1
+    version: v2.0-alpha-2
     # ui将api转发到网关模块hawk gateway, gateway地址
     gateway: hawk-gateway:8080
 
@@ -133,8 +133,8 @@ prometheus:
   server:
     retention: "14d"
     persistentVolume:
-      enabled: true
-      storageClass: rook-cephfs
+      enabled: false
+        #storageClass: rook-cephfs
       size: 100Gi
   pushgateway:
     enabled: false
@@ -147,9 +147,9 @@ ingress-nginx:
       nodePorts:
         http: 80
     image:
-      repository: registry.cn-qingdao.aliyuncs.com/kangta123/k8s/ingress-nginx/controller
+      repository: registry.cn-qingdao.aliyuncs.com/kangta123/k8s-ingress-nginx-controller
       digest: ""
     admissionWebhooks:
       patch:
         image:
-          repository: registry.cn-qingdao.aliyuncs.com/kangta123/k8s/jettech/kube-webhook-certgen
+          repository:  registry.cn-qingdao.aliyuncs.com/kangta123/k8s-kube-webhook-certgen

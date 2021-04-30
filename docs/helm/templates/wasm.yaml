@@ -48,7 +48,7 @@ spec:
                 value: |
                   {
                     "logging_service": "hawk-traffic.hawk:6565",
-                    "filters": ["/eureka/apps", "/actuator/health", "/api/container/file"]
+                    "filters": ["/eureka/apps", "/actuator/health", "/container/file", "/file"]
                   }
               vm_config:
                 code:

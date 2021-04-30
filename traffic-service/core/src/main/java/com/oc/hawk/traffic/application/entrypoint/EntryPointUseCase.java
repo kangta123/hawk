@@ -1,6 +1,5 @@
 package com.oc.hawk.traffic.application.entrypoint;
 
-import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -110,10 +108,10 @@ public class EntryPointUseCase {
     /**
      * 单个接口信息查询
      */
-    public UserEntryPointDTO queryApiInfo(Long id) {
+    public EntryPointDTO queryApiInfo(Long id) {
         EntryPointConfig config = entryPointConfigRepository.byId(new EntryPointConfigID(id));
         if (Objects.isNull(config)) {
-            return new UserEntryPointDTO();
+            return new EntryPointDTO();
         }
         return entryPointConfigRepresentation.toUserEntryPointDTO(config, config.getGroupId().getId());
     }

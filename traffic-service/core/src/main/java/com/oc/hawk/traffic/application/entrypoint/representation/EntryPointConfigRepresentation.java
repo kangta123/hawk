@@ -1,40 +1,18 @@
 package com.oc.hawk.traffic.application.entrypoint.representation;
 
 import com.oc.hawk.api.utils.JsonUtils;
-import com.oc.hawk.common.utils.DateUtils;
-import com.oc.hawk.container.api.dto.InstanceProjectDTO;
 import com.oc.hawk.project.api.dto.ProjectDetailDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceDetailDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceItemDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceItemPageDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceListItemDTO;
-import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
-import com.oc.hawk.traffic.entrypoint.api.dto.ExecuteResponseDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceNodeDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.TraceResponseDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.UserEntryPointDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupDTO;
-import com.oc.hawk.traffic.entrypoint.api.dto.UserGroupEntryPointDTO;
+import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
-import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointGroupID;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -69,8 +47,8 @@ public class EntryPointConfigRepresentation {
         return userGroupDTOList;
     }
 
-    public UserEntryPointDTO toUserEntryPointDTO(EntryPointConfig config, Long groupId) {
-        UserEntryPointDTO userApiDTO = new UserEntryPointDTO();
+    public EntryPointDTO toUserEntryPointDTO(EntryPointConfig config, Long groupId) {
+        EntryPointDTO userApiDTO = new EntryPointDTO();
         userApiDTO.setId(config.getConfigId().getId());
         userApiDTO.setGroupId(groupId);
         userApiDTO.setApiName(config.getDescription().getName());
@@ -91,7 +69,7 @@ public class EntryPointConfigRepresentation {
         entryPointGroupList.forEach( obj -> {
             UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
             Long id = obj.getGroupId().getId();
-            List<UserEntryPointDTO> userApiDTOList = new ArrayList<>();
+            List<EntryPointDTO> userApiDTOList = new ArrayList<>();
             entryPointList.forEach(item -> {
                 if(item.getGroupId().getId().equals(id)) {
                     userApiDTOList.add(toUserEntryPointDTO(item, item.getGroupId().getId()));
@@ -116,12 +94,9 @@ public class EntryPointConfigRepresentation {
     }
     
     public TraceItemPageDTO toTraceDetailList(List<Trace> traceList,Integer size) {
-        List<TraceItemDTO> list = new ArrayList<>();
-        for(Trace trace : traceList) {
-            TraceItemDTO dto = toTraceItemDTO(trace);
-            list.add(dto);
-        }
-        
+
+        final List<TraceItemDTO> list = traceList.stream().map(this::toTraceItemDTO).collect(Collectors.toList());
+
         TraceItemPageDTO itemPage = new TraceItemPageDTO();
         if(list.size() > size) {
             itemPage.setHasNext(true);
