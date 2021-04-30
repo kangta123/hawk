@@ -105,7 +105,7 @@ public class EntryPointController {
     /**
      * 根据接口id,查询历史请求列表
      */
-    @GetMapping("/history/page")
+    @GetMapping("/trace/page")
     public TraceResponseDTO queryTrafficTraceList(@RequestParam(required=false) Integer page,
             @RequestParam(required=false) Integer size,
             @RequestParam(required=false) Long entryPointId) {
@@ -115,7 +115,7 @@ public class EntryPointController {
     /**
      * 根据历史请求id,查询单个历史请求信息
      */
-    @GetMapping("/history/{id}")
+    @GetMapping("/trace/{id}")
     public TraceDetailDTO queryTrafficTraceInfo(@PathVariable Long id) {
         return entryPointUseCase.queryTrafficTraceInfo(new TraceId(id));
     }

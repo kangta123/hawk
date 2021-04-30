@@ -29,7 +29,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -151,10 +150,10 @@ public class EntryPointConfigRepresentation {
         dto.setParentSpanId(trace.getSpanContext().getParentSpanId());
         dto.setTraceId(trace.getSpanContext().getTraceId());
         dto.setRequestBody(trace.getRequestBody().getBody());
-        dto.setRequestHeaders(JsonUtils.object2Json(trace.getRequestHeaders().getHeaderMap()));
+        dto.setRequestHeaders(trace.getRequestHeaders().getHeaderMap());
         dto.setResponseCode(trace.getResponseCode().getCode());
-        dto.setResponseBody(trace.getRequestBody().getBody());
-        dto.setResponseHeaders(JsonUtils.object2Json(trace.getResponseHeaders().getResponeseHeader()));
+        dto.setResponseBody(trace.getResponseBody().getBody()); 
+        dto.setResponseHeaders(trace.getResponseHeaders().getResponeseHeader());
         dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
         dto.setEntryPointName(trace.getEntryPointName());
@@ -182,7 +181,6 @@ public class EntryPointConfigRepresentation {
         traceNodeDTO.setResponseCode(trace.getResponseCode().getCode());
         traceNodeDTO.setEntryPointName(trace.getEntryPointName());
         traceNodeDTO.setEntryPointId(trace.getEntryPointId());
-        traceNodeDTO.setDstWorkload(trace.getDestination().getDstWorkload());
         traceNodeDTO.setStartTime(trace.getTimestamp());
         return traceNodeDTO;
     }

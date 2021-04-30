@@ -22,4 +22,4 @@ spring:
 trace:
     header-filter:
         requestKey: ":method,:path,:authority,x-envoy-peer-metadata-id,x-envoy-decorator-operation,x-request-id,x-envoy-attempt-count,x-forwarded-proto,:scheme,x-forwarded-client-cert,x-b3-sampled,:authority,x-ot-span-context,x-b3-flags,x-envoy-peer-metadata"
-        responseKey: "date,x-envoy-peer-metadata,x-envoy-peer-metadata-id,x-envoy-upstream-service-time"
+        responseKey: "date,x-envoy-peer-metadata,x-envoy-peer-metadata-id,x-envoy-upstream-service-time,x-envoy-decorator-operation"

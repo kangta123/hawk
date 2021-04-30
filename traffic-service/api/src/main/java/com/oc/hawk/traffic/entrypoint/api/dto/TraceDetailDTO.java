@@ -23,10 +23,10 @@ public class TraceDetailDTO {
     private String parentSpanId;
     private String traceId;
     private String requestBody;
-    private String requestHeaders;
+    private Map<String,String> requestHeaders;
     private Integer responseCode;
     private String responseBody;
-    private String responseHeaders;
+    private Map<String,String> responseHeaders;
     private Long startTime;
     private Long entryPointId;
     private String entryPointName;
