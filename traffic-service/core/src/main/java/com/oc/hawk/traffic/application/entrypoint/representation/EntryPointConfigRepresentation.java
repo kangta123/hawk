@@ -132,6 +132,7 @@ public class EntryPointConfigRepresentation {
         dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
         dto.setEntryPointName(trace.getEntryPointName());
+        dto.setPathVariable(trace.getHttpResource().getPath().getPathVariable());
         return dto;
     }
     

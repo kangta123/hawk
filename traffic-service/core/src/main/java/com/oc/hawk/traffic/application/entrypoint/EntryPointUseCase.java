@@ -169,8 +169,8 @@ public class EntryPointUseCase {
     /**
      * 根据链路id查询单个请求历史详情
      */
-    public TraceDetailDTO queryTrafficTraceInfo(TraceId traceId) {
-        Trace trace = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTrafficTraceInfo(traceId);
+    public TraceDetailDTO queryTrafficTraceInfo(EntryPointConfigID entryPointId,TraceId traceId) {
+        Trace trace = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTrafficTraceInfo(entryPointId,traceId);
         return entryPointConfigRepresentation.toTraceDetailDTO(trace);
     }
     

@@ -49,8 +49,12 @@ public class TrafficTraces {
         return traceList;
     }
     
-    public Trace queryTrafficTraceInfo(TraceId traceId) {
-        return entryPointConfigRepository.byTraceId(traceId);
+    public Trace queryTrafficTraceInfo(EntryPointConfigID entryPointId,TraceId traceId) {
+        EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(entryPointId);
+        Trace trace = entryPointConfigRepository.byTraceId(traceId);
+        trace.getHttpResource().getPath().handlePath();
+        trace.getHttpResource().getPath().updatePathVariable(entryPointConfig.getHttpResource().getPath().getPath());
+        return trace;
     }
     
     private EntryPointConfig matchPath(HttpPath path, String method) {
@@ -101,6 +105,5 @@ public class TrafficTraces {
             trace.updateEntryPointIdAndName(traceInfo.getEntryPointId(),traceInfo.getEntryPointName());
         }
     }
-    
     
 }

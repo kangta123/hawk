@@ -7,6 +7,7 @@ import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateGroupCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +79,7 @@ public class EntryPointController {
     /**
      * 根据id查询api详情信息
      */
-    @GetMapping("/info/{id}")
+    @GetMapping("/{id}")
     public EntryPointDTO queryApiInfo(@PathVariable Long id) {
         return entryPointUseCase.queryApiInfo(id);
     }
@@ -105,19 +106,19 @@ public class EntryPointController {
     /**
      * 根据接口id,查询历史请求列表
      */
-    @GetMapping("/trace/page")
+    @GetMapping("/{entryPointId}/trace/page")
     public TraceResponseDTO queryTrafficTraceList(@RequestParam(required=false) Integer page,
             @RequestParam(required=false) Integer size,
-            @RequestParam(required=false) Long entryPointId) {
+            @PathVariable Long entryPointId) {
         return entryPointUseCase.queryTrafficTraceList(page,size,entryPointId);
     }
 
     /**
      * 根据历史请求id,查询单个历史请求信息
      */
-    @GetMapping("/trace/{id}")
-    public TraceDetailDTO queryTrafficTraceInfo(@PathVariable Long id) {
-        return entryPointUseCase.queryTrafficTraceInfo(new TraceId(id));
+    @GetMapping("/{entryPointId}/trace/{id}")
+    public TraceDetailDTO queryTrafficTraceInfo(@PathVariable Long entryPointId,@PathVariable Long id) {
+        return entryPointUseCase.queryTrafficTraceInfo(new EntryPointConfigID(entryPointId),new TraceId(id));
     }
     
     /**

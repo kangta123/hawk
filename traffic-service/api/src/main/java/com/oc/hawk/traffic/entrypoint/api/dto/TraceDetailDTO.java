@@ -30,8 +30,6 @@ public class TraceDetailDTO {
     private Long startTime;
     private Long entryPointId;
     private String entryPointName;
-    
-    private Map<String, String> requestParams;
-    private Map<String, String> uriParams;
+    private Map<String, String> pathVariable;
 	
 }
