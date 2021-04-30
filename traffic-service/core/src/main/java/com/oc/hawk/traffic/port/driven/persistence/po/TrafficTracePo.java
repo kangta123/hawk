@@ -88,7 +88,7 @@ public class TrafficTracePo extends BaseEntity {
                 .latency(new Latency(latency))
                 .protocol(protocol)
                 .spanContext(new SpanContext(spanId,parentSpanId,traceId))
-                .requestBody(new HttpRequestBody(responseBody))
+                .requestBody(new HttpRequestBody(requestBody))
                 .requestHeaders(new HttpRequestHeader(requestHeadersMap))
                 .responseCode(new HttpResponseCode(Integer.parseInt(responseCode)))
                 .responseBody(new HttpResponseBody(responseBody))
