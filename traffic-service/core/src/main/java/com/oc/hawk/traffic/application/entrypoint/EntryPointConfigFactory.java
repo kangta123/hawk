@@ -31,11 +31,10 @@ public class EntryPointConfigFactory {
         EntryPointDescription description = new EntryPointDescription(command.getName(), command.getDesc());
         
         HttpPath apiPath = new HttpPath(command.getPath());
-        apiPath.handlePath();
-        
+                
         HttpMethod apiMethod = HttpMethod.valueOf(command.getMethod());
-        HttpResource apiHttpResource = new HttpResource(apiPath, apiMethod);
-
+        HttpResource apiHttpResource = new HttpResource(apiPath.getUri(), apiMethod);
+        
         return EntryPointConfig.builder()
             .groupId(groupId)
             .description(description)
@@ -48,11 +47,10 @@ public class EntryPointConfigFactory {
         List<EntryPointConfig> baseApiConfigList = new ArrayList<>();
         for (ImportApiDTO importApiDTO : importApiList) {
             HttpPath path = new HttpPath(handleImportApiUrl(importApiDTO.getUrl()));
-            path.handlePath();
             EntryPointConfig apiConfig = EntryPointConfig.builder()
                 .groupId(group.getGroupId())
                 .description(new EntryPointDescription(importApiDTO.getName(), importApiDTO.getDescription()))
-                .httpResource(new HttpResource(path, HttpMethod.valueOf(importApiDTO.getMethod())))
+                .httpResource(new HttpResource(path.getUri(), HttpMethod.valueOf(importApiDTO.getMethod())))
                 .build();
             baseApiConfigList.add(apiConfig);
         }

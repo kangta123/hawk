@@ -77,12 +77,17 @@ public class EntryPointConfigGroups {
     }
     
     /**
-     * 
+     * 查询全部api配置
      */
     public List<EntryPointConfig> getEntryPointConfigList(){
-        
         return apiConfigRepository.findAllEntryPointConfig();
     }
     
+    /**
+     * 删除分组
+     */
+    public void deleteEntryPointGroup(EntryPointGroupID groupId) {
+        apiConfigRepository.deleteGroupById(groupId);
+    }
     
 }

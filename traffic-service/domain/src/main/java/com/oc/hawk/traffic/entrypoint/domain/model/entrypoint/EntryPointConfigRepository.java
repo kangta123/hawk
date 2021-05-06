@@ -52,4 +52,6 @@ public interface EntryPointConfigRepository {
     
     void deleteAll();
     
+    void deleteGroupById(EntryPointGroupID entryPointGroupID);
+    
 }

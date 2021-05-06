@@ -26,17 +26,19 @@ public class HttpPath {
     }
     
     
-    public void handlePath() {
-        int n = path.indexOf("?");
+    public HttpPath getUri() {
+        String uri = this.path;
+        int n = uri.indexOf("?");
         if (n >= 0) {
-            path = path.substring(0, n);
+            uri = uri.substring(0, n);
         }
-        if (path.endsWith("/")) {
-            n = path.lastIndexOf("/");
+        if (uri.endsWith("/")) {
+            n = uri.lastIndexOf("/");
             if (n > 0) {
-                path = path.substring(0, n);
+                uri = uri.substring(0, n);
             }
         }
+        return new HttpPath(uri);
     }
     
     public boolean matchPath(String targetPath) {
@@ -61,12 +63,23 @@ public class HttpPath {
         return pathVariable;
     }
     
+    public void updatePathVariable(Map<String,String> pathVariable) {
+        this.pathVariable = pathVariable;
+    }
+    
+    public void updatePath(String path) {
+        this.path = path;
+    }
+    
     /**
     public static void main(String[] args) {
         HttpPath path = new HttpPath("/a1/b/2/c/3/?a=txt/");
-        path.handlePath();
-        path.updatePathVariable("/a1/b/{id1}/c/{id2}");
-        System.out.println(path.getPathVariable());
+        HttpPath pathUri = path.getUri();
+        System.out.println("pathUri:"+pathUri.getPath());
+        pathUri.updatePathVariable("/a1/b/{id1}/c/{id2}");
+        pathUri.updatePath(path.getPath());
+        System.out.println("pathVariable:"+pathUri.getPathVariable());
+        System.out.println("uriPath:"+pathUri.getPath());
     }
     */
 }

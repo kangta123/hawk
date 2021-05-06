@@ -210,4 +210,23 @@ public class EntryPointUseCase {
         entryPointResourceRepository.deleteAllEntryPointResource(entryPointConfigList);
         entryPointResourceRepository.loadEntryPointResource(entryPointConfigList);
     }
+    
+    /**
+     * 根据id删除组
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteEntryPointGroup(Long id) {
+        EntryPointConfigGroup group = entryPointConfigRepository.byId(new EntryPointGroupID(id));
+        //groupId不存在,不能删除.
+        if(Objects.isNull(group)) {
+           return ;
+        }
+        List<EntryPointConfig> entryPointConfigList = entryPointConfigRepository.byGroupIdList(List.of(group.getGroupId()));
+        //该组下存在api,不能删除.
+        if(Objects.nonNull(entryPointConfigList) && !entryPointConfigList.isEmpty()) {
+            return ;
+        }
+        new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPointGroup(new EntryPointGroupID(id));
+    }
+
 }

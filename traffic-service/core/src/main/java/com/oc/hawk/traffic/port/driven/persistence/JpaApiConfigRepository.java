@@ -363,5 +363,10 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         List<TrafficTracePo> trafficTracePoList = trafficTracePoRepository.findByStartTimeLessThan(startTime);
         trafficTracePoRepository.deleteAll(trafficTracePoList);
     }
+
+    @Override
+    public void deleteGroupById(EntryPointGroupID entryPointGroupID) {
+        apiConfigGroupPoRepository.deleteById(entryPointGroupID.getId());
+    }
     
 }

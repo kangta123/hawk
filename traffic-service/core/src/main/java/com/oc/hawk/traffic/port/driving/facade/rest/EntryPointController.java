@@ -130,6 +130,13 @@ public class EntryPointController {
         return BooleanWrapper.TRUE;
     }
     
-
+    /**
+     * 删除分组
+     */
+    @DeleteMapping("/group/{id}")
+    public BooleanWrapper deleteEntryPointGroup(@PathVariable Long id) {
+        entryPointUseCase.deleteEntryPointGroup(id);
+        return BooleanWrapper.TRUE;
+    }
     
 }

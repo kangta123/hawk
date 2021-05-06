@@ -52,8 +52,11 @@ public class TrafficTraces {
     public Trace queryTrafficTraceInfo(EntryPointConfigID entryPointId,TraceId traceId) {
         EntryPointConfig entryPointConfig = entryPointConfigRepository.byId(entryPointId);
         Trace trace = entryPointConfigRepository.byTraceId(traceId);
-        trace.getHttpResource().getPath().handlePath();
-        trace.getHttpResource().getPath().updatePathVariable(entryPointConfig.getHttpResource().getPath().getPath());
+        HttpPath httpPath = trace.getHttpResource().getPath();
+        HttpPath pathUri = httpPath.getUri();
+        pathUri.updatePathVariable(entryPointConfig.getHttpResource().getPath().getPath());
+        pathUri.updatePath(httpPath.getPath());
+        trace.getHttpResource().updateHttpPath(pathUri);
         return trace;
     }
     
@@ -61,10 +64,10 @@ public class TrafficTraces {
         if (StringUtils.isEmpty(path.getPath())) {
             return null;
         }
-        path.handlePath();
+        HttpPath pathUri = path.getUri();
         
         //查找path 与 method匹配项
-        EntryPointConfig entryPointConfig = entryPointResourceRepository.findByPathAndMethod(new HttpPath(path.getPath()), HttpMethod.valueOf(method));
+        EntryPointConfig entryPointConfig = entryPointResourceRepository.findByPathAndMethod(pathUri, HttpMethod.valueOf(method));
         if (Objects.nonNull(entryPointConfig)) {
             return entryPointConfig;
         }
@@ -73,7 +76,7 @@ public class TrafficTraces {
         List<EntryPointConfig> configList = entryPointResourceRepository.findByMethodAndRestfulPath(HttpMethod.valueOf(method));
         for (EntryPointConfig config : configList) {
             String targetPath = config.getHttpResource().getPath().getPath();
-            boolean result = path.matchPath(targetPath);
+            boolean result = pathUri.matchPath(targetPath);
             if (result) {
                 return config;
             }
