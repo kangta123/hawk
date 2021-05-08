@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class GrpcServer {
-    private final TraceCollector traceCollector;
+    private final GrpcTraceCollector grpcTraceCollector;
     private Server server;
 
     @PostConstruct
     public void setup() {
         try {
             server = ServerBuilder.forPort(6565)
-                .addService(traceCollector)
+                .addService(grpcTraceCollector)
                 .build().start();
         } catch (Exception e) {
             e.printStackTrace();

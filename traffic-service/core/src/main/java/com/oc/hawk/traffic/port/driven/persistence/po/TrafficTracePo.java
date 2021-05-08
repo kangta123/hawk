@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Entity
 @DynamicUpdate
 public class TrafficTracePo extends BaseEntity {
-	
+
     private String host;
     private String path;
     private String method;
@@ -36,6 +36,7 @@ public class TrafficTracePo extends BaseEntity {
     private Long latency;
     private String protocol;
     private String spanId;
+    private String kind;
     private String parentSpanId;
     private String traceId;
     private String requestBody;
@@ -45,7 +46,7 @@ public class TrafficTracePo extends BaseEntity {
     private String responseHeaders;
     private LocalDateTime startTime;
     private LocalDateTime createTime;
-    
+
     public static TrafficTracePo createBy(Trace history) {
         TrafficTracePo historyPo = new TrafficTracePo();
         historyPo.setHost(history.getHost());
@@ -58,9 +59,15 @@ public class TrafficTracePo extends BaseEntity {
         historyPo.setDstWorkload(history.getDestination().getDstWorkload());
         historyPo.setLatency(history.getLatency().getLatency());
         historyPo.setProtocol(history.getProtocol());
-        historyPo.setSpanId(history.getSpanContext().getSpanId());
-        historyPo.setParentSpanId(history.getSpanContext().getParentSpanId());
-        historyPo.setTraceId(history.getSpanContext().getTraceId());
+        final SpanContext spanContext = history.getSpanContext();
+        historyPo.setSpanId(spanContext.getSpanId());
+        historyPo.setParentSpanId(spanContext.getParentSpanId());
+        historyPo.setTraceId(spanContext.getTraceId());
+        final Kind kind = spanContext.getKind();
+        if (kind != null) {
+            historyPo.setKind(String.valueOf(kind));
+        }
+
         historyPo.setRequestBody(history.getRequestBody().getBody());
         historyPo.setRequestHeaders(JsonUtils.object2Json(history.getRequestHeaders().getHeaderMap()));
         historyPo.setRequestId(history.getRequestId());
@@ -72,22 +79,22 @@ public class TrafficTracePo extends BaseEntity {
         historyPo.setCreateTime(LocalDateTime.now());
         return historyPo;
     }
-    
+
     public Trace toTrace() {
-        Map<String,Object> requestMap = JsonUtils.json2Map(requestHeaders);
-        Map<String,String> requestHeadersMap = requestMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e->(String)e.getValue()));
-        Map<String,Object> responseMap = JsonUtils.json2Map(responseHeaders);
-        Map<String,String> responseHeadersMap = responseMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e->(String)e.getValue()));
+        Map<String, Object> requestMap = JsonUtils.json2Map(requestHeaders);
+        Map<String, String> requestHeadersMap = requestMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
+        Map<String, Object> responseMap = JsonUtils.json2Map(responseHeaders);
+        Map<String, String> responseHeadersMap = responseMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
         return Trace.builder()
                 .id(new TraceId(getId()))
                 .host(host)
-                .httpResource(new HttpResource(new HttpPath(path),HttpMethod.valueOf(method)))
+                .httpResource(new HttpResource(new HttpPath(path), HttpMethod.valueOf(method)))
                 .destination(new Destination(dstWorkload, destAddr, dstNamespace))
                 .requestId(requestId)
                 .sourceAddr(sourceAddr)
                 .latency(new Latency(latency))
                 .protocol(protocol)
-                .spanContext(new SpanContext(spanId,parentSpanId,traceId))
+                .spanContext(new SpanContext(spanId, parentSpanId, traceId, kind))
                 .requestBody(new HttpRequestBody(requestBody))
                 .requestHeaders(new HttpRequestHeader(requestHeadersMap))
                 .responseCode(new HttpResponseCode(Integer.parseInt(responseCode)))

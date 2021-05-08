@@ -1,16 +1,17 @@
 package com.oc.hawk.traffic.application.entrypoint.representation;
 
-import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.project.api.dto.ProjectDetailDTO;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigGroup;
 import com.oc.hawk.traffic.entrypoint.domain.model.execution.response.HttpResponse;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class EntryPointConfigRepresentation {
-    
+
     private final ProjectFacade projectFacade;
-    
+
 
     public List<UserGroupDTO> toUserGroupDTO(List<EntryPointConfigGroup> allGroupList, List<EntryPointConfigGroup> groupList) {
         List<UserGroupDTO> userGroupDTOList = new ArrayList<UserGroupDTO>();
@@ -56,7 +57,7 @@ public class EntryPointConfigRepresentation {
         userApiDTO.setApiMethod(config.getHttpResource().getMethod().name());
         userApiDTO.setApiDesc(config.getDescription().getDesc());
         Long projectId = config.getProjectId();
-        if(Objects.nonNull(projectId)) {
+        if (Objects.nonNull(projectId)) {
             userApiDTO.setProjectId(String.valueOf(projectId));
             ProjectDetailDTO projectDetailDTO = projectFacade.getProject(projectId);
             userApiDTO.setProjectName(projectDetailDTO.getName());
@@ -66,12 +67,12 @@ public class EntryPointConfigRepresentation {
 
     public List<UserGroupEntryPointDTO> toUserGroupEntryPointDTOList(List<EntryPointConfig> entryPointList, List<EntryPointConfigGroup> entryPointGroupList) {
         List<UserGroupEntryPointDTO> userGroupApiDTOList = new ArrayList<>();
-        entryPointGroupList.forEach( obj -> {
+        entryPointGroupList.forEach(obj -> {
             UserGroupEntryPointDTO userGroupApiDTO = new UserGroupEntryPointDTO();
             Long id = obj.getGroupId().getId();
             List<EntryPointDTO> userApiDTOList = new ArrayList<>();
             entryPointList.forEach(item -> {
-                if(item.getGroupId().getId().equals(id)) {
+                if (item.getGroupId().getId().equals(id)) {
                     userApiDTOList.add(toUserEntryPointDTO(item, item.getGroupId().getId()));
                     userGroupApiDTO.setApiList(userApiDTOList);
                 }
@@ -87,28 +88,28 @@ public class EntryPointConfigRepresentation {
     public ExecuteResponseDTO toExecuteResponseDTO(HttpResponse httpResponse) {
         ExecuteResponseDTO dto = new ExecuteResponseDTO();
         dto.setResponseCode(httpResponse.getResponseCode());
-        dto.setResponseTime(httpResponse.getResponseTime());
+        dto.setLatency(httpResponse.getResponseTime());
         dto.setResponseBody(httpResponse.getResponseBody().getBody());
         dto.setResponseHeaders(httpResponse.getResponseHeader().getResponeseHeader());
         return dto;
     }
-    
-    public TraceItemPageDTO toTraceDetailList(List<Trace> traceList,Integer size) {
+
+    public TraceItemPageDTO toTraceDetailList(List<Trace> traceList, Integer size) {
 
         final List<TraceItemDTO> list = traceList.stream().map(this::toTraceItemDTO).collect(Collectors.toList());
 
         TraceItemPageDTO itemPage = new TraceItemPageDTO();
-        if(list.size() > size) {
+        if (list.size() > size) {
             itemPage.setHasNext(true);
             itemPage.setItems(list.subList(0, size));
-        }else{
+        } else {
             itemPage.setHasNext(false);
             itemPage.setItems(list);
         }
         return itemPage;
     }
-    
-    public TraceDetailDTO toTraceDetailDTO(Trace trace){
+
+    public TraceDetailDTO toTraceDetailDTO(Trace trace) {
         TraceDetailDTO dto = new TraceDetailDTO();
         dto.setId(trace.getId().getId());
         dto.setHost(trace.getHost());
@@ -127,7 +128,7 @@ public class EntryPointConfigRepresentation {
         dto.setRequestBody(trace.getRequestBody().getBody());
         dto.setRequestHeaders(trace.getRequestHeaders().getHeaderMap());
         dto.setResponseCode(trace.getResponseCode().getCode());
-        dto.setResponseBody(trace.getResponseBody().getBody()); 
+        dto.setResponseBody(trace.getResponseBody().getBody());
         dto.setResponseHeaders(trace.getResponseHeaders().getResponeseHeader());
         dto.setStartTime(trace.getTimestamp());
         dto.setEntryPointId(trace.getEntryPointId());
@@ -135,21 +136,19 @@ public class EntryPointConfigRepresentation {
         dto.setPathVariable(trace.getHttpResource().getPath().getPathVariable());
         return dto;
     }
-    
+
     public List<TraceNodeDTO> toTreeNodeDTOList(List<Trace> traceList) {
-        List<TraceNodeDTO> nodeList = new ArrayList<>();
-        for(Trace trace : traceList) {
-            TraceNodeDTO dto = toTraceNodeDTO(trace);
-            nodeList.add(dto);
-        }
-        return nodeList;
+        return traceList.stream().map(this::toTraceNodeDTO).collect(Collectors.toList());
     }
-    
+
     private TraceNodeDTO toTraceNodeDTO(Trace trace) {
         TraceNodeDTO traceNodeDTO = new TraceNodeDTO();
-        traceNodeDTO.setTraceId(trace.getSpanContext().getTraceId());
-        traceNodeDTO.setSpanId(trace.getSpanContext().getSpanId());
-        traceNodeDTO.setParentSpanId(trace.getSpanContext().getParentSpanId());
+        final SpanContext spanContext = trace.getSpanContext();
+        traceNodeDTO.setTraceId(spanContext.getTraceId());
+        traceNodeDTO.setSpanId(spanContext.getSpanId());
+        traceNodeDTO.setParentSpanId(spanContext.getParentSpanId());
+        traceNodeDTO.setKind(String.valueOf(spanContext.getKind()));
+
         traceNodeDTO.setInstanceName(trace.getDestination().getDstWorkload());
         traceNodeDTO.setLatency(trace.getLatency().getTime());
         traceNodeDTO.setMethod(trace.getHttpResource().getMethod().name());
@@ -160,11 +159,11 @@ public class EntryPointConfigRepresentation {
         traceNodeDTO.setStartTime(trace.getTimestamp());
         return traceNodeDTO;
     }
-    
-    public TraceResponseDTO toTraceResponseDTO(List<Trace> traceList,Long countNum) {
+
+    public TraceResponseDTO toTraceResponseDTO(List<Trace> traceList, Long countNum) {
         TraceResponseDTO dto = new TraceResponseDTO();
         dto.setTotalSize(countNum);
-        
+
         List<TraceListItemDTO> traceListItemList = traceList.stream().map(item -> {
             TraceListItemDTO traceListItemDTO = new TraceListItemDTO();
             traceListItemDTO.setId(item.getId().getId());
@@ -174,11 +173,11 @@ public class EntryPointConfigRepresentation {
             traceListItemDTO.setSpanId(item.getSpanContext().getSpanId());
             return traceListItemDTO;
         }).collect(Collectors.toList());
-        
+
         dto.setItems(traceListItemList);
         return dto;
     }
-    
+
     private TraceItemDTO toTraceItemDTO(Trace trace) {
         TraceItemDTO dto = new TraceItemDTO();
         dto.setId(trace.getId().getId());
@@ -193,5 +192,5 @@ public class EntryPointConfigRepresentation {
         dto.setEntryPointName(trace.getEntryPointName());
         return dto;
     }
-    
+
 }

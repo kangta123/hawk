@@ -22,6 +22,7 @@ data:
         build-namespace: {{ default "build" .Values.hawk.build.namespace }}
         app-image-prefix: {{ .Values.hawk.appImagePrefix }}
         gateway-url: hawk-gateway.hawk:8080
+        pvc-log: true
       runtime:
         buildVolume: lib-repo
         config:

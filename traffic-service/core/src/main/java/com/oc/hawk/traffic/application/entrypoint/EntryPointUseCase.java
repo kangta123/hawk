@@ -148,7 +148,6 @@ public class EntryPointUseCase {
      * 链路信息查询
      */
     public TraceItemPageDTO queryTraceInfoList(Integer page,Integer size,String key){
-        
     	List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceInfoList(page,size,key);
     	return entryPointConfigRepresentation.toTraceDetailList(traceList,size);
     }
@@ -178,7 +177,7 @@ public class EntryPointUseCase {
      * 链路节点列表查询
      */
     public List<TraceNodeDTO> queryTraceNodeList(String spanId){
-        Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null)).build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null, null)).build();
         List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
         return entryPointConfigRepresentation.toTreeNodeDTOList(traceList);
     }

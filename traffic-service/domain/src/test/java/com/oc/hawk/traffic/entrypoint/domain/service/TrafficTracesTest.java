@@ -5,18 +5,14 @@ import com.oc.hawk.traffic.entrypoint.EntryPointBaseTest;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointDescription;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.*;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
-import static org.mockito.Mockito.when;
-import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 public class TrafficTracesTest extends EntryPointBaseTest {
@@ -79,7 +75,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceNodeList_spanIdAlreadyExists() {
-        Trace traceParam = Trace.builder().spanContext(new SpanContext("1",null,null)).build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext("1",null,null, null)).build();
         when(entryPointConfigRepository.findBySpanId(any())).thenReturn(getTrace());
         when(entryPointConfigRepository.findByTraceId(any())).thenReturn(List.of(getTrace()));
         List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
@@ -92,7 +88,7 @@ public class TrafficTracesTest extends EntryPointBaseTest {
      */
     @Test
     void testQueryTraceNodeList_spanIdIsNull() {
-        Trace traceParam = Trace.builder().spanContext(new SpanContext(null,null,null)).build();
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(null,null,null,null)).build();
         when(entryPointConfigRepository.findBySpanId(eq(traceParam))).thenReturn(null);
         List<Trace> traceList = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryTraceNodeList(traceParam);
         

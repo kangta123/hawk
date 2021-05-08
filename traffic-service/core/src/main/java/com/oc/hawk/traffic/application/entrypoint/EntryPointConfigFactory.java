@@ -82,7 +82,7 @@ public class EntryPointConfigFactory {
         Map<String, String> responseHeaderMap = responseHeaders.entrySet().stream()
                 .filter(map -> !responseFilterKeyList.contains(map.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        
+
         return Trace.builder()
     			.host(command.getHost())
     			.httpResource(new HttpResource(new HttpPath(command.getPath()),HttpMethod.valueOf(command.getMethod())))
@@ -96,9 +96,14 @@ public class EntryPointConfigFactory {
     			.requestHeaders(new HttpRequestHeader(requestHeaderMap))
     			.responseBody(new HttpResponseBody(command.getResponseBody()))
     			.responseHeaders(new HttpResponseHeader(responseHeaderMap))
-    			.responseCode(new HttpResponseCode(Integer.parseInt(command.getResponseCode())))
-    			.spanContext(new SpanContext(command.getSpanId(),command.getParentSpanId(),command.getTraceId()))
+    			.responseCode(HttpResponseCode.of(command.getResponseCode()))
+    			.spanContext(createSpanContext(command))
     			.build();
+    }
+
+
+    private SpanContext createSpanContext(UploadTraceInfoCommand command){
+        return new SpanContext(command.getSpanId(),command.getParentSpanId(),command.getTraceId(), command.getKind());
     }
 
     private List<String> getTraceRequestHeaderConfig(){

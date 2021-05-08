@@ -1,21 +1,11 @@
 package com.oc.hawk.traffic.entrypoint.domain.model.trace;
 
-import java.util.Map;
-import java.util.Objects;
-
 import com.oc.hawk.ddd.DomainEntity;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpRequestHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseBody;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseCode;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResponseHeader;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Latency;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.SpanContext;
-
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.*;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -23,24 +13,24 @@ import lombok.Getter;
 public class Trace {
 
     private final TraceId id;
-    private String host;
-    private HttpResource httpResource;
+    private final String host;
+    private final HttpResource httpResource;
     
-    private Destination destination;
-    private String sourceAddr;
+    private final Destination destination;
+    private final String sourceAddr;
     
-    private Long timestamp;
-    private Latency latency;
-    private String requestId;
-    private String protocol;
+    private final Long timestamp;
+    private final Latency latency;
+    private final String requestId;
+    private final String protocol;
     
-    private HttpRequestHeader requestHeaders;
-    private HttpResponseHeader responseHeaders;
-    private HttpResponseBody responseBody;
-    private HttpRequestBody requestBody;
+    private final HttpRequestHeader requestHeaders;
+    private final HttpResponseHeader responseHeaders;
+    private final HttpResponseBody responseBody;
+    private final HttpRequestBody requestBody;
     
-    private SpanContext spanContext;
-    private HttpResponseCode responseCode;
+    private final SpanContext spanContext;
+    private final HttpResponseCode responseCode;
     private Long entryPointId;
     private String entryPointName;
     
@@ -52,6 +42,23 @@ public class Trace {
             this.entryPointName = entryPointName;
         }
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Trace trace = (Trace) o;
+        return Objects.equals(requestId, trace.requestId) &&
+                Objects.equals(spanContext, trace.spanContext);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestId, spanContext);
+    }
 }
 

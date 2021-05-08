@@ -7,13 +7,14 @@ import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * @author kangta123
@@ -21,34 +22,38 @@ import java.util.function.BiFunction;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
+public class GrpcTraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
 
     private static final String KEY_SPAN_ID = "x-b3-spanid";
     private static final String KEY_TRACE_ID = "x-b3-traceid";
     private static final String KEY_PARENT_SPAN_ID = "x-b3-parentspanid";
     private static final String KEY_STATUS = ":status";
     private static final Integer KEY_MAP_SIZE = 8;
-    private final TrafficTraceInfoUseCase trafficTraceInfoUseCase;
     private static final Long TIME_MILLIS = 1000L;
+    private final TrafficTraceInfoUseCase trafficTraceInfoUseCase;
 
     @Override
     public void writeLog(com.oc.hawk.trace_logging.Trace.WriteLogRequest request, StreamObserver<com.oc.hawk.trace_logging.Trace.WriteLogResponse> responseObserver) {
-        List<UploadTraceInfoCommand> commandList = new ArrayList<UploadTraceInfoCommand>();
-        
-        for (com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry : request.getLogEntriesList()) {
-            log.info("received trace log : {} {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
-            UploadTraceInfoCommand command = getTraceInfoCommand(logEntry);
-            buildRequestHeader(logEntry, command);
-            buildResponseHeader(logEntry, command);
-            commandList.add(command);
-        }
-        trafficTraceInfoUseCase.createTrace(commandList);
-        log.info("complete");
+
+        final List<UploadTraceInfoCommand> traceInfoCommandList = request.getLogEntriesList().stream()
+                .map(this::getTraceInfoCommand)
+                .filter(d -> {
+                    if (StringUtils.isEmpty(d.getTraceId())) {
+                        log.warn("invalid trace data with empty trace id");
+                        return false;
+                    }
+                    return true;
+                }).collect(Collectors.toList());
+
+        trafficTraceInfoUseCase.createTrace(traceInfoCommandList);
+        log.info("Received trace log completely, {}", traceInfoCommandList.size());
         responseObserver.onNext(com.oc.hawk.trace_logging.Trace.WriteLogResponse.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     private UploadTraceInfoCommand getTraceInfoCommand(com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry) {
+        log.info("received trace log : {} {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
+
         UploadTraceInfoCommand command = new UploadTraceInfoCommand();
         command.setHost(logEntry.getHost());
         command.setPath(logEntry.getPath());
@@ -57,15 +62,26 @@ public class TraceCollector extends LoggingServiceGrpc.LoggingServiceImplBase {
         command.setDstWorkload(logEntry.getDestinationWorkload());
         command.setDstNamespace(logEntry.getDestinationNamespace());
         command.setTimestamp(logEntry.getTimestamp().getSeconds() * TIME_MILLIS);
-        command.setLatency(Long.valueOf(logEntry.getLatency().getNanos()));
+        command.setLatency((long) logEntry.getLatency().getNanos());
         command.setRequestId(logEntry.getRequestId());
         command.setProtocol(logEntry.getProtocol());
         command.setMethod(logEntry.getMethod());
-        command.setRequestBody(logEntry.getRequestBody());
-        command.setResponseBody(logEntry.getResponseBody());
+        final String localAddress = logEntry.getLocalAddress();
+        if (!StringUtils.isEmpty(localAddress)) {
+            command.setKind(localAddress.startsWith("127.0.0.1") ? "server" : "client");
+        }
+        try {
+            command.setRequestBody(logEntry.getRequestBody().toStringUtf8());
+            command.setResponseBody(logEntry.getResponseBody().toStringUtf8());
+        } catch (Exception e) {
+            log.error("Read body data error", e);
+        }
+
+        buildRequestHeader(logEntry, command);
+        buildResponseHeader(logEntry, command);
         return command;
     }
-    
+
     private void buildRequestHeader(com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry, UploadTraceInfoCommand command) {
         Object[] reqHeaderList = JsonUtils.json2Object(logEntry.getRequestHeaders(), Object[].class);
         command.setRequestHeaders(buildHeader(reqHeaderList, (key, value) -> {

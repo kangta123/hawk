@@ -2,7 +2,6 @@ package com.oc.hawk.traffic.entrypoint.api.command;
 
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 @Data
@@ -27,5 +26,6 @@ public class UploadTraceInfoCommand {
     private String parentSpanId;
     private String traceId;
     private String responseCode;
-    
+    private String kind;
+
 }

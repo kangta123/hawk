@@ -27,13 +27,13 @@ public interface EntryPointConfigRepository {
     List<EntryPointConfigGroup> byIdList(List<EntryPointGroupID> groupIdList);
 
     List<EntryPointConfig> byGroupIdList(List<EntryPointGroupID> groupIdList);
+    List<Trace> queryTraceInfoList(Integer page, Integer size, String key) ;
 
     List<EntryPointConfig> batchSave(EntryPointGroupID entryPointConfigGroupID, List<EntryPointConfig> apiConfigList);
 
     void saveTrace(List<Trace> history);
     
-    List<Trace> queryTraceInfoList(Integer page,Integer size,Trace trace);
-    
+
     void deleteById(EntryPointConfigID entryPointConfigID);
     
     Trace byTraceId(TraceId traceId);

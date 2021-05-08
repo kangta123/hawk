@@ -24,11 +24,12 @@ message WriteLogRequest {
     string method = 14;
     string request_headers = 15;
     string response_headers = 16;
-    string request_body = 17;
-    string response_body = 18;
+    bytes request_body = 17;
+    bytes response_body = 18;
 
     int64 response_size = 20;
     int64 request_size = 21;
+    string local_address = 22;
 
 
     google.protobuf.Timestamp timestamp = 10;

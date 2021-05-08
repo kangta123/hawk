@@ -152,7 +152,8 @@ public class JsonUtils {
             if (StringUtils.isEmpty(json)) {
                 return null;
             }
-            return OBJECT_MAPPER.readValue(json, new TypeReference<Map<String, Object>>() {
+            return OBJECT_MAPPER.readValue(json, new TypeReference<>() {
+
             });
         } catch (IOException e) {
             throw new RuntimeException("将 Json 转换为MAP时异常,数据是:" + json, e);

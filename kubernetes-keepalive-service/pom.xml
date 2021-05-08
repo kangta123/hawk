@@ -9,9 +9,10 @@
     </parent>
     <artifactId>kubernetes-keepalive</artifactId>
     <name>kubernetes-keepalive</name>
-
+    <properties>
+        <kubernetes.client.version>5.2.1</kubernetes.client.version>
+    </properties>
     <dependencies>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -30,7 +31,6 @@
         <dependency>
             <groupId>com.oc.hawk</groupId>
             <artifactId>message-api</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,12 +49,21 @@
             <artifactId>container-domain</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.oc.hawk</groupId>
             <artifactId>kubernetes-infrastructure</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client</artifactId>
+            <version>${kubernetes.client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-model</artifactId>
+            <version>${kubernetes.client.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

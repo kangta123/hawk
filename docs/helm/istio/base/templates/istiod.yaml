@@ -1,0 +1,22 @@
+apiVersion: v1
+data:
+  mesh: |-
+    accessLogFile: /dev/stdout
+    accessLogEncoding: JSON
+    defaultConfig:
+      discoveryAddress: istiod.istio-system.svc:15012
+      tracing:
+        tracing:
+          sampling: 100.0
+        zipkin:
+          address: zipkin.istio-system:9411
+    enablePrometheusMerge: true
+    enableTracing: true
+    rootNamespace: istio-system
+    trustDomain: cluster.local
+  meshNetworks: 'networks: {}'
+kind: ConfigMap
+metadata:
+  name: istio
+  namespace: { { .Release.Namespace } }
+

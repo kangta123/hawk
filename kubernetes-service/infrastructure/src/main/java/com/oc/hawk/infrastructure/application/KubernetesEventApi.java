@@ -24,7 +24,7 @@ public class KubernetesEventApi {
         }
         log.info("Kubernetes event watch start with version {}", resourceVersion);
 
-        client.pods().inAnyNamespace().withLabels(labels).withResourceVersion(resourceVersion).watch(new Watcher<Pod>() {
+        client.pods().inAnyNamespace().withLabels(labels).withResourceVersion(resourceVersion).watch(new Watcher<>() {
             @Override
             public void eventReceived(Watcher.Action action, Pod pod) {
                 KubernetesPod kubernetesRuntime = KubernetesPod.createNew(pod);
@@ -47,7 +47,7 @@ public class KubernetesEventApi {
 
             @Override
             public void onClose() {
-
+                log.info("Watch gracefully closed");
             }
 
             @Override

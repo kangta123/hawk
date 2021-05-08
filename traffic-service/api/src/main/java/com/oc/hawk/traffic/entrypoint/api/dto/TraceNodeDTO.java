@@ -16,4 +16,5 @@ public class TraceNodeDTO {
     private Long entryPointId;
     private String entryPointName;
     private Long startTime;
+    private String kind;
 }
