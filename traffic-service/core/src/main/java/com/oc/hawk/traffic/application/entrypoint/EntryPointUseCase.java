@@ -1,5 +1,6 @@
 package com.oc.hawk.traffic.application.entrypoint;
 
+import com.oc.hawk.api.exception.AppBusinessException;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
 import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
@@ -223,7 +224,7 @@ public class EntryPointUseCase {
         List<EntryPointConfig> entryPointConfigList = entryPointConfigRepository.byGroupIdList(List.of(group.getGroupId()));
         //该组下存在api,不能删除.
         if(Objects.nonNull(entryPointConfigList) && !entryPointConfigList.isEmpty()) {
-            return ;
+            throw new AppBusinessException("分组下包含api不能删除");
         }
         new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPointGroup(new EntryPointGroupID(id));
     }
