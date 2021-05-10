@@ -12,6 +12,8 @@ import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,8 +49,12 @@ public class EntryPointController {
      * 查询用户所有可见分组及分组下的api
      */
     @GetMapping("")
-    public List<UserGroupEntryPointDTO> queryUserGroupApiList() {
-        return entryPointUseCase.queryGroupAndApiList();
+    public List<UserGroupEntryPointDTO> queryUserGroupApiList(@RequestParam(required = false) String key) {
+        if(StringUtils.isEmpty(key)) {
+            return entryPointUseCase.queryGroupAndApiList();
+        }else{
+            return entryPointUseCase.queryApiByResource(key);
+        }
     }
 
     /**
@@ -66,14 +72,6 @@ public class EntryPointController {
     public BooleanWrapper updateUserGroupVisibility(@RequestBody List<Long> groupIds) {
         entryPointUseCase.updateUserGroupVisibility(groupIds);
         return BooleanWrapper.TRUE;
-    }
-
-    /**
-     * 根据api地址模糊查询
-     */
-    @GetMapping("/path")
-    public List<UserGroupEntryPointDTO> queryApiByPath(@RequestParam(required = false) String key) {
-        return entryPointUseCase.queryApiByResource(key);
     }
 
     /**

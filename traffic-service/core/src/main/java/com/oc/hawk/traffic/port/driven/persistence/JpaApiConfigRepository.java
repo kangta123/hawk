@@ -59,6 +59,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public EntryPointConfigID save(EntryPointConfig config) {
         EntryPointConfigPO apiConfigPo = EntryPointConfigPO.createBy(config);
+        apiConfigPo.setId(config.getConfigId().getId());
         apiConfigPoRepository.save(apiConfigPo);
         return new EntryPointConfigID(apiConfigPo.getId());
     }
