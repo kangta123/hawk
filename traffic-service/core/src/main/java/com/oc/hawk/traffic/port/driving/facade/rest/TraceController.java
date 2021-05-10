@@ -3,11 +3,13 @@ package com.oc.hawk.traffic.port.driving.facade.rest;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oc.hawk.traffic.application.entrypoint.EntryPointUseCase;
+import com.oc.hawk.traffic.entrypoint.api.dto.TraceDetailDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceItemPageDTO;
 import com.oc.hawk.traffic.entrypoint.api.dto.TraceNodeDTO;
 
@@ -38,6 +40,14 @@ public class TraceController {
     @GetMapping("/trace/node")
     public List<TraceNodeDTO> queryTraceNodeList(@RequestParam(required=false) String spanId) {
         return entryPointUseCase.queryTraceNodeList(spanId);
+    }
+    
+    /**
+     * 链路详情信息查询
+     */
+    @GetMapping("/trace/{spanId}")
+    public TraceDetailDTO queryApiTraceDetail(@PathVariable String spanId){
+        return entryPointUseCase.queryApiTraceDetail(spanId);
     }
     
 }

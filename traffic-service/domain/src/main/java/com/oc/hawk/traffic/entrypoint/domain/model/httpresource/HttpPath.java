@@ -71,6 +71,12 @@ public class HttpPath {
         this.path = path;
     }
     
+    public String getLikePath(String targetPath) {
+        if(StringUtils.indexOf(targetPath, "{")>=0 && StringUtils.indexOf(targetPath, "}")>=0) {
+            return targetPath.replaceAll("\\{[a-zA-Z\\d]+\\}", "%");
+        }
+        return targetPath;
+    }
     /**
     public static void main(String[] args) {
         HttpPath path = new HttpPath("/a1/b/2/c/3/?a=txt/");
@@ -80,6 +86,8 @@ public class HttpPath {
         pathUri.updatePath(path.getPath());
         System.out.println("pathVariable:"+pathUri.getPathVariable());
         System.out.println("uriPath:"+pathUri.getPath());
+        HttpPath path = new HttpPath();
+        System.out.println(path.getLikePath("/a1/b/{id1}/c/{id2}"));
     }
     */
 }

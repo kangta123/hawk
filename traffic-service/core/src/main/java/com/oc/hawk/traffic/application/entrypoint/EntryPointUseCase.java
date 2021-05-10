@@ -228,5 +228,14 @@ public class EntryPointUseCase {
         }
         new EntryPointConfigGroups(entryPointConfigRepository).deleteEntryPointGroup(new EntryPointGroupID(id));
     }
+    
+    /**
+     * 链路详情查询
+     */
+    public TraceDetailDTO queryApiTraceDetail(String spanId){
+        Trace traceParam = Trace.builder().spanContext(new SpanContext(spanId,null,null, null)).build();
+        Trace trace = new TrafficTraces(entryPointConfigRepository,entryPointResourceRepository).queryApiTraceDetail(traceParam);
+        return entryPointConfigRepresentation.toTraceDetailDTO(trace);
+    }
 
 }

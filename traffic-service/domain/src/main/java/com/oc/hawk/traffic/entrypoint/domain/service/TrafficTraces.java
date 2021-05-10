@@ -108,5 +108,15 @@ public class TrafficTraces {
             trace.updateEntryPointIdAndName(traceInfo.getEntryPointId(), traceInfo.getEntryPointName());
         }
     }
+    
+    public Trace queryApiTraceDetail(Trace traceParam) {
+        Trace traceNode = entryPointConfigRepository.findBySpanId(traceParam);
+        if (Objects.isNull(traceNode)) {
+            return null;
+        }
+        Trace traceInfo = queryTraceInfo(traceNode.getHttpResource().getPath(), traceNode.getHttpResource().getMethod().name());
+        updateTrace(traceInfo, traceNode);
+        return traceNode;
+    }
 
 }
