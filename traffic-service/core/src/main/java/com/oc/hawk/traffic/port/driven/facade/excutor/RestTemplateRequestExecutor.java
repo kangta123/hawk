@@ -82,7 +82,7 @@ public class RestTemplateRequestExecutor implements EntryPointExcutor {
                 requestUrlBuilder.append(sb);
             }
             //MultiValueMap<String, String> httpParams = getHttpParams(((FormHttpBody) request.getRequestBody()).getData());
-            entity = new HttpEntity<>((FormHttpBody)request.getRequestBody(), httpHeaders);
+            entity = new HttpEntity<>(((FormHttpBody)request.getRequestBody()).getData(), httpHeaders);
         }
         return entity;
     }
