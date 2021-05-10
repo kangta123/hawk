@@ -21,7 +21,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -44,11 +46,12 @@ public class RestTemplateRequestExecutor implements EntryPointExcutor {
         InstanceConfigDTO instanceConfigDTO = containerFacade.getById(request.getInstanceId());
         
         String requestUrl = request.getHttpRequestUrl(instanceConfigDTO.getServiceName(),instanceConfigDTO.getNamespace());
-        HttpEntity requestEntity = getHttpEntity(request, httpHeaders);
+        StringBuilder requestUrlBuilder = new StringBuilder(requestUrl);
+        HttpEntity requestEntity = getHttpEntity(request, httpHeaders,requestUrlBuilder);
         
         Stopwatch stopWatch = Stopwatch.createStarted();
         HttpMethod httpMethod = getHttpMethod(request.getRequestMethod());
-        ResponseEntity<String> responseObj = customRestTemplate.exchange(requestUrl, httpMethod, requestEntity, String.class, uriVariablesMap);
+        ResponseEntity<String> responseObj = customRestTemplate.exchange(requestUrlBuilder.toString(), httpMethod, requestEntity, String.class, uriVariablesMap);
         stopWatch.stop();
         return HttpResponse.builder()
             .responseCode(String.valueOf(responseObj.getStatusCodeValue()))
@@ -58,13 +61,28 @@ public class RestTemplateRequestExecutor implements EntryPointExcutor {
             .build();
     }
 
-    private HttpEntity<Object> getHttpEntity(HttpRequest request, HttpHeaders httpHeaders) {
+    private HttpEntity<Object> getHttpEntity(HttpRequest request, HttpHeaders httpHeaders,StringBuilder requestUrlBuilder) {
         HttpEntity entity = null;
         if (request.getRequestBody() instanceof JsonHttpBody) {
             entity = new HttpEntity<>(((JsonHttpBody) request.getRequestBody()).getData(), httpHeaders);
         } else if (request.getRequestBody() instanceof FormHttpBody) {
-            MultiValueMap<String, String> httpParams = getHttpParams(((FormHttpBody) request.getRequestBody()).getData());
-            entity = new HttpEntity<>(httpParams, httpHeaders);
+            Map<String,String> paramsMap = request.getRequestParam().getParams();
+            if(Objects.nonNull(paramsMap)) {
+                StringBuilder sb = new StringBuilder("?");
+                Object[] keyArray = paramsMap.keySet().toArray();
+                for(int i=0;i<keyArray.length;i++) {
+                    String paramKey = (String)keyArray[i];
+                    String paramValue = paramsMap.get(paramKey);
+                    if(i==keyArray.length-1) {
+                        sb.append(paramKey).append("=").append(paramValue);
+                    }else{
+                        sb.append(paramKey).append("=").append(paramValue).append("&");
+                    }
+                }
+                requestUrlBuilder.append(sb);
+            }
+            //MultiValueMap<String, String> httpParams = getHttpParams(((FormHttpBody) request.getRequestBody()).getData());
+            entity = new HttpEntity<>((FormHttpBody)request.getRequestBody(), httpHeaders);
         }
         return entity;
     }

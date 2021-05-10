@@ -39,9 +39,9 @@ public class HttpRequestFactory {
         if (header.isJsonContentType()) {
             body = new JsonHttpBody(executeCommand.getRequestBody());
         } else if (header.isFormContentType()) {
-            body = new FormHttpBody(formMap);
+            body = new FormHttpBody(executeCommand.getRequestBody());
         } else {
-            body = new FormHttpBody(formMap);
+            body = new FormHttpBody(executeCommand.getRequestBody());
         }
         
         return HttpRequest.builder()
