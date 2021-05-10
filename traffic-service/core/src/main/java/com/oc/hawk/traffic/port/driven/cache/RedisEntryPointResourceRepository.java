@@ -140,10 +140,14 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
         List<EntryPointConfig> configList = filterPathList.stream().map(item -> {
             String pathKey = getPathKey(item, httpMethod.name());
             Map<String,String> entryMap = getEntryMap(pathKey);
-            Long configId = Long.parseLong(entryMap.get("id"));
+            String entryPointId = entryMap.get("id");
+            EntryPointConfigID configId = null;
+            if(!StringUtils.isEmpty(entryPointId)) {
+                configId = new EntryPointConfigID(Long.parseLong(entryPointId));
+            }
             return EntryPointConfig
                     .builder()
-                    .configId(new EntryPointConfigID(configId))
+                    .configId(configId)
                     .description(new EntryPointDescription(entryMap.get("name"), null))
                     .httpResource(new HttpResource(new HttpPath(item),httpMethod))
                     .build();

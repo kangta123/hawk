@@ -94,7 +94,7 @@ public class TrafficTraces {
 
     private Trace queryTraceInfo(HttpPath path, String method) {
         EntryPointConfig entryPointConfig = matchPath(path, method);
-        if (Objects.nonNull(entryPointConfig)) {
+        if (Objects.nonNull(entryPointConfig) && Objects.nonNull(entryPointConfig.getConfigId())) {
             return Trace.builder()
                     .entryPointId(entryPointConfig.getConfigId().getId())
                     .entryPointName(entryPointConfig.getDescription().getName())
