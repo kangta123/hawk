@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.oc.hawk.api.constant.AccountHolder;
 import com.oc.hawk.common.utils.AccountHolderUtils;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.*;
+import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
@@ -269,10 +270,11 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<TrafficTracePo> criteriaQuery = criteriaBuilder.createQuery(TrafficTracePo.class);
         Root<TrafficTracePo> fromObj = criteriaQuery.from(TrafficTracePo.class);
 
-        String path = entryPointConfig.getHttpResource().getPath().getPath();
+        HttpPath httpPath = entryPointConfig.getHttpResource().getPath();
+        String path = httpPath.getLikePath(httpPath.getPath());
         String method = entryPointConfig.getHttpResource().getMethod().name();
 
-        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), path);
+        Predicate conditionPath = criteriaBuilder.like(fromObj.get("path"), path);
         Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path + "?%");
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
 
@@ -295,11 +297,12 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<TrafficTracePo> fromObj = criteriaQuery.from(TrafficTracePo.class);
         criteriaQuery.select(criteriaBuilder.count(fromObj));
-
-        String path = entryPointConfig.getHttpResource().getPath().getPath();
+        
+        HttpPath httpPath = entryPointConfig.getHttpResource().getPath();
+        String path = httpPath.getLikePath(httpPath.getPath());
         String method = entryPointConfig.getHttpResource().getMethod().name();
 
-        Predicate conditionPath = criteriaBuilder.equal(fromObj.get("path"), path);
+        Predicate conditionPath = criteriaBuilder.like(fromObj.get("path"), path);
         Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path + "?%");
         Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
 
