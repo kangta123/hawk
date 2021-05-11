@@ -57,8 +57,8 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
         if(Objects.isNull(pathList) || pathList.isEmpty()) {
             return ;
         }
-        StringBuilder key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(method).append("_");
-        List<String> pathKeyList = pathList.stream().map(obj -> key.append(obj).toString()).collect(Collectors.toList());
+        String key = new StringBuilder().append(ENTRYPOINT_PATH_KEY).append(method).append("_").toString();
+        List<String> pathKeyList = pathList.stream().map(obj -> key+obj).collect(Collectors.toList());
         String listKey = ENTRYPOINT_PATH_LIST + method;
         redisTemplate.opsForList().leftPushAll(listKey, pathKeyList);
     }
