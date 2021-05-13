@@ -169,7 +169,7 @@ public class RedisEntryPointResourceRepository implements EntryPointResourceRepo
     private String getPathKey(String path,String method) {
         return new StringBuilder()
                 .append(ENTRYPOINT_PATH_KEY)
-                .append(method)
+                .append(method.toLowerCase())
                 .append("_")
                 .append(path)
                 .toString();
