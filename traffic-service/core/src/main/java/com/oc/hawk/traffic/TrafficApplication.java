@@ -3,11 +3,15 @@ package com.oc.hawk.traffic;
 import com.oc.hawk.common.spring.config.BaseConfiguration;
 import com.oc.hawk.common.spring.config.WebConfiguration;
 import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
+import com.oc.hawk.traffic.port.driven.facade.excutor.CustomInterceptor;
 import com.oc.hawk.traffic.port.driven.facade.excutor.NoErrorResultHandler;
 import com.oc.hawk.traffic.port.driven.facade.excutor.RestTemplateProxy;
 import com.oc.hawk.traffic.port.driving.event.ApplicationStartupListener;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collections;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,6 +37,7 @@ public class TrafficApplication {
     public RestTemplate customRestTemplate() {
         RestTemplate restTemplate = new RestTemplateProxy();
         restTemplate.setErrorHandler(new NoErrorResultHandler());
+        restTemplate.setInterceptors(Collections.singletonList(new CustomInterceptor()));
         return restTemplate;
     }
     
