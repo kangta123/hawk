@@ -66,6 +66,7 @@ hawk:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_gateway
   - name: hawk-traffic
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_traffic-core
+    verison: v2.0.1-7
     #额外被service暴露端口
     exposePort:
     - name: grpc
@@ -86,7 +87,7 @@ hawk:
   ui:
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk-ui
     # ui 版本
-    version: v2.0-release
+    version: v2.0.1
     # ui将api转发到网关模块hawk gateway, gateway地址
     gateway: hawk-gateway:8080
 
@@ -134,7 +135,7 @@ prometheus:
     retention: "14d"
     persistentVolume:
       enabled: false
-        #storageClass: rook-cephfs
+      #storageClass: rook-cephfs
       size: 100Gi
   pushgateway:
     enabled: false
@@ -152,4 +153,4 @@ ingress-nginx:
     admissionWebhooks:
       patch:
         image:
-          repository:  registry.cn-qingdao.aliyuncs.com/kangta123/k8s-kube-webhook-certgen
+          repository: registry.cn-qingdao.aliyuncs.com/kangta123/k8s-kube-webhook-certgen

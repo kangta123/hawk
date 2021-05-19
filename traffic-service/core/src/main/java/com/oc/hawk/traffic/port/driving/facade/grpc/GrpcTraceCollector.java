@@ -39,7 +39,7 @@ public class GrpcTraceCollector extends LoggingServiceGrpc.LoggingServiceImplBas
                 .map(this::getTraceInfoCommand)
                 .filter(d -> {
                     if (StringUtils.isEmpty(d.getTraceId())) {
-                        log.warn("invalid trace data with empty trace id");
+                        log.warn("Invalid trace data with empty trace id");
                         return false;
                     }
                     return true;
@@ -52,7 +52,7 @@ public class GrpcTraceCollector extends LoggingServiceGrpc.LoggingServiceImplBas
     }
 
     private UploadTraceInfoCommand getTraceInfoCommand(com.oc.hawk.trace_logging.Trace.WriteLogRequest.LogEntry logEntry) {
-        log.info("received trace log : {} {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
+        log.info("Received trace log : {} {} to {}", logEntry.getMethod(), logEntry.getPath(), logEntry.getDestinationWorkload());
 
         UploadTraceInfoCommand command = new UploadTraceInfoCommand();
         command.setHost(logEntry.getHost());

@@ -31,6 +31,9 @@ public class AppContainerSpec implements ContainerSpec {
 
         appContainer.setTty(true);
         appContainer.setStdin(true);
+
+        withInSecurityContext(appContainer);
+
         ResourceRequirements resourceRequirement = resourceRequirement(runtimeComponent, configuration);
 
         if (resourceRequirement != null) {
@@ -48,11 +51,17 @@ public class AppContainerSpec implements ContainerSpec {
         return appContainer;
     }
 
+    private void withInSecurityContext(Container appContainer) {
+//        final SecurityContext securityContext = new SecurityContext(false, null, false, null, null, 3000L, true, 1000L, null, null, null);
+//        securityContext.setAdditionalProperty("fsGroup", 2000);
+//        appContainer.setSecurityContext(securityContext);
+    }
+
     private EnvVar injectNamespaceToEnv() {
         final EnvVarSource envVarSource = new EnvVarSourceBuilder()
-            .withFieldRef(
-                new ObjectFieldSelectorBuilder().withFieldPath(NAMESPACE_FIELD_PATH).build())
-            .build();
+                .withFieldRef(
+                        new ObjectFieldSelectorBuilder().withFieldPath(NAMESPACE_FIELD_PATH).build())
+                .build();
         return new EnvVar(POD_NAMESPACE, null, envVarSource);
     }
 

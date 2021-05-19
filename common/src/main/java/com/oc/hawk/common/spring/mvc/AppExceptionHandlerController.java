@@ -8,8 +8,7 @@ import com.oc.hawk.api.exception.error.CommonErrorCode;
 import com.oc.hawk.api.exception.error.Error;
 import com.oc.hawk.api.exception.error.ErrorCode;
 import com.oc.hawk.api.utils.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +29,9 @@ import java.util.stream.Collectors;
  * 统一异常处理
  */
 @ControllerAdvice
+@Slf4j
 public class AppExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-    protected Logger logger = LoggerFactory.getLogger(AppExceptionHandlerController.class);
 
     @Override
     protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers,
@@ -60,7 +59,7 @@ public class AppExceptionHandlerController extends ResponseEntityExceptionHandle
                                                              HttpHeaders headers, HttpStatus status,
                                                              WebRequest request) {
 
-        logger.error("spring web 异常: " + ex.getMessage(), ex);
+        log.error("spring web 异常: " + ex.getMessage(), ex);
         ErrorCode errorCode = CommonErrorCode.fromHttpStatus(status.value());
         return createResponseEntity(errorCode, request.getDescription(false), errorCode.getMessage());
     }
@@ -68,7 +67,7 @@ public class AppExceptionHandlerController extends ResponseEntityExceptionHandle
     @ExceptionHandler(value = {ServiceUnavailableException.class, RemoteCallException.class, BaseException.class})
     public ResponseEntity<Object> handleRemoteCallException(HttpServletRequest request, AppBusinessException e) {
 
-        logger.error(e.getMessage(), e);
+        log.error(e.getMessage(), e);
         return createResponseEntity(e.getCode(), e.getHttpStatus(), request.getRequestURI(), e.getMessage());
     }
 
@@ -83,7 +82,7 @@ public class AppExceptionHandlerController extends ResponseEntityExceptionHandle
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleException(HttpServletRequest request, Exception e) {
 
-        logger.error("服务器发生错误: " + e.getMessage(), e);
+        log.error("服务器发生错误: " + e.getMessage(), e);
         ErrorCode errorCode = CommonErrorCode.INTERNAL_ERROR;
         return createResponseEntity(errorCode, request.getRequestURI(), errorCode.getMessage());
 

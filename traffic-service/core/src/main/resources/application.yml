@@ -1,25 +1,29 @@
 spring:
-    application:
-        name: traffic
-    profiles:
-        active: dev
-    jpa:
-        open-in-view: false
-        show-sql: true
-        hibernate:
-            ddl-auto: none
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-                query.substitutions: true 1, false 0
-                max_fetch_depth: 2
-                current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-                connection.zeroDateTimeBehavior: convertToNull
-                enable_lazy_load_no_trans: false
-                globally_quoted_identifiers: true
+  application:
+    name: traffic
+  profiles:
+    active: dev
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        query.substitutions: true 1, false 0
+        max_fetch_depth: 2
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        connection.zeroDateTimeBehavior: convertToNull
+        enable_lazy_load_no_trans: false
+        globally_quoted_identifiers: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
 
 
 trace:
-    header-filter:
-        requestKey: ":method,:path,:authority,x-envoy-peer-metadata-id,x-envoy-decorator-operation,x-request-id,x-envoy-attempt-count,x-forwarded-proto,:scheme,x-forwarded-client-cert,x-b3-sampled,:authority,x-ot-span-context,x-b3-flags,x-envoy-peer-metadata"
-        responseKey: "date,x-envoy-peer-metadata,x-envoy-peer-metadata-id,x-envoy-upstream-service-time,x-envoy-decorator-operation"
+  header-filter:
+    requestKey: ":method,:path,:authority,x-envoy-peer-metadata-id,x-envoy-decorator-operation,x-request-id,x-envoy-attempt-count,x-forwarded-proto,:scheme,x-forwarded-client-cert,x-b3-sampled,:authority,x-ot-span-context,x-b3-flags,x-envoy-peer-metadata"
+    responseKey: "date,x-envoy-peer-metadata,x-envoy-peer-metadata-id,x-envoy-upstream-service-time,x-envoy-decorator-operation"

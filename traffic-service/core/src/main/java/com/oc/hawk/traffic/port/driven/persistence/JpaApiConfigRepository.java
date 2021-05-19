@@ -49,7 +49,7 @@ interface ApiConfigPoRepository extends JpaRepositoryImplementation<EntryPointCo
 @Slf4j
 public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
-    private static final Integer DAYS = 14;
+    private static final Integer DAYS = 7;
     private final ApiConfigPoRepository apiConfigPoRepository;
     private final EntryPointConfigGroupPoRepository apiConfigGroupPoRepository;
     private final EntryPointGroupManagerPoRepository apiGroupManagerPoRepository;

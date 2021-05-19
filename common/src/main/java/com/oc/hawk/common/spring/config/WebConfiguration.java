@@ -21,6 +21,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -84,9 +85,9 @@ public class WebConfiguration implements WebMvcConfigurer {
         converters.add(jackson2Convert);
 
         converters.stream()
-            .filter(c -> c instanceof StringHttpMessageConverter)
-            .findFirst()
-            .ifPresent(messageConverter -> ((StringHttpMessageConverter) messageConverter).setDefaultCharset(StandardCharsets.UTF_8));
+                .filter(c -> c instanceof StringHttpMessageConverter)
+                .findFirst()
+                .ifPresent(messageConverter -> ((StringHttpMessageConverter) messageConverter).setDefaultCharset(StandardCharsets.UTF_8));
 
     }
 
@@ -95,7 +96,9 @@ public class WebConfiguration implements WebMvcConfigurer {
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new HeaderRequestInterceptor("Accept", MediaType.APPLICATION_JSON_VALUE));
 
+
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new ResourceHttpMessageConverter());
         restTemplate.setInterceptors(interceptors);
 
         return restTemplate;

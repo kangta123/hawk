@@ -2,8 +2,6 @@ package com.oc.hawk.traffic.application.entrypoint;
 
 import com.oc.hawk.api.exception.AppBusinessException;
 import com.oc.hawk.traffic.application.entrypoint.representation.EntryPointConfigRepresentation;
-import com.oc.hawk.traffic.application.entrypoint.representation.facade.ContainerFacade;
-import com.oc.hawk.traffic.application.entrypoint.representation.facade.ProjectFacade;
 import com.oc.hawk.traffic.entrypoint.api.command.CreateEntryPointCommand;
 import com.oc.hawk.traffic.entrypoint.api.command.ExecuteCommand;
 import com.oc.hawk.traffic.entrypoint.api.dto.*;
@@ -41,9 +39,7 @@ public class EntryPointUseCase {
     private final HttpRequestFactory httpRequestFactory;
     private final EntryPointExcutor entryPointExcutor;
     private final FileFacade fileFacade;
-    private final ProjectFacade projectFacade;
-    private final ContainerFacade containerFacade;
-    
+
     private final EntryPointResourceRepository entryPointResourceRepository;
 
     /**
@@ -102,8 +98,7 @@ public class EntryPointUseCase {
     public List<UserGroupEntryPointDTO> queryApiByResource(String key) {
         List<EntryPointConfig> entryPointConfigList = new EntryPointConfigGroups(entryPointConfigRepository).getEntryPointByKey(key);  
         List<EntryPointConfigGroup> entryPointGroupList = new EntryPointConfigGroups(entryPointConfigRepository).getUserGroupList(entryPointConfigList);
-        List<UserGroupEntryPointDTO> userGroupEntryPointList = entryPointConfigRepresentation.toUserGroupEntryPointDTOList(entryPointConfigList, entryPointGroupList);
-        return userGroupEntryPointList;
+        return entryPointConfigRepresentation.toUserGroupEntryPointDTOList(entryPointConfigList, entryPointGroupList);
     }
 
     /**
@@ -140,9 +135,8 @@ public class EntryPointUseCase {
         HttpRequest httpRequest = httpRequestFactory.create(entryPointConfig, executeCommand);
         
         HttpResponse httpResponse = new EntryPointConfigExecutor(entryPointExcutor).execute(httpRequest);
-        
-        ExecuteResponseDTO excuteResponseDTO = entryPointConfigRepresentation.toExecuteResponseDTO(httpResponse);
-        return excuteResponseDTO;
+
+        return entryPointConfigRepresentation.toExecuteResponseDTO(httpResponse);
     }
     
     /**

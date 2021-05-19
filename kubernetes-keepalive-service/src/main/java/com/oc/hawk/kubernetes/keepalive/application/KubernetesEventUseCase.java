@@ -56,7 +56,7 @@ public class KubernetesEventUseCase {
 
                 RuntimeInfoDTO runtimeInfoDTO = kubernetesPodRepresentation.toRuntimeInfoDTO(kubernetesRuntime);
                 eventPublisher.publishEvent(KafkaTopic.INFRASTRUCTURE_RESOURCE_TOPIC, DomainEvent.byData(ContainerDomainEventType.RUNTIME_STATE_UPDATED, runtimeInfoDTO));
-                log.info("Kubernetes event received {}-{}, ith version {}", kubernetesRuntime.getRuntimeId(), kubernetesRuntime.getRuntimeStatus(), kubernetesRuntime.getResourceVersion());
+                log.info("Kubernetes event received {}-{} with version {}", kubernetesRuntime.getRuntimeId(), kubernetesRuntime.getRuntimeStatus(), kubernetesRuntime.getResourceVersion());
 
                 kubernetesEventRepository.updateEventResourceVersion(kubernetesRuntime.getResourceVersion());
             },
