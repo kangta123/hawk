@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 @Builder
 public class NetworkConfigSpec {
     private static final Integer ENV_DEFAULT_SERVER_PORT = 8080;
+    private static final Integer JAVA_AGENT_PORT = 4295;
     private final String PORT_NAME_HTTP = "http";
+    private final String PORT_NAME_AGENT = "agent";
     /**
      * Just support TCP value , optional values ["SCTP", "TCP", "UDP"]
      */
@@ -52,7 +54,8 @@ public class NetworkConfigSpec {
 
         // https://preliminary.istio.io/zh/docs/ops/deployment/requirements/
         if (!nonNullExtraPorts.containsKey(ENV_DEFAULT_SERVER_PORT)) {
-            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, 0, ENV_DEFAULT_SERVER_PORT, TCP_PROTOCOL, targetPort));
+            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, null, ENV_DEFAULT_SERVER_PORT, TCP_PROTOCOL, targetPort));
+            ports.add(new ServicePort(TCP_PROTOCOL, PORT_NAME_AGENT + "-" + serviceName, null, JAVA_AGENT_PORT, TCP_PROTOCOL, new IntOrString(JAVA_AGENT_PORT)));
         }
         return ports.toArray(new ServicePort[0]);
     }

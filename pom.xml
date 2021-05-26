@@ -270,6 +270,7 @@
         <module>message-service</module>
         <module>monitor-service</module>
         <module>traffic-service</module>
+        <module>jvm-service</module>
     </modules>
 
 </project>
