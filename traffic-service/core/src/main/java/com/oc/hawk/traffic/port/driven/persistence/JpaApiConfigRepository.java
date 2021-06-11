@@ -17,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.query.criteria.internal.OrderImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -60,7 +57,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     @Override
     public EntryPointConfigID save(EntryPointConfig config) {
         EntryPointConfigPO apiConfigPo = EntryPointConfigPO.createBy(config);
-        if(Objects.nonNull(config.getConfigId())) {
+        if (Objects.nonNull(config.getConfigId())) {
             apiConfigPo.setId(config.getConfigId().getId());
         }
         apiConfigPoRepository.save(apiConfigPo);
@@ -211,22 +208,46 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         int pageNum = page == null ? 0 : (page - 1) * pageSize;
         //多查一条
         pageSize += 1;
-        final Page<TrafficTracePo> pageResult = trafficTracePoRepository.findAll((root, criteriaQuery, cb) -> {
-            List<Predicate> predicates = Lists.newArrayList(
-                    cb.equal(root.get("kind"), "server")
-            );
-            if (StringUtils.isNotEmpty(key)) {
-                predicates.add(cb.or(
-                        cb.equal(root.get("dstWorkload"), key),
-                        cb.like(root.get("path"), key + "%")
-                ));
-            }
+//
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<TrafficTracePo> criteriaQuery = cb.createQuery(TrafficTracePo.class);
+        Root<TrafficTracePo> root = criteriaQuery.from(TrafficTracePo.class);
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+        List<Predicate> predicates = Lists.newArrayList(
+                cb.equal(root.get("kind"), "server")
+        );
+        if (StringUtils.isNotEmpty(key)) {
+            predicates.add(cb.or(
+                    cb.equal(root.get("dstWorkload"), key),
+                    cb.like(root.get("path"), key + "%")
+            ));
+        }
 
-        }, PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "startTime")));
+        criteriaQuery.orderBy(new OrderImpl(root.get("id"), false));
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(pageNum)
+                .setMaxResults(pageSize)
+                .getResultList().stream().map(TrafficTracePo::toTrace).collect(Collectors.toList());
+//        return cb.and(predicates.toArray(new Predicate[0]));
 
-        return pageResult.getContent().stream().map(TrafficTracePo::toTrace).collect(Collectors.toList());
+//
+//        Predicate conditionEntryPointId = criteriaBuilder.equal(fromObj.get("configId"), entryPointId.getId());
+//        criteriaQuery.where(conditionEntryPointId);
+//        criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
+//
+//        List<EntryPointTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
+//                .setFirstResult(pageNum)
+//                .setMaxResults(pageSize)
+//                .getResultList();
+//        List<Trace> traceList = resultPoList.stream().map(obj -> obj.toTrace()).collect(Collectors.toList());
+
+//        final List<TrafficTracePo> pageResult = trafficTracePoRepository.findAll((root, criteriaQuery, cb) -> {
+
+
+//        },  Sort.by(Sort.Direction.DESC, "id"));
+
+//        return pageResult.getContent().stream().map(TrafficTracePo::toTrace).collect(Collectors.toList());
     }
 
     @Override
@@ -268,21 +289,21 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<TrafficTracePo> criteriaQuery = criteriaBuilder.createQuery(TrafficTracePo.class);
-        Root<TrafficTracePo> fromObj = criteriaQuery.from(TrafficTracePo.class);
+        Root<TrafficTracePo> root = criteriaQuery.from(TrafficTracePo.class);
 
         HttpPath httpPath = entryPointConfig.getHttpResource().getPath();
         String path = httpPath.getLikePath(httpPath.getPath());
         String method = entryPointConfig.getHttpResource().getMethod().name();
 
-        Predicate conditionPath = criteriaBuilder.like(fromObj.get("path"), path);
-        Predicate conditionPathPrefix = criteriaBuilder.like(fromObj.get("path"), path + "?%");
-        Predicate conditionMethod = criteriaBuilder.equal(fromObj.get("method"), method);
+        Predicate conditionPath = criteriaBuilder.like(root.get("path"), path);
+        Predicate conditionPathPrefix = criteriaBuilder.like(root.get("path"), path + "?%");
+        Predicate conditionMethod = criteriaBuilder.equal(root.get("method"), method);
 
         Predicate pathClause = criteriaBuilder.or(conditionPath, conditionPathPrefix);
         Predicate conditionWhere = criteriaBuilder.and(pathClause, conditionMethod);
 
         criteriaQuery.where(conditionWhere);
-        criteriaQuery.orderBy(new OrderImpl(fromObj.get("startTime"), false));
+        criteriaQuery.orderBy(new OrderImpl(root.get("id"), false));
 
         List<TrafficTracePo> resultPoList = entityManager.createQuery(criteriaQuery)
                 .setFirstResult(pageNum)
@@ -297,7 +318,7 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<TrafficTracePo> fromObj = criteriaQuery.from(TrafficTracePo.class);
         criteriaQuery.select(criteriaBuilder.count(fromObj));
-        
+
         HttpPath httpPath = entryPointConfig.getHttpResource().getPath();
         String path = httpPath.getLikePath(httpPath.getPath());
         String method = entryPointConfig.getHttpResource().getMethod().name();
@@ -338,9 +359,9 @@ public class JpaApiConfigRepository implements EntryPointConfigRepository {
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAllByDateRange(int day) {
         LocalDateTime today = LocalDateTime.now();
-        LocalDateTime startTime = today.minusDays(DAYS);
+        LocalDateTime startTime = today.minusDays(day);
         trafficTracePoRepository.deleteByStartTimeLessThan(startTime);
     }
 

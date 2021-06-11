@@ -15,4 +15,5 @@ public interface TrafficTracePoRepository extends JpaRepositoryImplementation<Tr
     List<TrafficTracePo> findByTraceIdOrderByStartTimeAsc(String traceId);
     
     void deleteByStartTimeLessThan(LocalDateTime startTime);
+
 }

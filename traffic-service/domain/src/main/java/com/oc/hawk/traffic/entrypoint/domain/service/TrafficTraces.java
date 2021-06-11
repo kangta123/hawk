@@ -4,10 +4,8 @@ import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigID;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointResourceRepository;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.Destination;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpMethod;
 import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpPath;
-import com.oc.hawk.traffic.entrypoint.domain.model.httpresource.HttpResource;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.TraceId;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +22,6 @@ public class TrafficTraces {
     private final EntryPointResourceRepository entryPointResourceRepository;
 
     public List<Trace> queryTraceInfoList(Integer page, Integer size, String key) {
-        Trace traceParam = Trace.builder()
-                .httpResource(new HttpResource(new HttpPath(key), null))
-                .destination(new Destination(key, null, null))
-                .build();
         List<Trace> traceList = entryPointConfigRepository.queryTraceInfoList(page, size, key);
         for (Trace trace : traceList) {
             Trace traceInfo = queryTraceInfo(trace.getHttpResource().getPath(), trace.getHttpResource().getMethod().name());

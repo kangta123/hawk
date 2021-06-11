@@ -67,6 +67,9 @@ hawk:
   - name: hawk-traffic
     image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_traffic-core
     verison: v2.0.1-7
+  - name: hawk-jvm
+    image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_jvm-service
+    verison: v2.0.1-1
     #额外被service暴露端口
     exposePort:
     - name: grpc

@@ -1,13 +1,13 @@
 package com.oc.hawk.traffic.application.entrypoint;
 
 import com.oc.hawk.traffic.entrypoint.api.command.UploadTraceInfoCommand;
-import com.oc.hawk.traffic.entrypoint.domain.config.TrafficTraceHeaderFilterConfig;
 import com.oc.hawk.traffic.entrypoint.domain.model.entrypoint.EntryPointConfigRepository;
 import com.oc.hawk.traffic.entrypoint.domain.model.trace.Trace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TrafficTraceInfoUseCase {
     }
     
     @Transactional(rollbackFor = Exception.class)
-    public void deleteTrace() {
-        entryPointConfigRepository.deleteAll();
+    public void deleteTrace(int day) {
+        entryPointConfigRepository.deleteAllByDateRange(day);
     }
 }

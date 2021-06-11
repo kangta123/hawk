@@ -50,7 +50,7 @@ public interface EntryPointConfigRepository {
     
     List<EntryPointConfig> findByHttpResource(HttpResource httpResource);
     
-    void deleteAll();
+    void deleteAllByDateRange(int day);
     
     void deleteGroupById(EntryPointGroupID entryPointGroupID);
     

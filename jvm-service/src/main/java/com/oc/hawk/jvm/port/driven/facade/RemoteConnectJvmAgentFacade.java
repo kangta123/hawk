@@ -3,6 +3,7 @@ package com.oc.hawk.jvm.port.driven.facade;
 import com.oc.hawk.api.utils.JsonUtils;
 import com.oc.hawk.jvm.application.representation.ClassInfoDTO;
 import com.oc.hawk.jvm.application.representation.JvmDashboardDTO;
+import com.oc.hawk.jvm.application.representation.JvmThreadDTO;
 import com.oc.hawk.jvm.application.representation.ThreadStackDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.function.Function;
 
 
@@ -27,8 +29,10 @@ import java.util.function.Function;
 public class RemoteConnectJvmAgentFacade implements JvmAgentFacade {
 
     private String getUrl(String instanceName, String namespace) {
-        //        String url = "http://" + instanceName + "." + namespace + ":4295/hotswap";
-        return "http://localhost:4295";
+//        return "http://localhost:4295";
+        final String s = "http://" + instanceName + "." + namespace + ":4295";
+        log.info("connect to instance {}", s);
+        return s;
     }
 
     private HttpRequest getHttpRequest(String url) {
@@ -79,7 +83,12 @@ public class RemoteConnectJvmAgentFacade implements JvmAgentFacade {
         final String url = getUrl(instanceName, namespace) + "/classes/decompile?clz=" + clz;
         final HttpRequest httpRequest = getHttpRequest(url);
 
-        return this.execute(httpRequest, response -> JsonUtils.json2Object(response, ClassInfoDTO.class));
+        return this.execute(httpRequest, response -> {
+            if (StringUtils.isNotEmpty(response)) {
+                return JsonUtils.json2Object(response, ClassInfoDTO.class);
+            }
+            return null;
+        });
     }
 
     @Override
@@ -87,10 +96,18 @@ public class RemoteConnectJvmAgentFacade implements JvmAgentFacade {
         final String url = getUrl(instanceName, namespace) + "/thread/stack?id=" + id;
         final HttpRequest httpRequest = getHttpRequest(url);
         return this.execute(httpRequest, response -> {
-            if(StringUtils.isEmpty(response)){
-               return null;
+            if (StringUtils.isEmpty(response)) {
+                return null;
             }
             return JsonUtils.json2Object(response, ThreadStackDTO.class);
         });
+    }
+
+
+    @Override
+    public List<JvmThreadDTO> getThreadList(String instanceName, String namespace) {
+        final String url = getUrl(instanceName, namespace) + "/thread";
+        final HttpRequest httpRequest = getHttpRequest(url);
+        return this.execute(httpRequest, response -> JsonUtils.json2List(response, JvmThreadDTO.class));
     }
 }

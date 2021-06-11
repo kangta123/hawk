@@ -55,8 +55,8 @@ public class NetworkConfigSpec {
         // https://preliminary.istio.io/zh/docs/ops/deployment/requirements/
         if (!nonNullExtraPorts.containsKey(ENV_DEFAULT_SERVER_PORT)) {
             ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, null, ENV_DEFAULT_SERVER_PORT, TCP_PROTOCOL, targetPort));
-            ports.add(new ServicePort(TCP_PROTOCOL, PORT_NAME_AGENT + "-" + serviceName, null, JAVA_AGENT_PORT, TCP_PROTOCOL, new IntOrString(JAVA_AGENT_PORT)));
         }
+        ports.add(new ServicePort(TCP_PROTOCOL, PORT_NAME_AGENT + "-" + serviceName, null, JAVA_AGENT_PORT, TCP_PROTOCOL, new IntOrString(JAVA_AGENT_PORT)));
         return ports.toArray(new ServicePort[0]);
     }
 
