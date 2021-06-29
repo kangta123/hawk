@@ -133,4 +133,8 @@ public class InstanceNetwork {
             }
         }
     }
+
+    public void discardPort(SystemServicePort port) {
+        getNonNullExposePorts().remove(port.getPort());
+    }
 }

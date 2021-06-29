@@ -45,57 +45,19 @@ import java.util.stream.Collectors;
 public class KubernetesApi {
     private final KubernetesClient client;
     private final ExecutorService executorService = new ThreadPoolExecutor(20, 20,
-        0, TimeUnit.SECONDS, new LinkedBlockingDeque<>(),
-        new ThreadFactoryBuilder().setDaemon(true).setNameFormat("kubernetes-keepAlive-execution-%d").build());
+            0, TimeUnit.SECONDS, new LinkedBlockingDeque<>(),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("kubernetes-keepAlive-execution-%d").build());
 
     public Service createService(String ns, Service service) {
         yaml(service);
-        try {
-            return client.services().inNamespace(StringUtils.defaultString(ns, KubernetesConstants.DEFAULT_NAMESPACE)).createOrReplace(service);
-        } catch (KubernetesClientException e) {
-            log.error("create service of {} error {}", service.getMetadata().getName(), e.getMessage());
-        }
-        return null;
-    }
+        ns = StringUtils.defaultString(ns, KubernetesConstants.DEFAULT_NAMESPACE);
 
-    public void execAndWatch(PodExecution execution, Consumer<String> outputConsumer) {
-//        try {
-//            PipedInputStream pis = new PipedInputStream();
-//            PipedOutputStream pos = new PipedOutputStream(pis);
-//            ExecWatch watch = client.pods().inNamespace(execution.getNamespace()).withName(execution.getName())
-//                .readingInput(new PipedInputStream(new PipedOutputStream()))
-//                .writingOutput(pos)
-//                .writingError(System.err)
-//                .withTTY()
-//                .exec(execution.getCommand());
-//            executorService.submit(() -> {
-//                try {
-//                    byte[] buffer = new byte[1024];
-//
-//                    int len;
-//
-//                    byte[] remain = null;
-//
-//                    while ((len = pis.read(buffer)) != -1) {
-//                        int last = 0;
-//                        for (int i = 0; i < len; i++) {
-//                            final char c = (char) buffer[i];
-//                            if ((c == '\n')) {
-//                                String str = remain != null ? new String(remain) : "";
-//                                outputConsumer.accept(str + new String(buffer, last, i - last));
-//                                last = i;
-//                                remain = null;
-//                            }
-//                        }
-//                        remain = Arrays.copyOfRange(buffer, last, len);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            return client.services().inNamespace(ns).createOrReplace(service);
+        } catch (KubernetesClientException e) {
+            client.services().inNamespace(ns).withName(service.getMetadata().getName()).delete();
+            return client.services().inNamespace(ns).createOrReplace(service);
+        }
     }
 
     public boolean isPodReady(String namespace, String name) {
@@ -117,7 +79,7 @@ public class KubernetesApi {
         while (i++ < maxTimes) {
             log.info("Get pod {} times: {}", name, i);
             podDoneablePodPodResource = client.pods().inNamespace(namespace)
-                .withName(name);
+                    .withName(name);
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {

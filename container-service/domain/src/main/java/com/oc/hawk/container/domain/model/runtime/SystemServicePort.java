@@ -8,8 +8,9 @@ public enum SystemServicePort {
     SERVICE_PORT(8080),
     JPROFILER_PORT(8849),
     SSH_PORT(22),
+    JVM_PORT(4295),
     ANY_PORT(0);
-    private Integer port;
+    private final Integer port;
 
     SystemServicePort(Integer port) {
         this.port = port;

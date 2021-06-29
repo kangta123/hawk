@@ -25,7 +25,7 @@ public class JavaPropertyDecorator extends AbstractInstanceConfigDecorator {
         BaseInstanceConfig baseConfig = (BaseInstanceConfig) instanceConfig.getBaseConfig();
         if (instanceConfig instanceof JavaInstanceConfig) {
             JavaInstanceConfig javaInstanceConfig = (JavaInstanceConfig) instanceConfig;
-            Map<String, String> property = javaInstanceConfig.getJavaConfigedProperty(baseConfig.getName().getName());
+            Map<String, String> property = javaInstanceConfig.getJavaConfigProperty(baseConfig.getName().getName());
 
             String javaPropertyStr = property.entrySet().stream().map(entry -> "-D" + entry.getKey() + "=" + entry.getValue()).collect(Collectors.joining(" "));
             baseConfig.addEnv(ENV_JAVA_PROPS, "\"" + javaPropertyStr + "\"");

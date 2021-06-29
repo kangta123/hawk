@@ -40,10 +40,16 @@ public abstract class JavaInstanceConfig implements InstanceConfig {
     public void update(Boolean debug, Boolean jProfiler, Map<String, String> property) {
         if (debug != null) {
             this.debug = debug;
+            if (!debug) {
+                this.baseInstanceConfig.discardNetworkPort(SystemServicePort.DEBUG_PORT);
+            }
         }
 
         if (jProfiler != null) {
             this.jprofiler = jProfiler;
+            if (!jprofiler) {
+                this.baseInstanceConfig.discardNetworkPort(SystemServicePort.JPROFILER_PORT);
+            }
         }
 
         if (property != null) {
@@ -52,7 +58,7 @@ public abstract class JavaInstanceConfig implements InstanceConfig {
 
     }
 
-    public Map<String, String> getJavaConfigedProperty(String serviceName) {
+    public Map<String, String> getJavaConfigProperty(String serviceName) {
         if (property == null) {
             property = Maps.newHashMap();
         }

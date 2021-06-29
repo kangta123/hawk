@@ -29,37 +29,37 @@ hawk:
     config:
       nginx:
         runtime:
-          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_nginx:v2.0-alpha-31
-          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_npm:v2.0-alpha-31
+          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_nginx:v2.0.1
+          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_npm:v2.0.1
           podInteractionVolume: /tmp/app:/usr/local/openresty/nginx/html
         build:
           npm:
-            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_npm_build:v2.0-alpha-31
+            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_npm_build:v2.0.1
             sub: npm
       tomcat:
         runtime:
-          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_tomcat8:v2.0-alpha-31
-          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_tomcat:v2.0-alpha-31
+          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_tomcat8:v2.0.1
+          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_tomcat:v2.0.1
           podInteractionVolume: /tmp/app:/usr/local/apache-tomcat-8.5.46/webapps/ROOT
         build:
           npm:
-            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:v2.0-alpha-31
+            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_maven_build:v2.0.1
             volume:
               sub: maven
               mountPath: /root/.m2/
       springboot:
         runtime:
-          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_springboot8:v2.0-alpha-31
-          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_init_springboot:v2.0-alpha-31
+          appImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_springboot8:v2.0.1
+          dataImage: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_init_springboot:v2.0.1
           podInteractionVolume: /tmp/app:/app/jar
         build:
           maven:
-            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_maven_build:v2.0-alpha-31
+            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_maven_build:v2.0.1
             volume:
               sub: maven
               mountPath: /root/.m2/
           gradle:
-            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk/hawk_gradle_build:v2.0-alpha-31
+            image: registry.cn-qingdao.aliyuncs.com/kangta123/hawk_gradle_build:v2.0.1
             volume:
               sub: gradle
               mountPath: /gradle

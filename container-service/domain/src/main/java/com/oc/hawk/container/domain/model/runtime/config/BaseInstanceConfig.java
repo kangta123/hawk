@@ -70,20 +70,22 @@ public class BaseInstanceConfig implements InstanceConfig {
                 .hosts(hosts)
                 .remoteAccess(instanceRemoteAccess)
                 .build();
-        if (instanceRemoteAccess != null) {
-            exposePort(SystemServicePort.SSH_PORT);
-        }
     }
 
     public void createOrUpdateInstanceHost(String hosts, String preStart, Boolean ssh, Map<String, String> env) {
         if (this.host == null) {
-            if (Objects.equals(ssh, Boolean.TRUE)) {
-                InstanceRemoteAccess remoteAccess = InstanceRemoteAccess.createNew();
-                network.exposePort(SystemServicePort.SSH_PORT);
-                this.createInstanceHost(hosts, preStart, remoteAccess, env);
-            }
+            InstanceRemoteAccess remoteAccess = InstanceRemoteAccess.createNew();
+            this.createInstanceHost(hosts, preStart, remoteAccess, env);
         } else {
             this.host.update(hosts, preStart, ssh, env);
+        }
+
+        if (ssh != null) {
+            if (Objects.equals(ssh, Boolean.TRUE)) {
+                exposePort(SystemServicePort.SSH_PORT);
+            } else {
+                network.discardPort(SystemServicePort.SSH_PORT);
+            }
         }
 
     }
@@ -154,6 +156,10 @@ public class BaseInstanceConfig implements InstanceConfig {
         if (enable != null && path != null) {
             healthCheck = new InstanceHealthCheck(enable, path);
         }
+    }
+
+    public void discardNetworkPort(SystemServicePort port) {
+        network.discardPort(port);
     }
 }
 

@@ -123,7 +123,6 @@ public class InstanceRuntimeRepresentation {
         spec.setRuntimeCatalog(RUNTIME_CATALOG_BUSINESS);
         spec.setEntryPoint(createEntryPoint(network));
 
-
         final ProjectType projectType = projectFacade.getProjectType(baseConfig.getProjectId());
 
         if (projectType != null) {
