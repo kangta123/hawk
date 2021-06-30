@@ -22,9 +22,6 @@ public class KafkaEventPublish implements EventPublisher {
 
     @Override
     public void publishDomainEvent(DomainEvent domainEvent) {
-        if (domainEvent.getDomainId() == null) {
-            throw new IllegalArgumentException("Domain id cannot be null");
-        }
         publishEvent(KafkaTopic.DOMAIN_EVENT_TOPIC, domainEvent);
     }
 

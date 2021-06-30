@@ -23,7 +23,7 @@ public class RuntimeExecutorController {
 
     @PutMapping("/stop/{id}")
     public BooleanWrapper stopService(@PathVariable long id) {
-        instanceExecutorUseCase.stopService(new InstanceId(id));
+        instanceExecutorUseCase.stopInstance(new InstanceId(id));
         return BooleanWrapper.TRUE;
     }
 

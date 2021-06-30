@@ -34,14 +34,14 @@ public class InstanceExecutorUseCase {
     }
 
 
-    public void stopService(InstanceId configId) {
+    public void stopInstance(InstanceId configId) {
         log.info("stop instance with id {}", configId);
         InstanceConfig config = instanceConfigRepository.byId(configId);
         infrastructureLifeCycleFacade.stop(config);
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteServiceByProject(long projectId) {
+    public void deleteInstanceByProject(long projectId) {
         log.info("delete service from projectId  id {}", projectId);
 
         List<InstanceConfig> instanceConfigList = instanceConfigRepository.byProject(projectId, configuration.getDefaultInstanceNamespace());
@@ -50,11 +50,11 @@ public class InstanceExecutorUseCase {
             final InstanceId id = baseConfig.getId();
             instanceConfigRepository.delete(id);
             final InstanceName name = baseConfig.getName();
-            this.deleteService(name.getName(), baseConfig.getNetwork().getServiceName(), configuration.getDefaultInstanceNamespace());
+            this.deleteInstance(name.getName(), baseConfig.getNetwork().getServiceName(), configuration.getDefaultInstanceNamespace());
         });
     }
 
-    public void deleteService(String name, String serviceName, String namespace) {
+    private void deleteInstance(String name, String serviceName, String namespace) {
         log.info("delete service with name {}", name);
 
         DeleteRuntimeInfoCommand command = new DeleteRuntimeInfoCommand(namespace, name, serviceName);

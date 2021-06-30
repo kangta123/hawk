@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class NetworkConfigSpec {
-    private static final Integer ENV_DEFAULT_SERVER_PORT = 8080;
+    private static final Integer DEFAULT_SERVER_PORT = 8080;
     private static final Integer JAVA_AGENT_PORT = 4295;
     private final String PORT_NAME_HTTP = "http";
     /**
@@ -49,11 +49,14 @@ public class NetworkConfigSpec {
             return new ServicePort(TCP_PROTOCOL, portName, nodePort, port, TCP_PROTOCOL, targetPort);
         }).collect(Collectors.toList());
 
-        IntOrString targetPort = new IntOrString(this.getInnerPort());
 
         // https://preliminary.istio.io/zh/docs/ops/deployment/requirements/
-        if (!nonNullExtraPorts.containsKey(ENV_DEFAULT_SERVER_PORT)) {
-            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, null, ENV_DEFAULT_SERVER_PORT, TCP_PROTOCOL, targetPort));
+        if (!nonNullExtraPorts.containsKey(DEFAULT_SERVER_PORT)) {
+            ports.add(new ServicePort(HTTP_PROTOCOL, PORT_NAME_HTTP + "-" + serviceName, null, DEFAULT_SERVER_PORT, TCP_PROTOCOL, new IntOrString(this.getInnerPort())));
+        }
+
+        if (!nonNullExtraPorts.containsKey(JAVA_AGENT_PORT)) {
+            ports.add(new ServicePort(TCP_PROTOCOL, serviceName + "-" + JAVA_AGENT_PORT, null, JAVA_AGENT_PORT, TCP_PROTOCOL, new IntOrString(JAVA_AGENT_PORT)));
         }
         return ports.toArray(new ServicePort[0]);
     }
